@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Holidae | Holiday Packages</title>
+
+<link rel="stylesheet" href="../css/style.css"/>
+<link rel="stylesheet" href="../css/mobile.css"/>
+</head>
+
+<!-- data-page is used for page-specific layout and sticky sidebar styling. -->
+<body class="holidae-redesign" data-page="package">
+<header class="site-header site-header-overlay">
+<div class="container header-wrap">
+<a class="logo logo-light" href="../index.html">Holidae</a>
+
+<!-- Mobile menu button controlled by script.js. -->
+<button aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation" class="nav-toggle nav-toggle-light" type="button">
+<span></span>
+<span></span>
+<span></span>
+</button>
+
+<nav class="site-nav" id="site-nav">
+<ul class="nav-list nav-list-light">
+<li><a href="../index.html">Home</a></li>
+<li><a class="active" href="package.html">Package</a></li>
+<li><a href="booking.html">Booking</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="destinations.html">Destinations</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+</div>
+</header>
+
+<main>
+
+<!-- Hero section introduces the package page before the user starts comparing options. -->
+<section class="video-hero video-hero-small reveal">
+<video autoplay="" class="hero-video" loop="" muted="" playsinline="">
+<source src="../videos/Video 5.mp4" type="video/mp4"/>
+</video>
+<div class="hero-overlay"></div>
+<div class="container video-hero-content">
+<p class="eyebrow eyebrow-light">Package collection</p>
+<h1>Compare packages the way a travel planner does</h1>
+<p>
+          Move through the collection by destination, tier, and trip reason. Each package shows who it suits, what pace it offers, and the best next step for the enquiry.
+        </p>
+<div class="hero-buttons">
+<a class="btn" href="#package-levels">Compare Package Levels</a>
+<a class="btn btn-ghost" href="#package-builder">Build Package</a>
+</div>
+<div class="hero-stats-grid">
+<article class="hero-stat-card">
+<strong>6 premium destinations</strong>
+<p>Curated escapes built for mood, pace, and every premium travel intention.</p>
+</article>
+<article class="hero-stat-card">
+<strong>3 package tiers</strong>
+<p>Essential, Signature and Luxe options let every enquiry match travel style and budget comfort.</p>
+</article>
+<article class="hero-stat-card">
+<strong>Enquiry-first flow</strong>
+<p>Compare, refine and send a detailed enquiry before availability and pricing are confirmed.</p>
+</article>
+</div>
+</div>
+</section>
+
+<!-- Package cards. The data-package-category values are used by the filter buttons. -->
+<section class="section-padding reveal" id="package-collection">
+<div class="container">
+<div class="section-heading section-heading-center">
+<p class="eyebrow">Package collection</p>
+<h2>Choose by destination, pace, and stay style</h2>
+<p>
+            Each package now has a clear purpose, price level, duration, traveller fit, and booking path.
+            Use the filters to narrow the collection before moving into the enquiry form.
+          </p>
+</div>
+<div aria-label="Package filters" class="package-filter-bar">
+<button class="package-filter active" data-package-filter="all" type="button">All packages</button>
+<button class="package-filter" data-package-filter="romantic" type="button">Romantic</button>
+<button class="package-filter" data-package-filter="city" type="button">City</button>
+<button class="package-filter" data-package-filter="beach" type="button">Beach</button>
+<button class="package-filter" data-package-filter="culture" type="button">Culture</button>
+</div>
+<p class="package-filter-status">Showing 6 premium packages across romantic, city, beach, and culture themes.</p>
+<div class="package-hub-grid">
+<article class="deal-card interactive-card package-hub-card" data-package-category="romantic beach" id="santorini-package">
+<img alt="Santorini package with white buildings and sea views" src="../images/santorini.jpg"/>
+<div class="card-content">
+<p class="eyebrow">Featured island escape</p>
+<h3>Santorini All-Inclusive Escape</h3>
+<p>7 nights shaped around caldera views, slow island evenings, sunset dining, and relaxed resort comfort.</p>
+<div class="package-meta-list">
+<span>From AED 4,950</span>
+<span>7 nights</span>
+<span>Couples</span>
+</div>
+<div class="card-actions">
+<a class="text-link" href="#santorini-details">View details</a>
+<a class="text-link" href="booking.html?destination=Santorini&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</div>
+</article>
+<article class="deal-card interactive-card package-hub-card" data-package-category="city luxury" id="dubai-package">
+<img alt="Dubai skyline package" src="../images/dubai.jpg"/>
+<div class="card-content">
+<p class="eyebrow">Premium city break</p>
+<h3>Dubai City Break</h3>
+<p>5 nights built around skyline hotels, shopping, rooftop dining, polished service, and modern city energy.</p>
+<div class="package-meta-list">
+<span>From AED 4,200</span>
+<span>5 nights</span>
+<span>City luxury</span>
+</div>
+<div class="card-actions">
+<a class="text-link" href="#dubai-details">View details</a>
+<a class="text-link" href="booking.html?destination=Dubai&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</div>
+</article>
+<article class="deal-card interactive-card package-hub-card" data-package-category="beach romantic" id="maldives-package">
+<img alt="Maldives beach package" src="../images/maldives.jpg"/>
+<div class="card-content">
+<p class="eyebrow">Quiet luxury retreat</p>
+<h3>Maldives Island Retreat</h3>
+<p>7 nights for travellers who want privacy, turquoise water, resort calm, and a slower honeymoon-style reset.</p>
+<div class="package-meta-list">
+<span>From AED 6,450</span>
+<span>7 nights</span>
+<span>Quiet beach</span>
+</div>
+<div class="card-actions">
+<a class="text-link" href="#maldives-details">View details</a>
+<a class="text-link" href="booking.html?destination=Maldives&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</div>
+</article>
+<article class="deal-card interactive-card package-hub-card" data-package-category="beach culture" id="bali-package">
+<img alt="Bali tropical package" src="../images/bali.jpg"/>
+<div class="card-content">
+<p class="eyebrow">Tropical balance</p>
+<h3>Bali Resort Escape</h3>
+<p>7 nights mixing resort comfort, tropical greenery, spa-style downtime, beach scenery, and gentle exploring.</p>
+<div class="package-meta-list">
+<span>From AED 5,450</span>
+<span>7 nights</span>
+<span>Tropical calm</span>
+</div>
+<div class="card-actions">
+<a class="text-link" href="#bali-details">View details</a>
+<a class="text-link" href="booking.html?destination=Bali&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</div>
+</article>
+<article class="deal-card interactive-card package-hub-card" data-package-category="romantic beach" id="amalfi-package">
+<img alt="Amalfi Coast package" src="../images/amalfi.jpg"/>
+<div class="card-content">
+<p class="eyebrow">Coastal elegance</p>
+<h3>Amalfi Coast Journey</h3>
+<p>6 nights for refined Mediterranean scenery, cliffside towns, bright terraces, coastal drives, and stylish hotels.</p>
+<div class="package-meta-list">
+<span>From AED 5,700</span>
+<span>6 nights</span>
+<span>Elegant coast</span>
+</div>
+<div class="card-actions">
+<a class="text-link" href="#amalfi-details">View details</a>
+<a class="text-link" href="booking.html?destination=Amalfi%20Coast&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</div>
+</article>
+<article class="deal-card interactive-card package-hub-card" data-package-category="city culture" id="marrakech-package">
+<img alt="Marrakech package" src="../images/marrakech.jpg"/>
+<div class="card-content">
+<p class="eyebrow">Colour and culture</p>
+<h3>Marrakech Boutique Discovery</h3>
+<p>5 nights shaped around riad stays, warm evenings, colourful streets, cultural atmosphere, and boutique comfort.</p>
+<div class="package-meta-list">
+<span>From AED 4,450</span>
+<span>5 nights</span>
+<span>Culture break</span>
+</div>
+<div class="card-actions">
+<a class="text-link" href="#marrakech-details">View details</a>
+<a class="text-link" href="booking.html?destination=Marrakech&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<!-- Quick table version of the package comparison. -->
+<section class="section-padding alt-bg reveal" id="package-comparison">
+<div class="container">
+<div class="section-heading section-heading-left">
+<p class="eyebrow">Fast comparison</p>
+<h2>What each package is actually for</h2>
+<p>
+            Use the comparison table to narrow the field before you move into the builder or the booking page.
+          </p>
+</div>
+<div class="decision-table-wrap interactive-card">
+<table class="decision-table">
+<thead>
+<tr>
+<th>Package</th>
+<th>Best for</th>
+<th>Trip pace</th>
+<th>Typical stay</th>
+<th>Next step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Santorini</strong><span>Scenic Greece</span></td>
+<td>Couples, sunsets, visual escapes</td>
+<td>Slow and romantic</td>
+<td>7 nights</td>
+<td><a href="booking.html?destination=Santorini&amp;package=Signature#booking-form-section">Book Santorini</a></td>
+</tr>
+<tr>
+<td><strong>Dubai</strong><span>Luxury city break</span></td>
+<td>Shopping, skyline hotels, restaurants</td>
+<td>Busy and polished</td>
+<td>5 nights</td>
+<td><a href="booking.html?destination=Dubai&amp;package=Signature#booking-form-section">Book Dubai</a></td>
+</tr>
+<tr>
+<td><strong>Maldives</strong><span>Quiet island luxury</span></td>
+<td>Honeymoon-style beach reset</td>
+<td>Very slow and restful</td>
+<td>7 nights</td>
+<td><a href="booking.html?destination=Maldives&amp;package=Signature#booking-form-section">Book Maldives</a></td>
+</tr>
+<tr>
+<td><strong>Bali</strong><span>Tropical resort calm</span></td>
+<td>Spa energy, greenery, soft beach days</td>
+<td>Gentle and balanced</td>
+<td>7 nights</td>
+<td><a href="booking.html?destination=Bali&amp;package=Signature#booking-form-section">Book Bali</a></td>
+</tr>
+<tr>
+<td><strong>Amalfi Coast</strong><span>Refined coastal journey</span></td>
+<td>Stylish scenery and summer coastlines</td>
+<td>Relaxed but polished</td>
+<td>6 nights</td>
+<td><a href="booking.html?destination=Amalfi%20Coast&amp;package=Signature#booking-form-section">Book Amalfi</a></td>
+</tr>
+<tr>
+<td><strong>Marrakech</strong><span>Boutique culture break</span></td>
+<td>Colour, city texture, warm evenings</td>
+<td>Vibrant and varied</td>
+<td>5 nights</td>
+<td><a href="booking.html?destination=Marrakech&amp;package=Signature#booking-form-section">Book Marrakech</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- Package tiers and builder. The builder is updated by JavaScript. -->
+<section class="section-padding reveal" id="package-levels">
+<div class="container">
+<div class="section-heading section-heading-center">
+<p class="eyebrow">Package levels</p>
+<h2>Pick the same destination in three different travel styles</h2>
+<p>
+            Each destination can be enquired as an Essential, Signature, or Luxe trip instead of forcing one flat package option for everyone.
+          </p>
+</div>
+<div class="package-level-grid">
+<article class="package-level-card interactive-card">
+<span class="package-level-label">Essential</span>
+<h3>Smart escape</h3>
+<p>For travellers who want the destination atmosphere, core hotel comfort, and a cleaner price point.</p>
+<ul class="feature-list compact-list">
+<li>Return flights and checked stay basics</li>
+<li>Standard room or close equivalent</li>
+<li>Useful support before confirmation</li>
+</ul>
+</article>
+<article class="package-level-card interactive-card package-level-featured">
+<span class="package-level-label">Signature</span>
+<h3>Recommended Holidae trip</h3>
+<p>The balanced option for most users: stronger hotel feel, better inclusions, and more memorable details.</p>
+<ul class="feature-list compact-list">
+<li>Improved room or view preference</li>
+<li>Transfers and board guidance</li>
+<li>Best for a balanced high-comfort stay</li>
+</ul>
+</article>
+<article class="package-level-card interactive-card">
+<span class="package-level-label">Luxe</span>
+<h3>More premium stay</h3>
+<p>For travellers who want a higher-end room feel, stronger service, and a more polished celebration trip.</p>
+<ul class="feature-list compact-list">
+<li>Suite or premium room request</li>
+<li>Extra comfort and occasion notes</li>
+<li>Best for honeymoons and special trips</li>
+</ul>
+</article>
+</div>
+
+<!-- The selected destination and tier here control the builder text, price, and booking link. -->
+<article class="package-builder-card interactive-card" id="package-builder">
+<div class="package-builder-copy">
+<p class="eyebrow">Build a package enquiry</p>
+<h3 id="package-builder-title">Santorini Signature enquiry</h3>
+<p id="package-builder-copy">
+              A balanced scenic island enquiry with stronger room preference, transfers, and all-inclusive guidance.
+            </p>
+</div>
+<div class="package-builder-controls">
+<label for="package-builder-destination">Destination</label>
+<select id="package-builder-destination">
+<option value="Santorini">Santorini</option>
+<option value="Dubai">Dubai</option>
+<option value="Maldives">Maldives</option>
+<option value="Bali">Bali</option>
+<option value="Amalfi Coast">Amalfi Coast</option>
+<option value="Marrakech">Marrakech</option>
+</select>
+<label for="package-builder-tier">Package level</label>
+<select id="package-builder-tier">
+<option value="Essential">Essential</option>
+<option selected="" value="Signature">Signature</option>
+<option value="Luxe">Luxe</option>
+</select>
+<div class="builder-result-list">
+<span><strong id="builder-price">From AED 5,850</strong></span>
+<span id="builder-duration">7 nights</span>
+<span id="builder-fit">Couples and scenic travellers</span>
+</div>
+<a class="btn full-width" href="booking.html?destination=Santorini&amp;package=Signature#booking-form-section" id="package-builder-link">Continue with this package</a>
+</div>
+</article>
+</div>
+</section>
+
+<!-- Explains how the three package levels should be understood. -->
+<section class="section-padding alt-bg reveal package-advice-section">
+<div class="container">
+<div class="section-heading section-heading-center">
+<p class="eyebrow">Before you choose</p>
+<h2>How the package system is meant to be used</h2>
+<p>Use the destination cards for quick browsing, the comparison table for pace and trip style, and the package builder when you already know which tier suits the trip.</p>
+</div>
+<div class="card-grid package-advice-grid">
+<article class="info-card interactive-card">
+<h3>Essential</h3>
+<p>A cleaner starting point for travellers who want the destination first and a simpler package structure.</p>
+</article>
+<article class="info-card interactive-card">
+<h3>Signature</h3>
+<p>The balanced middle tier for most travellers, with a stronger fit between comfort, planning detail, and budget.</p>
+</article>
+<article class="info-card interactive-card">
+<h3>Luxe</h3>
+<p>The highest tier for travellers looking for more room upgrades, stronger inclusions, and a more polished stay style.</p>
+</article>
+</div>
+</div>
+</section>
+
+<!-- Editorial section breaks up the comparison-heavy layout with images and tier guidance. -->
+<section class="section-padding reveal package-editorial-lens">
+  <div class="container split-grid spotlight-grid">
+    <div class="editorial-panel">
+      <p class="eyebrow">How the tiers work</p>
+      <h2>The destination stays the same. The service level changes the feeling of the trip.</h2>
+      <p>Holidae packages are structured so travellers can choose the version of the destination that actually suits them. Essential keeps the enquiry light, Signature balances comfort and planning detail, and Luxe adds stronger room and stay preferences.</p>
+      <div class="insight-band compact-insight-band">
+        <div><strong>Essential</strong><span>Best when the destination matters most and the stay can stay simple.</span></div>
+        <div><strong>Signature</strong><span>The most balanced option for couples, first-time travellers, and most seven-night stays.</span></div>
+        <div><strong>Luxe</strong><span>For celebration trips, upgraded rooms, and a stronger premium finish.</span></div>
+      </div>
+    </div>
+    <div class="image-band-card interactive-card">
+      <div class="image-band-layout reverse-band">
+        <img src="../images/amalfi-coast-night.jpg" alt="Amalfi coast evening scene" class="image-band-large">
+        <div class="image-band-stack">
+          <img src="../images/bali-infinity-mountain.jpg" alt="Bali infinity pool with mountain view" class="image-band-small">
+          <img src="../images/dubai-desert-adventure.jpg" alt="Dubai desert experience" class="image-band-small">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Helps users pick packages by reason for travel, not just destination name. -->
+<section class="section-padding alt-bg reveal package-occasion-section">
+  <div class="container">
+    <div class="section-heading section-heading-left">
+      <p class="eyebrow">Choose by occasion</p>
+      <h2>Packages are easier to choose when the trip reason is clear</h2>
+      <p>Travellers rarely choose a destination in isolation. They are usually choosing for a honeymoon, a shorter luxury break, a scenic week away, or a first high-end holiday that still needs to feel manageable.</p>
+    </div>
+    <div class="occasion-grid">
+      <article class="occasion-card interactive-card">
+        <span>Celebration trip</span>
+        <h3>Maldives Luxe or Santorini Luxe</h3>
+        <p>Best when privacy, upgrade potential, and a slower premium atmosphere matter more than seeing everything in one trip.</p>
+      </article>
+      <article class="occasion-card interactive-card">
+        <span>Short premium reset</span>
+        <h3>Dubai Signature or Marrakech Essential</h3>
+        <p>Best when the traveller wants a stronger sense of place over a shorter number of nights without overcomplicating the enquiry.</p>
+      </article>
+      <article class="occasion-card interactive-card">
+        <span>Week-long scenic stay</span>
+        <h3>Amalfi Coast Signature or Bali Signature</h3>
+        <p>Best when the traveller wants rhythm, atmosphere, and enough time to enjoy the destination without the itinerary feeling packed.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Detailed package area. Santorini is used as the full example, with shorter cards for the rest. -->
+<section class="section-padding reveal" id="package-details">
+<div class="container two-column-layout">
+<div class="main-column">
+<article class="content-box interactive-card" id="santorini-details">
+<p class="eyebrow">Detailed package</p>
+<h2>Santorini All-Inclusive Escape</h2>
+<p>
+              Santorini is shown in more detail as a featured example of the package format. It suits travellers who want a scenic island atmosphere, easy resort comfort, and evenings built around the view.
+            </p>
+<div class="summary-tag-row left-align-tags">
+<span class="summary-tag">From AED 4,950</span>
+<span class="summary-tag">7 nights</span>
+<span class="summary-tag">All-inclusive</span>
+<span class="summary-tag">Couples</span>
+</div>
+<div class="package-detail-grid">
+<div>
+<h3>Included</h3>
+<ul class="feature-list compact-list">
+<li>Return flights</li>
+<li>7 nights hotel accommodation</li>
+<li>Airport and hotel transfers</li>
+<li>Breakfast, lunch, dinner, and selected drinks</li>
+<li>Optional island excursions</li>
+</ul>
+</div>
+<div>
+<h3>Best moments</h3>
+<ul class="feature-list compact-list">
+<li>Cliffside viewpoint walks</li>
+<li>Sea-view resort downtime</li>
+<li>Sunset dining atmosphere</li>
+<li>Whitewashed village exploring</li>
+</ul>
+</div>
+</div>
+<a class="btn" href="booking.html?destination=Santorini&amp;package=Signature#booking-form-section">Check Santorini Availability</a>
+</article>
+
+<section class="editorial-section">
+<div class="split-grid">
+<div class="image-stack">
+<img alt="Santorini sunset dining scene" class="stack-large" src="../images/santorini-oia-twilight.jpg"/>
+<div class="stack-small-row">
+<img alt="Santorini terrace view" class="stack-small" src="../images/santorini-terrace-view.jpg"/>
+<img alt="Santorini sea cliffs" class="stack-small" src="../images/santorini-sunset-dome.jpg"/>
+</div>
+</div>
+<div class="editorial-panel">
+<p class="eyebrow">The destination feel</p>
+<h2>More than a hotel stay</h2>
+<p>
+                  The Santorini package is built around the full island atmosphere: white architecture, bright sea views,
+                  calm daytime exploring, and slower sunset evenings.
+                </p>
+<p>
+                  It keeps the destination mood clear while showing how the wider package collection works.
+                </p>
+</div>
+</div>
+</section>
+
+<article class="content-box interactive-card">
+<p class="eyebrow">Other package details</p>
+<h2>Five more destination routes at a glance</h2>
+<p class="package-subheading">
+              These shorter route cards keep the destination personalities clear without forcing six full-length package pages.
+            </p>
+<div class="package-route-grid">
+<article class="package-route-card interactive-card" id="dubai-details">
+<h3>Dubai City Break</h3>
+<p>Use this package when the traveller wants a premium hotel, skyline views, rooftop dining, shopping, and optional desert-style excursions.</p>
+<ul class="feature-list compact-list">
+<li>5 nights from AED 4,200</li>
+<li>Best for luxury city energy</li>
+<li>Optional half-day activity planning</li>
+</ul>
+<a class="text-link" href="booking.html?destination=Dubai&amp;package=Signature#booking-form-section">Build Dubai enquiry</a>
+</article>
+<article class="package-route-card interactive-card" id="maldives-details">
+<h3>Maldives Island Retreat</h3>
+<p>Use this package when the priority is beach silence, clear water, privacy, and a resort-led holiday with very little rushing.</p>
+<ul class="feature-list compact-list">
+<li>7 nights from AED 6,450</li>
+<li>Best for quiet luxury</li>
+<li>Water-villa style upgrade notes</li>
+</ul>
+<a class="text-link" href="booking.html?destination=Maldives&amp;package=Signature#booking-form-section">Build Maldives enquiry</a>
+</article>
+<article class="package-route-card interactive-card" id="bali-details">
+<h3>Bali Resort Escape</h3>
+<p>Use this package when the traveller wants tropical scenery, resort comfort, spa-style downtime, and warm island character.</p>
+<ul class="feature-list compact-list">
+<li>7 nights from AED 5,450</li>
+<li>Best for tropical calm</li>
+<li>Optional culture and wellness notes</li>
+</ul>
+<a class="text-link" href="booking.html?destination=Bali&amp;package=Signature#booking-form-section">Build Bali enquiry</a>
+</article>
+<article class="package-route-card interactive-card" id="amalfi-details">
+<h3>Amalfi Coast Journey</h3>
+<p>Use this package when the trip should feel scenic, stylish, Mediterranean, and more refined than a basic beach break.</p>
+<ul class="feature-list compact-list">
+<li>6 nights from AED 5,700</li>
+<li>Best for coastal elegance</li>
+<li>Viewpoint and town-hopping focus</li>
+</ul>
+<a class="text-link" href="booking.html?destination=Amalfi%20Coast&amp;package=Signature#booking-form-section">Build Amalfi enquiry</a>
+</article>
+<article class="package-route-card interactive-card" id="marrakech-details">
+<h3>Marrakech Boutique Discovery</h3>
+<p>Use this package when the traveller wants city colour, boutique stays, warm evenings, and a stronger cultural mood.</p>
+<ul class="feature-list compact-list">
+<li>5 nights from AED 4,450</li>
+<li>Best for culture-led breaks</li>
+<li>Riad-style stay and evening notes</li>
+</ul>
+<a class="text-link" href="booking.html?destination=Marrakech&amp;package=Signature#booking-form-section">Build Marrakech enquiry</a>
+</article>
+</div>
+</article>
+
+<!-- Trust section explains why the enquiry flow is safer than instant checkout. -->
+<article class="content-box interactive-card">
+<p class="eyebrow">Package trust</p>
+<h2>How Holidae makes package enquiries feel safer</h2>
+<p class="package-subheading">
+              A package page should make the trip feel clearer before anyone moves on to the enquiry form.
+            </p>
+<div class="trust-grid trust-grid-compact">
+<article class="trust-card interactive-card">
+<span class="trust-kicker">Before booking</span>
+<h3>Clear package guidance</h3>
+<p>Travellers can compare trip mood, stay style, duration, and budget feel before opening the booking form.</p>
+</article>
+<article class="trust-card interactive-card">
+<span class="trust-kicker">During enquiry</span>
+<h3>No pressure to pay instantly</h3>
+<p>The form is an enquiry journey first, so availability and package details can be reviewed before payment steps.</p>
+</article>
+<article class="trust-card interactive-card">
+<span class="trust-kicker">After enquiry</span>
+<h3>Support with next steps</h3>
+<p>Dates, transfers, rooms, airports, and notes can be checked before the traveller moves toward confirmation.</p>
+</article>
+</div>
+</article>
+
+<!-- FAQ accordion. JavaScript handles the open and close state. -->
+<article class="content-box interactive-card">
+<h2>Frequently Asked Questions</h2>
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Are these packages final bookings?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>No. The booking page sends an enquiry first so dates, availability, and details can be checked before any payment stage.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Can I choose any of the six destinations?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>Yes. Every package card links to the booking page with that destination already selected.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Why is Santorini still the longest section?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>Santorini is shown in more detail here as an example of how the package structure works across the collection.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Can the package be adjusted?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>Yes. The booking form lets travellers adjust traveller count, room type, board basis, airport, trip focus, and notes.</p>
+</div>
+</div>
+</article>
+</div>
+
+<!-- Sidebar gives a quick summary while the user scrolls through package details. -->
+<aside class="side-column">
+<div class="content-box booking-summary-box interactive-card">
+<p class="eyebrow">Package hub</p>
+<h2>Quick Summary</h2>
+<p><strong>Destinations:</strong> 6 package options</p>
+<p><strong>Price range:</strong> From AED 4,200–AED 6,450</p>
+<p><strong>Trip length:</strong> 5–7 nights</p>
+<p><strong>Booking type:</strong> Enquiry first, no instant payment</p>
+<div class="summary-tag-row left-align-tags">
+<span class="summary-tag">Compare</span>
+<span class="summary-tag">Choose</span>
+<span class="summary-tag">Enquire</span>
+</div>
+<a class="btn full-width" href="#package-builder">Build a Package</a>
+<a class="text-link sidebar-link" href="destinations.html#comparison">Compare destinations first</a>
+</div>
+<div class="content-box trust-sidebar-card interactive-card">
+<p class="eyebrow">Confidence checks</p>
+<h2>Each package includes</h2>
+<ul class="feature-list compact-list">
+<li>A real destination-specific booking link</li>
+<li>A clear price, duration, and traveller fit</li>
+<li>A practical comparison route</li>
+<li>A safer enquiry-first message</li>
+</ul>
+</div>
+<div class="content-box interactive-card">
+<h2>Best quick choices</h2>
+<ul class="feature-list compact-list">
+<li><strong>Romance:</strong> Santorini or Amalfi Coast</li>
+<li><strong>City energy:</strong> Dubai</li>
+<li><strong>Beach reset:</strong> Maldives or Bali</li>
+<li><strong>Culture:</strong> Marrakech</li>
+</ul>
+</div>
+</aside>
+</div>
+</section>
+</main>
+
+<!-- Shared footer across the site. -->
+<footer class="site-footer">
+<div class="container footer-shell">
+  <div class="footer-brand">
+    <a class="footer-logo" href="../index.html">Holidae</a>
+    <p>Curated holiday planning for travellers who want destination clarity, polished package options, and a calmer enquiry experience.</p>
+    <div class="footer-micro">
+      <span>Dubai-based planning desk</span>
+      <span>AED pricing</span>
+      <span>Enquiry-first booking flow</span>
+    </div>
+  </div>
+  <div class="footer-grid">
+    <div class="footer-links">
+      <h3>Explore</h3>
+      <a href="package.html">Packages</a>
+      <a href="destinations.html">Destinations</a>
+      <a href="booking.html">Booking</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-links">
+      <h3>Collection</h3>
+      <a href="booking.html?destination=Santorini&amp;package=Signature#booking-form-section">Santorini</a>
+      <a href="booking.html?destination=Dubai&amp;package=Luxe#booking-form-section">Dubai</a>
+      <a href="booking.html?destination=Maldives&amp;package=Luxe#booking-form-section">Maldives</a>
+      <a href="booking.html?destination=Amalfi%20Coast&amp;package=Signature#booking-form-section">Amalfi Coast</a>
+    </div>
+    <div class="footer-links">
+      <h3>Planning help</h3>
+      <span>hello@holidae.ae</span>
+      <span>+971 4 555 0189</span>
+      <span>Mon–Sat · 9am–7pm GST</span>
+      <span>Dubai, United Arab Emirates</span>
+    </div>
+  </div>
+</div>
+<div class="container footer-base">
+  <p>© 2026 Holidae. All rights reserved.</p>
+  <p>Premium destination enquiries and curated holiday packages.</p>
+</div>
+</footer>
+
+<!-- Mobile styles and shared JavaScript are loaded at the end. --><script src="../js/script.js"></script>
+</body>
+</html>

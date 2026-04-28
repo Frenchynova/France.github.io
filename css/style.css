@@ -1,0 +1,5289 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+
+/* ═══════════════════════════════════════════
+   BASE STYLES — all screen sizes
+═══════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════
+   BASE STYLES
+═══════════════════════════════════════════ */
+/* Main design values used across the site. */
+:root {
+  --sand: #f5f0e8;
+  --sand-light: #faf8f3;
+  --ink: #16120e;
+  --ink-mid: #3a342c;
+  --ink-soft: #6b6158;
+  --teal: #0e6b60;
+  --teal-dark: #0a5149;
+  --teal-light: rgba(14, 107, 96, 0.1);
+  --gold: #c9a96e;
+  --gold-light: rgba(201, 169, 110, 0.14);
+  --cream: #fdf9f4;
+  --white: #ffffff;
+  --border: rgba(22, 18, 14, 0.09);
+  --border-soft: rgba(22, 18, 14, 0.05);
+  --r-xs: 12px;
+  --r-sm: 18px;
+  --r-md: 24px;
+  --r-lg: 32px;
+  --r-xl: 42px;
+  --r-full: 999px;
+  --sh-sm: 0 4px 18px rgba(22, 18, 14, 0.07);
+  --sh-md: 0 12px 40px rgba(22, 18, 14, 0.1);
+  --sh-lg: 0 24px 72px rgba(22, 18, 14, 0.13);
+  --sh-xl: 0 40px 100px rgba(22, 18, 14, 0.16);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --max-w: 1220px;
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* These theme blocks are switched by the visual style buttons in JavaScript. */
+html[data-holidae-style="night"] {
+  --sand: #0e0c0a;
+  --sand-light: #141210;
+  --ink: #f0ece4;
+  --ink-mid: #c8c0b4;
+  --ink-soft: #8a8278;
+  --border: rgba(240, 236, 228, 0.08);
+  --border-soft: rgba(240, 236, 228, 0.04);
+  --cream: #111008;
+  --teal: #3ecfbf;
+  --teal-dark: #2bb8a8;
+  --teal-light: rgba(62, 207, 191, 0.1);
+  --gold: #d4b07a;
+  --gold-light: rgba(212, 176, 122, 0.12);
+}
+
+html[data-holidae-style="editorial"] {
+  --sand: #f7f2ea;
+  --teal: #8b5e3c;
+  --teal-dark: #6f4a2e;
+  --teal-light: rgba(139, 94, 60, 0.1);
+  --gold: #c17f3a;
+}
+
+html[data-holidae-style="resort"] {
+  --sand: #f0f7f8;
+  --teal: #1a7a8a;
+  --teal-dark: #156070;
+  --teal-light: rgba(26, 122, 138, 0.1);
+  --gold: #5c9e8f;
+}
+
+/* Basic reset so spacing and sizing stay predictable. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--sand);
+  color: var(--ink);
+  line-height: 1.65;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+img,
+video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  padding: 0;
+}
+
+button {
+  cursor: pointer;
+  font: inherit;
+  border: none;
+  background: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sand-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(14, 107, 96, 0.3);
+  border-radius: 99px;
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid rgba(201, 169, 110, 0.88);
+  outline-offset: 4px;
+}
+
+/* Display font is used only where the brand needs to feel more premium. */
+h1,
+h2,
+h3,
+h4,
+.logo,
+.footer-logo {
+  font-family: var(--font-display);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+}
+
+p {
+  color: var(--ink-mid);
+  line-height: 1.7;
+}
+
+strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.container {
+  width: min(100% - 32px, var(--max-w));
+  margin: 0 auto;
+}
+
+.section-padding {
+  padding: clamp(72px, 9vw, 120px) 0;
+}
+
+.alt-bg {
+  background: var(--cream);
+}
+
+/* Filled by JavaScript as the user scrolls down the page. */
+.page-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  z-index: 9999;
+  border-radius: 0 99px 99px 0;
+  transition: width 0.05s linear;
+  box-shadow: 0 0 12px rgba(14, 107, 96, 0.4);
+}
+
+/* Header sits over the hero on landing pages. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.4s var(--ease-expo);
+}
+
+.site-header-overlay {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+}
+
+.header-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 74px;
+  padding: 10px 20px;
+  margin-top: 12px;
+  border-radius: var(--r-full);
+  background: rgba(253, 249, 244, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+  box-shadow: var(--sh-md), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  transition: all 0.4s var(--ease-expo);
+}
+
+.site-header.scrolled .header-wrap {
+  box-shadow: var(--sh-lg), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+.logo {
+  font-size: clamp(1.6rem, 2.2vw, 2rem);
+  font-weight: 600;
+  color: var(--teal);
+  letter-spacing: 0.04em;
+}
+
+.logo-light,
+.site-header-overlay .logo-light {
+  color: var(--white);
+}
+
+.site-nav {
+  margin-left: auto;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+.nav-list a {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 15px;
+  border-radius: var(--r-full);
+  font-weight: 500;
+  font-size: 0.92rem;
+  color: var(--ink-mid);
+  transition: color 0.25s ease, background 0.25s ease;
+  letter-spacing: 0.01em;
+}
+
+.nav-list a:hover,
+.nav-list a.active,
+.nav-list a[aria-current="page"] {
+  color: var(--teal);
+  background: var(--teal-light);
+}
+
+.nav-list a.active,
+.nav-list a[aria-current="page"] {
+  font-weight: 600;
+}
+
+.nav-list-light a {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.nav-list-light a:hover,
+.nav-list-light a.active,
+.nav-list-light a[aria-current="page"] {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Hidden on desktop, turned into the mobile menu button later. */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border-radius: var(--r-xs);
+  width: 42px;
+  height: 42px;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 99px;
+  transition: all 0.3s var(--ease-expo);
+  transform-origin: center;
+}
+
+.nav-toggle-light span {
+  background: var(--white);
+}
+
+.nav-toggle.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.nav-toggle.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Main hero section with the background video. */
+.video-hero {
+  position: relative;
+  width: min(calc(100% - 24px), 1400px);
+  min-height: clamp(46rem, 92vh, 60rem);
+  margin: 10px auto 0;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  display: grid;
+  box-shadow: var(--sh-xl);
+}
+
+.video-hero-small {
+  min-height: clamp(34rem, 70vh, 48rem);
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.05);
+  transition: transform 8s ease;
+}
+
+.video-hero:hover .hero-video {
+  transform: scale(1);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(130deg, rgba(10, 14, 18, 0.75) 0%, rgba(10, 14, 18, 0.45) 50%, rgba(10, 14, 18, 0.2) 100%), linear-gradient(0deg, rgba(10, 14, 18, 0.6) 0%, transparent 50%);
+}
+
+.video-hero-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 1.4rem;
+  justify-items: center;
+  text-align: center;
+  align-content: end;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(6rem, 10vw, 10rem) clamp(1.5rem, 4vw, 3rem) clamp(4rem, 7vw, 7rem);
+  color: var(--white);
+}
+
+.video-hero-content h1 {
+  font-size: clamp(3rem, 7.5vw, 7rem);
+  line-height: 0.93;
+  letter-spacing: -0.04em;
+  color: var(--white);
+  max-width: 12ch;
+  text-wrap: balance;
+  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.3);
+}
+
+.video-hero-content p:not(.eyebrow) {
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 58ch;
+  font-size: 1.05rem;
+  line-height: 1.72;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px;
+  border-radius: var(--r-full);
+  font-size: 0.73rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--white);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 5px rgba(201, 169, 110, 0.2);
+  flex-shrink: 0;
+}
+
+.eyebrow:not(.eyebrow-light) {
+  background: var(--gold-light);
+  border-color: rgba(201, 169, 110, 0.22);
+  color: var(--teal);
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Button styles are reused across the whole site. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 28px;
+  min-height: 52px;
+  border-radius: var(--r-full);
+  background: var(--teal);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  border: 1.5px solid transparent;
+  box-shadow: 0 8px 28px rgba(14, 107, 96, 0.28);
+  transition: transform 0.3s var(--ease-back), box-shadow 0.3s ease, background 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.28) 50%, transparent 70%);
+  transform: translateX(-140%);
+  transition: transform 0.7s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(14, 107, 96, 0.34);
+  background: var(--teal-dark);
+}
+
+.btn:hover::after {
+  transform: translateX(140%);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--white);
+  box-shadow: none;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  border-color: var(--teal);
+  color: var(--teal);
+  box-shadow: none;
+}
+
+.btn-secondary:hover {
+  background: var(--teal-light);
+  transform: translateY(-2px);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--teal);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s ease, gap 0.25s ease;
+  padding-bottom: 1px;
+}
+
+.text-link::after {
+  content: '→';
+  transition: transform 0.25s ease;
+}
+
+.text-link:hover {
+  border-color: var(--teal);
+}
+
+.text-link:hover::after {
+  transform: translateX(3px);
+}
+
+.section-heading {
+  max-width: 760px;
+  display: grid;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.section-heading h2 {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.section-heading p {
+  color: var(--ink-soft);
+  max-width: 60ch;
+  font-size: 1.02rem;
+}
+
+.section-heading-center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-heading-center > * {
+  margin-inline: auto;
+}
+
+.section-heading-left {
+  text-align: left;
+  margin-inline: 0;
+}
+
+/* Shared card base so different sections keep the same visual style. */
+.content-box,
+.deal-card,
+.destination-card,
+.feature-point,
+.route-card,
+.review-card,
+.info-card,
+.mini-card,
+.occasion-card,
+.response-step,
+.journey-card,
+.lookbook-card,
+.image-band-card,
+.package-level-card,
+.shortlist-card,
+.trip-brief-card,
+.booking-form-panel,
+.editorial-panel,
+.booking-summary-box,
+.faq-item,
+.decision-table-wrap,
+.package-route-card,
+.trust-card,
+.destination-switch,
+.package-builder-card {
+  background: rgba(253, 249, 244, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-sm);
+  backdrop-filter: blur(12px);
+}
+
+.interactive-card,
+.deal-card,
+.destination-card,
+.journey-card,
+.occasion-card,
+.route-card,
+.destination-switch,
+.package-level-card,
+.shortlist-card {
+  transition: transform 0.35s var(--ease-expo), box-shadow 0.35s ease, border-color 0.35s ease;
+  will-change: transform;
+}
+
+.interactive-card:hover,
+.deal-card:hover,
+.destination-card:hover,
+.journey-card:hover,
+.occasion-card:hover,
+.route-card:hover,
+.destination-switch:hover,
+.package-level-card:hover,
+.shortlist-card:hover {
+  transform: translateY(-7px);
+  box-shadow: var(--sh-lg);
+  border-color: rgba(14, 107, 96, 0.2);
+}
+
+.deal-card img,
+.destination-card img,
+.journey-card img,
+.lookbook-card img,
+.image-band-card img,
+.stack-large,
+.stack-small {
+  transition: transform 0.7s var(--ease-expo), filter 0.7s ease;
+}
+
+.deal-card:hover img,
+.destination-card:hover img,
+.journey-card:hover img {
+  transform: scale(1.05);
+  filter: saturate(1.08);
+}
+
+.stack-large:hover,
+.stack-small:hover {
+  transform: scale(1.04);
+}
+
+/* Main grid layouts used by the bigger sections. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 22px;
+}
+
+.holidae-path-grid,
+.occasion-grid,
+.signature-journeys-grid,
+.response-rhythm-grid,
+.brand-principles-grid,
+.contact-route-grid,
+.destination-mood-grid,
+.booking-occasion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.feature-points {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.feature-points-wide {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.about-grid,
+.package-hub-grid,
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.split-grid,
+.booking-grid,
+.two-column-layout,
+.contact-grid,
+.trip-brief-card {
+  display: grid;
+  gap: clamp(24px, 3vw, 36px);
+  align-items: start;
+}
+
+.split-grid {
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.booking-grid,
+.contact-grid {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+}
+
+.two-column-layout {
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+}
+
+.shortlist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.package-route-grid,
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.trust-grid-compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.mini-card.stat-card {
+  padding: 28px 24px;
+  text-align: center;
+  display: grid;
+  gap: 8px;
+  align-content: center;
+}
+
+.mini-card.stat-card strong {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  color: var(--teal);
+  line-height: 1;
+  font-weight: 500;
+}
+
+.mini-card.stat-card span {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.deal-card,
+.destination-card,
+.journey-card,
+.lookbook-card {
+  overflow: hidden;
+}
+
+.deal-card,
+.destination-card,
+.journey-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.deal-card img {
+  height: 240px;
+  object-fit: cover;
+}
+
+.destination-card img,
+.journey-card img {
+  height: 260px;
+  object-fit: cover;
+}
+
+.card-content,
+.journey-card-body,
+.lookbook-content {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.card-content h3 {
+  font-size: 1.25rem;
+}
+
+.destination-card .card-content h3 {
+  font-size: 1.3rem;
+}
+
+.card-content p {
+  font-size: 0.92rem;
+}
+
+.card-content .price {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--teal);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.card-content .text-link,
+.shortlist-card .text-link,
+.response-step .text-link {
+  margin-top: auto;
+}
+
+.route-card,
+.feature-point,
+.info-card,
+.occasion-card,
+.package-level-card,
+.package-route-card,
+.trust-card,
+.response-step,
+.shortlist-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(20px, 2.4vw, 28px);
+}
+
+.route-card,
+.response-step,
+.shortlist-card {
+  min-height: 220px;
+  overflow: hidden;
+}
+
+.route-step,
+.step-label,
+.response-step > span,
+.shortlist-card > span,
+.occasion-card > span,
+.journey-card-kicker,
+.package-level-label,
+.trust-kicker {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  background: var(--teal-light);
+  color: var(--teal);
+  border: 1px solid rgba(14, 107, 96, 0.14);
+}
+
+.response-step > span,
+.shortlist-card > span,
+.trust-kicker {
+  background: var(--gold-light);
+  border-color: rgba(201, 169, 110, 0.22);
+}
+
+.route-card h3,
+.feature-point h3,
+.info-card h3,
+.occasion-card h3,
+.response-step h3,
+.shortlist-card h3,
+.package-route-card h3,
+.trust-card h3 {
+  font-size: clamp(1.12rem, 1.8vw, 1.35rem);
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+.route-card p,
+.feature-point p,
+.info-card p,
+.occasion-card p,
+.response-step p,
+.shortlist-card p,
+.package-route-card p,
+.trust-card p {
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.route-card p,
+.occasion-card p {
+  flex: 1;
+}
+
+.route-card-featured,
+.package-level-featured {
+  background: linear-gradient(145deg, rgba(14, 107, 96, 0.1), rgba(253, 249, 244, 0.95));
+  border-color: rgba(14, 107, 96, 0.18);
+}
+
+.journey-card-body {
+  gap: 12px;
+}
+
+.journey-card-featured {
+  transform: translateY(-16px);
+}
+
+.journey-card-featured:hover {
+  transform: translateY(-22px);
+}
+
+.editorial-panel {
+  padding: clamp(28px, 3.5vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.editorial-panel h2 {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  text-wrap: balance;
+}
+
+.editorial-panel p {
+  max-width: 56ch;
+}
+
+.image-stack,
+.image-band-stack,
+.insight-band,
+.image-detail-list {
+  display: grid;
+  gap: 14px;
+}
+
+.stack-large {
+  height: 380px;
+  border-radius: var(--r-md);
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.stack-small-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.stack-small {
+  height: 170px;
+  border-radius: var(--r-sm);
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.image-band-card {
+  padding: 14px;
+  overflow: hidden;
+}
+
+.image-band-layout,
+.image-band-layout.reverse-band {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 14px;
+}
+
+.image-band-layout.reverse-band {
+  grid-template-columns: 0.9fr 1.1fr;
+}
+
+.image-band-large {
+  width: 100%;
+  height: 430px;
+  object-fit: cover;
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+
+.image-band-small {
+  width: 100%;
+  height: 208px;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+
+.insight-band > div {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: rgba(253, 249, 244, 0.5);
+}
+
+.insight-band strong {
+  font-size: 0.9rem;
+}
+
+.insight-band span {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+/* Big final CTA section. */
+.cta-banner {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-banner::before {
+  content: '';
+  position: absolute;
+  top: -60%;
+  right: -10%;
+  width: 60%;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.cta-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cta-wrap .eyebrow {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.cta-wrap h2 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  color: var(--white);
+}
+
+.cta-wrap .btn {
+  background: var(--white);
+  color: var(--teal);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+}
+
+.cta-wrap .btn:hover {
+  background: var(--sand);
+  transform: translateY(-2px);
+}
+
+/* Forms share the same layout on booking and contact pages. */
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-row,
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-mid);
+  margin-bottom: 7px;
+  letter-spacing: 0.01em;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--white);
+  color: var(--ink);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  font-family: var(--font-body);
+  font-size: 0.96rem;
+  min-height: 52px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  appearance: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(14, 107, 96, 0.12);
+}
+
+input:invalid,
+select:invalid,
+textarea:invalid {
+  box-shadow: none;
+}
+
+textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.form-btn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.form-message,
+#form-message {
+  min-height: 0;
+  margin-top: 2px;
+  padding: 14px 18px;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(14, 107, 96, 0.16);
+  background: rgba(14, 107, 96, 0.07);
+  color: var(--teal-dark);
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: all 0.3s ease;
+}
+
+.form-message:empty,
+#form-message:empty {
+  display: none;
+}
+
+.form-message.error,
+#form-message.error {
+  border-color: rgba(160, 64, 48, 0.24);
+  background: rgba(160, 64, 48, 0.08);
+  color: #8a2f22;
+}
+
+.booking-form-panel,
+.content-box {
+  padding: clamp(22px, 2.5vw, 30px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.booking-form-panel {
+  gap: 22px;
+}
+
+.content-box h2 {
+  font-size: 1.35rem;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.content-box p {
+  font-size: 0.92rem;
+}
+
+.form-stage-heading {
+  display: grid;
+  gap: 6px;
+}
+
+.form-stage-heading p {
+  font-size: 0.9rem;
+}
+
+.form-note-band,
+.package-meta-list,
+.summary-tag-row,
+.footer-micro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.note-tag,
+.form-note-band span,
+.package-meta-list span,
+.summary-tag,
+.footer-micro span {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 12px;
+  border-radius: var(--r-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  background: var(--teal-light);
+  border: 1px solid rgba(14, 107, 96, 0.14);
+  color: var(--teal);
+}
+
+.summary-tag {
+  font-weight: 500;
+  color: var(--ink-mid);
+}
+
+.side-column {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+.trip-brief-card {
+  grid-template-columns: 1fr 1fr;
+  padding: clamp(24px, 3vw, 34px);
+}
+
+.trip-brief-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.trip-brief-copy h2 {
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  text-wrap: balance;
+}
+
+.trip-brief-tags {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.trip-tag {
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  background: var(--teal-light);
+  border: 1px solid rgba(14, 107, 96, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 80px;
+}
+
+.trip-tag strong {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.trip-tag span {
+  font-size: 0.92rem;
+  color: var(--ink-mid);
+}
+
+/* Progress card is added by JavaScript inside the booking form. */
+.booking-progress-card {
+  padding: 18px 20px;
+  border-radius: var(--r-md);
+  background: var(--teal-light);
+  border: 1px solid rgba(14, 107, 96, 0.14);
+  display: grid;
+  gap: 10px;
+}
+
+.booking-progress-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.booking-progress-topline strong,
+.booking-progress-percent {
+  font-size: 0.88rem;
+  color: var(--teal);
+}
+
+.booking-progress-percent {
+  font-weight: 700;
+}
+
+.booking-progress-track {
+  height: 6px;
+  background: rgba(14, 107, 96, 0.15);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.booking-progress-bar {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  border-radius: 99px;
+  transition: width 0.5s var(--ease-expo);
+}
+
+.booking-progress-hint {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.destination-switch-grid,
+.package-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.destination-switch,
+.package-filter {
+  padding: 9px 18px;
+  border-radius: var(--r-full);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  color: var(--ink-soft);
+  background: transparent;
+  transition: all 0.25s ease;
+}
+
+.destination-switch {
+  background: var(--cream);
+}
+
+.destination-switch.active,
+.destination-switch[data-destination-trigger]:hover,
+.package-filter.active,
+.package-filter:hover {
+  background: var(--teal);
+  color: var(--white);
+  border-color: var(--teal);
+  box-shadow: 0 4px 16px rgba(14, 107, 96, 0.22);
+  transform: translateY(-1px);
+}
+
+.package-filter-status {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+
+.package-hub-card.is-hidden {
+  display: none;
+}
+
+/* Package comparison table. */
+.decision-table-wrap {
+  overflow: auto;
+}
+
+.decision-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.decision-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.decision-table th,
+.decision-table td,
+.decision-table tbody th {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 0.92rem;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+
+.decision-table th {
+  font-weight: 600;
+  color: var(--ink);
+  background: rgba(14, 107, 96, 0.05);
+}
+
+.decision-table tbody th {
+  background: transparent;
+}
+
+.decision-table tbody th span {
+  display: block;
+  color: var(--ink-soft);
+  font-weight: 400;
+  font-size: 0.82rem;
+  margin-top: 3px;
+}
+
+.decision-table tr:last-child td {
+  border-bottom: none;
+}
+
+.package-builder-card {
+  margin-top: clamp(26px, 4vw, 44px);
+  padding: clamp(22px, 3vw, 34px);
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+  gap: clamp(22px, 4vw, 46px);
+  align-items: start;
+}
+
+.package-builder-copy,
+.package-builder-controls {
+  display: grid;
+  gap: 12px;
+}
+
+.package-builder-copy h3 {
+  font-size: clamp(1.55rem, 3vw, 2.4rem);
+  line-height: 1.05;
+}
+
+.package-builder-copy p:not(.eyebrow) {
+  max-width: 58ch;
+}
+
+.package-builder-controls select {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.builder-result-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 8px 0 4px;
+}
+
+.builder-result-list span {
+  min-height: 82px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--teal-light);
+  border: 1px solid rgba(14, 107, 96, 0.14);
+  color: var(--ink-mid);
+  display: grid;
+  align-content: center;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.builder-result-list strong {
+  color: var(--teal);
+  font-size: 1rem;
+}
+
+.lookbook-card {
+  display: grid;
+  grid-template-columns: 1.12fr 0.88fr;
+}
+
+.lookbook-media {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+}
+
+.lookbook-hero {
+  width: 100%;
+  height: 310px;
+  object-fit: cover;
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+
+.lookbook-thumb-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.lookbook-thumb {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+
+/* FAQ opens by adding the active class from JavaScript. */
+.faq-item {
+  overflow: hidden;
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 22px;
+  gap: 14px;
+  text-align: left;
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+
+.faq-question:hover {
+  color: var(--teal);
+}
+
+.faq-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--teal);
+  transition: transform 0.3s ease, background 0.25s ease;
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+  background: var(--teal-light);
+}
+
+.faq-answer {
+  display: none;
+  padding: 0 22px 20px;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+.feature-list,
+.compact-list {
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 8px;
+  list-style: disc;
+}
+
+.feature-list li,
+.compact-list li {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.compact-list li {
+  font-size: 0.9rem;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.review-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 190px;
+}
+
+.review-card .review-stars {
+  color: var(--gold);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.review-card p {
+  font-size: 0.92rem;
+  font-style: italic;
+  flex: 1;
+  color: var(--ink-mid);
+  opacity: 1;
+}
+
+.review-meta,
+.review-card .review-meta {
+  display: grid;
+  gap: 2px;
+  margin-top: auto;
+}
+
+.review-meta strong,
+.review-card .review-meta strong {
+  color: var(--ink);
+}
+
+.review-meta span,
+.review-card .review-meta span,
+.review-card .review-attr {
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+/* Modal opened by clicking destination images. */
+.image-detail-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.image-detail-modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.image-detail-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 8, 6, 0.82);
+  backdrop-filter: blur(14px);
+}
+
+.image-detail-panel {
+  position: relative;
+  z-index: 1;
+  width: min(1080px, 100%);
+  max-height: min(88vh, 900px);
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  border-radius: var(--r-xl);
+  background: var(--cream);
+  border: 1px solid var(--border);
+  box-shadow: var(--sh-xl);
+}
+
+.image-detail-media {
+  min-height: 420px;
+  background: var(--ink);
+}
+
+.image-detail-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-detail-content {
+  padding: clamp(24px, 4vw, 38px);
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.image-detail-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.image-detail-content h3 {
+  font-size: 1.6rem;
+}
+
+.image-detail-copy {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.image-detail-row {
+  padding: 13px 15px;
+  border-radius: var(--r-sm);
+  background: var(--teal-light);
+  border: 1px solid rgba(14, 107, 96, 0.12);
+}
+
+.image-detail-row strong {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--teal);
+  margin-bottom: 3px;
+}
+
+.image-detail-row span {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.image-detail-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(10, 8, 6, 0.6);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: background 0.25s ease;
+}
+
+.image-detail-close:hover {
+  background: rgba(10, 8, 6, 0.85);
+}
+
+/* Footer layout and link columns. */
+.site-footer {
+  background: var(--ink);
+  margin-top: 80px;
+}
+
+.footer-shell {
+  display: grid;
+  grid-template-columns: 1.1fr 1.4fr;
+  gap: 28px;
+  padding: 52px 0 28px;
+}
+
+.footer-brand {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  color: var(--white);
+  line-height: 1;
+}
+
+.footer-brand > p {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9rem;
+  max-width: 34ch;
+}
+
+.footer-micro span {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.footer-links {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.footer-links h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-body);
+  margin-bottom: 6px;
+}
+
+.footer-links a {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--gold);
+}
+
+.footer-links span {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-base {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0 38px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.footer-base p {
+  font-size: 0.83rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0;
+}
+
+/* Floating theme switcher made by JavaScript. */
+.style-switcher {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 4000;
+  display: block;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-lg);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+  max-width: min(330px, calc(100vw - 36px));
+  min-width: 200px;
+  transition: all 0.35s var(--ease-expo);
+}
+
+.style-switcher.collapsed .style-switcher-options {
+  display: none;
+}
+
+.style-switcher-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  gap: 10px;
+}
+
+.style-switcher-copy {
+  display: grid;
+  gap: 2px;
+}
+
+.style-switcher-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.style-switcher-subtitle {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.style-switcher-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--teal-light);
+  color: var(--teal);
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.style-switcher-options {
+  padding: 8px 12px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.style-option-btn {
+  padding: 7px 14px;
+  border-radius: var(--r-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  color: var(--ink-soft);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.style-option-btn:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.style-option-btn.active {
+  background: var(--teal);
+  color: var(--white);
+  border-color: var(--teal);
+}
+
+/* Floating sound button and short toast message. */
+.immersive-sound-toggle {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 4000;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 16px;
+  min-height: 44px;
+  max-width: calc(100vw - 36px);
+  border-radius: var(--r-full);
+  background: var(--cream);
+  border: 1px solid var(--border);
+  box-shadow: var(--sh-md);
+  backdrop-filter: blur(16px);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--ink);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.immersive-sound-toggle:hover {
+  box-shadow: var(--sh-lg);
+  transform: translateY(-1px);
+}
+
+.sound-status {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+
+.audio-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 80px;
+  transform: translateX(-50%) translateY(14px);
+  padding: 10px 16px;
+  border-radius: var(--r-full);
+  background: rgba(10, 8, 6, 0.88);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5000;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+
+.audio-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5500;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--cream);
+  transition: opacity 0.2s ease;
+}
+
+body.is-transitioning .page-transition-overlay {
+  opacity: 1;
+}
+
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+  width: 500px;
+  height: 500px;
+  margin-left: -250px;
+  margin-top: -250px;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(14, 107, 96, 0.1) 0%, transparent 70%);
+  transition: opacity 0.4s ease;
+  mix-blend-mode: multiply;
+}
+
+/* Reveal animation class added by JavaScript. */
+.reveal-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.75s var(--ease-expo), transform 0.75s var(--ease-expo);
+}
+
+.reveal-animate.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+body.modal-open,
+body.nav-open {
+  overflow: hidden;
+}
+
+.hero-stats-grid {
+  width: min(100%, 980px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: clamp(18px, 3vw, 34px);
+}
+
+.hero-stat-card {
+  min-height: 132px;
+  padding: 18px 20px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(16px) saturate(1.35);
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  text-align: left;
+}
+
+.hero-stat-card strong {
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.hero-stat-card p {
+  color: rgba(255, 255, 255, 0.78) !important;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.video-hero-content .hero-stats-grid {
+  justify-self: stretch;
+}
+
+.response-rhythm-section .section-heading,
+#shortlist-builder .section-heading {
+  margin-bottom: 28px;
+}
+
+.response-rhythm-section,
+#shortlist-builder {
+  overflow: hidden;
+}
+
+section[aria-labelledby="contact-faq-title"] .two-column-layout {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 980px;
+  margin-inline: auto;
+}
+
+section[aria-labelledby="contact-faq-title"] .main-column {
+  width: 100%;
+}
+
+section[aria-labelledby="contact-faq-title"] .section-heading {
+  margin-bottom: 28px;
+  max-width: 820px;
+}
+
+section[aria-labelledby="contact-faq-title"] .section-heading h2 {
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  line-height: 0.95;
+  max-width: 11ch;
+}
+
+section[aria-labelledby="contact-faq-title"] .section-heading .eyebrow {
+  width: fit-content;
+  max-width: 100%;
+}
+
+section[aria-labelledby="contact-faq-title"] .faq-item {
+  border-radius: 28px;
+  margin-bottom: 10px;
+}
+
+section[aria-labelledby="contact-faq-title"] .faq-question {
+  min-height: 68px;
+  padding: 20px 22px;
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+section[aria-labelledby="contact-faq-title"] .faq-answer {
+  padding: 0 22px 22px;
+}
+
+section[aria-labelledby="contact-faq-title"] .side-column {
+  display: none;
+}
+
+/* Extra fixes so the night theme changes more than just the main variables. */
+html[data-holidae-style="night"] body {
+  background: #0e0c0a;
+  color: #f0ece4;
+}
+
+html[data-holidae-style="night"] .alt-bg,
+html[data-holidae-style="night"] .site-footer {
+  background: #0b0908;
+}
+
+html[data-holidae-style="night"] .header-wrap {
+  background: rgba(14, 12, 10, 0.86);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+html[data-holidae-style="night"] .content-box,
+html[data-holidae-style="night"] .deal-card,
+html[data-holidae-style="night"] .destination-card,
+html[data-holidae-style="night"] .feature-point,
+html[data-holidae-style="night"] .route-card,
+html[data-holidae-style="night"] .review-card,
+html[data-holidae-style="night"] .info-card,
+html[data-holidae-style="night"] .mini-card,
+html[data-holidae-style="night"] .occasion-card,
+html[data-holidae-style="night"] .response-step,
+html[data-holidae-style="night"] .journey-card,
+html[data-holidae-style="night"] .lookbook-card,
+html[data-holidae-style="night"] .image-band-card,
+html[data-holidae-style="night"] .package-level-card,
+html[data-holidae-style="night"] .shortlist-card,
+html[data-holidae-style="night"] .trip-brief-card,
+html[data-holidae-style="night"] .booking-form-panel,
+html[data-holidae-style="night"] .editorial-panel,
+html[data-holidae-style="night"] .booking-summary-box,
+html[data-holidae-style="night"] .faq-item,
+html[data-holidae-style="night"] .decision-table-wrap,
+html[data-holidae-style="night"] .package-route-card,
+html[data-holidae-style="night"] .trust-card,
+html[data-holidae-style="night"] .destination-switch,
+html[data-holidae-style="night"] .package-builder-card {
+  background: rgba(20, 18, 16, 0.92);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f0ece4;
+}
+
+html[data-holidae-style="night"] p,
+html[data-holidae-style="night"] li,
+html[data-holidae-style="night"] span,
+html[data-holidae-style="night"] label,
+html[data-holidae-style="night"] .card-content p,
+html[data-holidae-style="night"] .feature-list li,
+html[data-holidae-style="night"] .compact-list li,
+html[data-holidae-style="night"] .package-subheading,
+html[data-holidae-style="night"] .review-card p,
+html[data-holidae-style="night"] .response-step p,
+html[data-holidae-style="night"] .shortlist-card p {
+  color: rgba(240, 236, 228, 0.76);
+}
+
+html[data-holidae-style="night"] h1,
+html[data-holidae-style="night"] h2,
+html[data-holidae-style="night"] h3,
+html[data-holidae-style="night"] h4,
+html[data-holidae-style="night"] strong,
+html[data-holidae-style="night"] .faq-question,
+html[data-holidae-style="night"] .style-switcher-title,
+html[data-holidae-style="night"] .immersive-sound-toggle span:first-child {
+  color: #f8f2e8;
+}
+
+html[data-holidae-style="night"] input,
+html[data-holidae-style="night"] select,
+html[data-holidae-style="night"] textarea {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f8f2e8;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+html[data-holidae-style="night"] input::placeholder,
+html[data-holidae-style="night"] textarea::placeholder {
+  color: rgba(240, 236, 228, 0.48);
+}
+
+html[data-holidae-style="night"] .eyebrow:not(.eyebrow-light),
+html[data-holidae-style="night"] .response-step > span,
+html[data-holidae-style="night"] .shortlist-card > span,
+html[data-holidae-style="night"] .trust-kicker {
+  background: rgba(212, 176, 122, 0.12);
+  border-color: rgba(212, 176, 122, 0.24);
+  color: #d4b07a;
+}
+
+html[data-holidae-style="night"] .text-link,
+html[data-holidae-style="night"] .style-option-btn:hover {
+  color: #69ddd0;
+}
+
+html[data-holidae-style="night"] .text-link:hover {
+  border-color: #69ddd0;
+}
+
+html[data-holidae-style="night"] .summary-tag,
+html[data-holidae-style="night"] .package-level-label,
+html[data-holidae-style="night"] .occasion-card > span,
+html[data-holidae-style="night"] .journey-card-kicker,
+html[data-holidae-style="night"] .package-meta-list span,
+html[data-holidae-style="night"] .form-note-band span,
+html[data-holidae-style="night"] .builder-result-list span,
+html[data-holidae-style="night"] .trip-tag {
+  background: rgba(62, 207, 191, 0.12);
+  border-color: rgba(62, 207, 191, 0.2);
+  color: #69ddd0;
+}
+
+html[data-holidae-style="night"] .style-switcher,
+html[data-holidae-style="night"] .immersive-sound-toggle {
+  background: rgba(20, 18, 16, 0.94);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #f8f2e8;
+}
+
+html[data-holidae-style="night"] .sound-status,
+html[data-holidae-style="night"] .style-switcher-subtitle,
+html[data-holidae-style="night"] .review-meta span,
+html[data-holidae-style="night"] .review-card .review-meta span {
+  color: rgba(240, 236, 228, 0.62);
+}
+
+html[data-holidae-style="night"] .footer-brand > p,
+html[data-holidae-style="night"] .footer-links a,
+html[data-holidae-style="night"] .footer-links span,
+html[data-holidae-style="night"] .footer-base p {
+  color: rgba(240, 236, 228, 0.68);
+}
+
+html[data-holidae-style="night"] .footer-links h3,
+html[data-holidae-style="night"] .footer-logo {
+  color: #f8f2e8;
+}
+
+html[data-holidae-style="night"] .footer-micro span {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(240, 236, 228, 0.72);
+}
+
+html[data-holidae-style="night"] .cursor-glow {
+  background: radial-gradient(circle, rgba(62, 207, 191, 0.08) 0%, transparent 70%);
+  mix-blend-mode: screen;
+}
+
+/* Keeps sidebar cards visible on wider screens. */
+
+
+/* First responsive step: wide layouts become simpler. */
+
+
+
+
+
+
+/* Main mobile layout. */
+
+
+/* Turns off movement for users who prefer reduced motion. */
+
+
+/* Custom mobile navigation overlay. */
+
+
+
+
+/* Mobile version of the floating style and sound controls. */
+
+
+
+/*
+  style-options.css
+  Additional theme option tokens and overrides for the Holidae visual style system.
+  These supplement the base tokens in style.css for the editorial, resort, and night themes.
+*/
+
+/* ─── Cinematic (default) extra overrides ─── */
+html[data-holidae-style="cinematic"] {
+  --sand: #f5f0e8;
+  --sand-light: #faf8f3;
+  --ink: #16120e;
+  --ink-mid: #3a342c;
+  --ink-soft: #6b6158;
+  --teal: #0e6b60;
+  --teal-dark: #0a5149;
+  --teal-light: rgba(14, 107, 96, 0.1);
+  --gold: #c9a96e;
+  --gold-light: rgba(201, 169, 110, 0.14);
+  --cream: #fdf9f4;
+}
+
+/* ─── Package level badge colours ─── */
+.package-level-label.essential {
+  background: var(--gold-light);
+  color: #8a6128;
+  border-color: rgba(201, 169, 110, 0.24);
+}
+
+.package-level-label.signature {
+  background: var(--teal-light);
+  color: var(--teal);
+  border-color: rgba(14, 107, 96, 0.18);
+}
+
+.package-level-label.luxe {
+  background: rgba(22, 18, 14, 0.07);
+  color: var(--ink);
+  border-color: rgba(22, 18, 14, 0.14);
+}
+
+/* ─── Package level card highlighted variant ─── */
+.package-level-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(20px, 2.4vw, 30px);
+}
+
+.package-level-card h3 {
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+  line-height: 1.1;
+}
+
+.package-level-card .price-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.package-level-card .price-line strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  color: var(--teal);
+  font-weight: 500;
+}
+
+.package-level-card .price-line span {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+/* ─── Package hub card ─── */
+.package-hub-card {
+  background: rgba(253, 249, 244, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.package-hub-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease-expo);
+}
+
+.package-hub-card:hover img {
+  transform: scale(1.04);
+}
+
+.package-hub-card-body {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+/* ─── Sidebar link ─── */
+.sidebar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--teal);
+  padding: 12px 18px;
+  border-radius: var(--r-full);
+  background: var(--teal-light);
+  border: 1px solid rgba(14, 107, 96, 0.14);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.sidebar-link:hover {
+  background: rgba(14, 107, 96, 0.16);
+  transform: translateY(-1px);
+}
+
+/* ─── Timeline list (contact / about) ─── */
+.timeline-list {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.timeline-list li {
+  display: flex;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.92rem;
+  color: var(--ink-mid);
+  line-height: 1.6;
+}
+
+.timeline-list li:last-child {
+  border-bottom: none;
+}
+
+.timeline-list li::before {
+  content: attr(data-step);
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--teal-light);
+  border: 1px solid rgba(14, 107, 96, 0.18);
+  color: var(--teal);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+/* ─── Enquiry next card ─── */
+.enquiry-next-card {
+  background: linear-gradient(145deg, rgba(14, 107, 96, 0.08), rgba(253, 249, 244, 0.96));
+  border: 1px solid rgba(14, 107, 96, 0.16);
+  border-radius: var(--r-lg);
+  padding: clamp(22px, 3vw, 34px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.enquiry-next-card h3 {
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+}
+
+/* ─── Trust sidebar card ─── */
+.trust-sidebar-card {
+  background: rgba(253, 249, 244, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: clamp(18px, 2.5vw, 26px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--sh-sm);
+}
+
+/* ─── Booking summary box ─── */
+.booking-summary-box {
+  padding: clamp(18px, 2.5vw, 26px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.booking-summary-box h3 {
+  font-size: 1.1rem;
+}
+
+/* ─── Compact insight band ─── */
+.compact-insight-band {
+  display: grid;
+  gap: 8px;
+}
+
+.compact-insight-band > div {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: rgba(253, 249, 244, 0.6);
+  font-size: 0.88rem;
+}
+
+.compact-insight-band > div strong {
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  color: var(--teal);
+}
+
+/* ─── Booking occasion grid ─── */
+.booking-occasion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* ─── Destination lens section ─── */
+.destination-lens-section,
+.booking-lens-section,
+.editorial-section,
+.package-editorial-lens,
+.package-occasion-section,
+.package-advice-section,
+.response-rhythm-section,
+.contact-route-section,
+.brand-principles-section,
+.signature-journeys-section {
+  /* These section wrappers are just containers — layout is handled by child classes */
+}
+
+/* ─── Destination mood grid ─── */
+.destination-mood-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Travel fit grid ─── */
+.travel-fit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* ─── Package advice grid ─── */
+.package-advice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Contact route grid ─── */
+.contact-route-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Brand principles grid ─── */
+.brand-principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Destination switch extra states ─── */
+.destination-switch-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+  display: block;
+}
+
+.destination-switch-copy {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  display: block;
+  line-height: 1.4;
+}
+
+/* ─── Small cards variant ─── */
+.small-cards .deal-card img,
+.small-cards .destination-card img {
+  height: 180px;
+}
+
+/* ─── Split grid reverse ─── */
+.split-grid-reverse {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 3vw, 36px);
+  align-items: center;
+}
+
+.split-grid-reverse > *:first-child {
+  order: 2;
+}
+
+.split-grid-reverse > *:last-child {
+  order: 1;
+}
+
+/* ─── Hero stats grid for booking page ─── */
+.hero-stats-grid-booking {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: clamp(18px, 3vw, 28px);
+  width: 100%;
+}
+
+/* ─── Left align tags ─── */
+.left-align-tags {
+  justify-content: flex-start;
+}
+
+/* ─── Lookbook grid ─── */
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+/* ─── Destination card image-detail list ─── */
+.image-detail-list {
+  display: grid;
+  gap: 10px;
+}
+
+/* ─── Card actions row ─── */
+.card-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+/* ─── Trip tag label ─── */
+.trip-tag-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  display: block;
+}
+
+/* ─── Step label (used on booking / how-it-works) ─── */
+.step-label {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--teal-light);
+  color: var(--teal);
+  border: 1px solid rgba(14, 107, 96, 0.14);
+}
+
+/* ─── Estimate price (booking calculator) ─── */
+.estimate-price {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  color: var(--teal);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+/* ─── Main column / side column layout (booking page) ─── */
+.main-column {
+  min-width: 0;
+}
+
+/* ─── Night mode overrides for new components ─── */
+html[data-holidae-style="night"] .package-hub-card,
+html[data-holidae-style="night"] .enquiry-next-card,
+html[data-holidae-style="night"] .trust-sidebar-card,
+html[data-holidae-style="night"] .booking-summary-box,
+html[data-holidae-style="night"] .compact-insight-band > div {
+  background: rgba(20, 18, 16, 0.92);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-holidae-style="night"] .sidebar-link {
+  background: rgba(62, 207, 191, 0.1);
+  border-color: rgba(62, 207, 191, 0.18);
+  color: #3ecfbf;
+}
+
+html[data-holidae-style="night"] .timeline-list li::before {
+  background: rgba(62, 207, 191, 0.12);
+  border-color: rgba(62, 207, 191, 0.2);
+  color: #3ecfbf;
+}
+
+/* ─── Mobile tweaks for style-options content ─── */
+
+
+
+
+/*
+  redesign.css
+  Layout redesign classes — refined grid systems, spacing overrides,
+  and section-level composition adjustments for the Holidae site.
+*/
+
+/* ─── Page-level layout wrapper ─── */
+.holidae-redesign main > section:not(:first-child) {
+  position: relative;
+}
+
+/* ─── Reveal animation setup (JS adds .reveal-animate after DOMContentLoaded) ─── */
+.reveal {
+  /* The element itself is visible by default — JS enhances with animation */
+}
+
+/* ─── Featured deals refined grid ─── */
+.featured-deals .card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+
+
+
+
+/* ─── Collection spotlight refined ─── */
+.collection-spotlight .spotlight-grid {
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: clamp(24px, 4vw, 52px);
+}
+
+
+
+/* ─── Signature journeys refined grid ─── */
+.signature-journeys-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+
+
+/* ─── Journey card featured lift (desktop only) ─── */
+
+
+/* ─── Holidae path grid (3-step section) ─── */
+.holidae-path-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+
+
+/* ─── Stats grid ─── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+
+
+/* ─── Review / planning notes grid ─── */
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+
+
+/* ─── About grid ─── */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+
+
+/* ─── Package hub grid ─── */
+.package-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+
+
+/* ─── Booking grid ─── */
+.booking-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+
+
+
+/* ─── Contact grid ─── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+
+
+
+/* ─── Two column layout ─── */
+.two-column-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+
+
+
+/* ─── Split grid ─── */
+.split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(22px, 4vw, 50px);
+}
+
+
+
+/* ─── Feature points grid ─── */
+.feature-points {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.feature-points-wide {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+
+
+/* ─── Package builder card mobile ─── */
+
+
+/* ─── CTA banner mobile ─── */
+
+
+/* ─── Footer mobile ─── */
+
+
+
+
+/* ─── Shortlist grid ─── */
+.shortlist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+
+
+
+
+/* ─── Package route grid ─── */
+.package-route-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+
+
+/* ─── Trust grid ─── */
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.trust-grid-compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+
+
+/* ─── Card grid responsive ─── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+
+
+/* ─── Occasion grid ─── */
+.occasion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+
+
+
+
+/* ─── Page progress bar ─── */
+.page-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  z-index: 9999;
+  border-radius: 0 99px 99px 0;
+  transition: width 0.05s linear;
+  box-shadow: 0 0 12px rgba(14, 107, 96, 0.4);
+}
+
+/* ─── Night mode section backgrounds ─── */
+html[data-holidae-style="night"] .cta-banner {
+  background: linear-gradient(135deg, #0a4f47 0%, #073d37 100%);
+}
+
+html[data-holidae-style="night"] .alt-bg {
+  background: #0b0908;
+}
+
+/* ─── Booking side sticky column ─── */
+.booking-side {
+  position: sticky;
+  top: 100px;
+}
+
+
+
+/*
+  experience.css
+  Interactive experience enhancements — animations, transitions,
+  hover states, scroll effects, and motion polish for the Holidae site.
+*/
+
+/* ─── Smooth page load fade-in ─── */
+@keyframes holidae-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes holidae-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes holidae-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes holidae-counter-tick {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Hero content entrance ─── */
+.video-hero-content > * {
+  animation: holidae-fade-in 0.85s var(--ease-expo) both;
+}
+
+.video-hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+.video-hero-content > *:nth-child(2) { animation-delay: 0.22s; }
+.video-hero-content > *:nth-child(3) { animation-delay: 0.32s; }
+.video-hero-content > *:nth-child(4) { animation-delay: 0.42s; }
+
+/* ─── Reduced motion: disable animations ─── */
+
+
+/* ─── Card hover shimmer effect ─── */
+.deal-card,
+.destination-card,
+.journey-card,
+.info-card,
+.route-card,
+.review-card,
+.occasion-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.deal-card::after,
+.destination-card::after,
+.journey-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+
+.deal-card:hover::after,
+.destination-card:hover::after,
+.journey-card:hover::after {
+  transform: translateX(120%);
+}
+
+/* ─── Interactive card focus ring ─── */
+.interactive-card:focus-within {
+  outline: 3px solid rgba(201, 169, 110, 0.7);
+  outline-offset: 3px;
+}
+
+/* ─── Image hover zoom (non-mobile) ─── */
+
+
+/* ─── Text link animated underline ─── */
+.text-link {
+  position: relative;
+}
+
+.text-link::before {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--teal);
+  transition: width 0.3s var(--ease-expo);
+}
+
+.text-link:hover::before {
+  width: 100%;
+}
+
+/* ─── Counter animation class ─── */
+.counter {
+  display: block;
+  animation: holidae-counter-tick 0.5s var(--ease-expo) both;
+}
+
+/* ─── Review card border left accent ─── */
+.review-card {
+  border-left: 3px solid transparent;
+  transition: border-color 0.3s ease, transform 0.35s var(--ease-expo), box-shadow 0.35s ease;
+}
+
+.review-card:hover {
+  border-left-color: var(--gold);
+}
+
+/* ─── Route card featured highlight pulse ─── */
+@keyframes holidae-border-pulse {
+  0%, 100% { border-color: rgba(14, 107, 96, 0.18); }
+  50% { border-color: rgba(14, 107, 96, 0.36); }
+}
+
+.route-card-featured {
+  animation: holidae-border-pulse 3.5s ease-in-out infinite;
+}
+
+/* ─── Booking form step transition ─── */
+.booking-form .form-stage-heading {
+  animation: holidae-fade-in 0.4s var(--ease-expo) both;
+}
+
+/* ─── FAQ item animation ─── */
+.faq-answer {
+  animation: none;
+}
+
+.faq-item.active .faq-answer {
+  animation: holidae-fade-in 0.3s var(--ease-expo) both;
+}
+
+/* ─── Scroll snap for stats row on mobile ─── */
+
+
+/* ─── Page transition polish ─── */
+.page-transition-overlay {
+  background: var(--cream);
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 1, 1);
+}
+
+body.is-transitioning .page-transition-overlay {
+  opacity: 1;
+}
+
+/* ─── Image detail modal entrance ─── */
+.image-detail-panel {
+  animation: holidae-scale-in 0.35s var(--ease-expo) both;
+}
+
+.image-detail-modal.open .image-detail-panel {
+  animation-play-state: running;
+}
+
+/* ─── Footer link hover effect ─── */
+.footer-links a {
+  transition: color 0.22s ease, letter-spacing 0.22s ease;
+}
+
+.footer-links a:hover {
+  letter-spacing: 0.01em;
+}
+
+/* ─── Eyebrow dot pulse ─── */
+@keyframes eyebrow-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.18); }
+  50% { box-shadow: 0 0 0 6px rgba(201, 169, 110, 0.08); }
+}
+
+.eyebrow::before {
+  animation: eyebrow-pulse 2.4s ease-in-out infinite;
+}
+
+/* ─── Style switcher smooth theme change ─── */
+body,
+.deal-card,
+.destination-card,
+.info-card,
+.route-card,
+.review-card,
+.journey-card,
+.editorial-panel,
+.booking-form-panel,
+.content-box,
+.header-wrap {
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease;
+}
+
+/* ─── Nav item stagger on mobile open ─── */
+.site-nav.open .nav-list li {
+  animation: holidae-slide-up 0.36s var(--ease-expo) both;
+}
+
+.site-nav.open .nav-list li:nth-child(1) { animation-delay: 0.04s; }
+.site-nav.open .nav-list li:nth-child(2) { animation-delay: 0.09s; }
+.site-nav.open .nav-list li:nth-child(3) { animation-delay: 0.14s; }
+.site-nav.open .nav-list li:nth-child(4) { animation-delay: 0.19s; }
+.site-nav.open .nav-list li:nth-child(5) { animation-delay: 0.24s; }
+.site-nav.open .nav-list li:nth-child(6) { animation-delay: 0.29s; }
+
+/* ─── Night mode card glow on hover ─── */
+html[data-holidae-style="night"] .interactive-card:hover,
+html[data-holidae-style="night"] .deal-card:hover,
+html[data-holidae-style="night"] .destination-card:hover,
+html[data-holidae-style="night"] .journey-card:hover {
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(62, 207, 191, 0.12);
+}
+
+/* ─── Destination card image overlay ─── */
+.destination-card {
+  position: relative;
+}
+
+.destination-card img {
+  position: relative;
+}
+
+/* ─── Package filter pressed state ─── */
+.package-filter {
+  position: relative;
+  overflow: hidden;
+}
+
+.package-filter::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--teal);
+  opacity: 0;
+  transform: scale(0.6);
+  border-radius: inherit;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.package-filter.active::after,
+.package-filter:active::after {
+  opacity: 0.12;
+  transform: scale(1);
+}
+
+/* ─── Section reveal base (enhanced by JS) ─── */
+.reveal {
+  transition: opacity 0.75s var(--ease-expo), transform 0.75s var(--ease-expo);
+}
+
+/*
+  refinement.css
+  Final refinements — spacing micro-adjustments, typographic polish,
+  accessibility improvements, and cross-browser fixes for Holidae.
+*/
+
+/* ─── Typography refinements ─── */
+h1 {
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+  line-height: 0.93;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+h3 {
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+h4 {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.2;
+}
+
+/* ─── Paragraph max-width for readability ─── */
+.section-heading p,
+.editorial-panel p,
+.booking-form-panel p,
+.content-box p {
+  max-width: 60ch;
+}
+
+/* ─── Remove orphan words on headings ─── */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+/* ─── Refined eyebrow label ─── */
+.eyebrow {
+  font-family: var(--font-body);
+}
+
+/* ─── Link accessibility: visible focus ─── */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid rgba(201, 169, 110, 0.85);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ─── Skip to main content link (accessibility) ─── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  padding: 10px 18px;
+  background: var(--teal);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 0 0 var(--r-sm) var(--r-sm);
+  z-index: 10000;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ─── Image aspect ratio helpers ─── */
+.aspect-video {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  width: 100%;
+}
+
+.aspect-square {
+  aspect-ratio: 1;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* ─── Scrollbar refinement ─── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sand-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(14, 107, 96, 0.28);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(14, 107, 96, 0.42);
+}
+
+/* ─── Selection colour ─── */
+::selection {
+  background: rgba(14, 107, 96, 0.18);
+  color: var(--ink);
+}
+
+/* ─── Print: hide non-essential elements ─── */
+
+
+/* ─── Form refinements ─── */
+select option {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 0.5;
+}
+
+/* ─── Placeholder text ─── */
+::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+
+/* ─── Disabled state ─── */
+input:disabled,
+select:disabled,
+textarea:disabled,
+button:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+/* ─── Package filter refinement ─── */
+.package-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+/* ─── Divider helper ─── */
+.section-divider {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  border-radius: 99px;
+  margin: 6px 0;
+}
+
+.section-heading .section-divider {
+  margin: 0 auto;
+}
+
+.section-heading-left .section-divider {
+  margin-left: 0;
+}
+
+/* ─── Sticky sidebar refinement ─── */
+.side-column {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+}
+
+
+
+/* ─── Mobile typography refinements ─── */
+
+
+/* ─── Tablet typography refinements ─── */
+
+
+/* ─── Focus management: modal ─── */
+.image-detail-modal:not(.open) {
+  pointer-events: none;
+}
+
+.image-detail-modal.open {
+  pointer-events: all;
+}
+
+/* ─── Smooth scroll with offset for sticky header ─── */
+[id] {
+  scroll-margin-top: 90px;
+}
+
+/* ─── Night mode final polish ─── */
+html[data-holidae-style="night"] ::selection {
+  background: rgba(62, 207, 191, 0.2);
+  color: #f8f2e8;
+}
+
+html[data-holidae-style="night"] ::-webkit-scrollbar-track {
+  background: #0e0c0a;
+}
+
+html[data-holidae-style="night"] ::-webkit-scrollbar-thumb {
+  background: rgba(62, 207, 191, 0.25);
+}
+
+html[data-holidae-style="night"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(62, 207, 191, 0.38);
+}
+
+html[data-holidae-style="night"] .page-progress {
+  background: linear-gradient(90deg, #3ecfbf, #d4b07a);
+  box-shadow: 0 0 12px rgba(62, 207, 191, 0.4);
+}
+
+html[data-holidae-style="night"] .site-footer {
+  background: #080706;
+}
+
+html[data-holidae-style="night"] .footer-logo {
+  color: var(--gold);
+}
+
+/* ─── Deal card: ensure text is never clipped on mobile ─── */
+
+
+/* ─── Journey card: ensure text is visible on mobile ─── */
+
+
+/* ─── Destination card: fix clipping on mobile ─── */
+
+
+/* ─── Ensure stats section heading is visible on mobile ─── */
+
+
+/* ─── Improved mobile touch targets ─── */
+
+
+/* ─── Fix overflow on very small screens ─── */
+
+
+/* ─── Booking form mobile refinements ─── */
+
+
+/* ─── Tablet form grid stays 2-col ─── */
+
+
+/* ─── Improve package level card on tablet ─── */
+
+
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — DESKTOP & TABLET
+═══════════════════════════════════════════ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+  style-options.css
+  Additional theme option tokens and overrides for the Holidae visual style system.
+  These supplement the base tokens in style.css for the editorial, resort, and night themes.
+*/
+
+/* ─── Cinematic (default) extra overrides ─── */
+html[data-holidae-style="cinematic"] {
+  --sand: #f5f0e8;
+  --sand-light: #faf8f3;
+  --ink: #16120e;
+  --ink-mid: #3a342c;
+  --ink-soft: #6b6158;
+  --teal: #0e6b60;
+  --teal-dark: #0a5149;
+  --teal-light: rgba(14, 107, 96, 0.1);
+  --gold: #c9a96e;
+  --gold-light: rgba(201, 169, 110, 0.14);
+  --cream: #fdf9f4;
+}
+
+/* ─── Package level badge colours ─── */
+.package-level-label.essential {
+  background: var(--gold-light);
+  color: #8a6128;
+  border-color: rgba(201, 169, 110, 0.24);
+}
+
+.package-level-label.signature {
+  background: var(--teal-light);
+  color: var(--teal);
+  border-color: rgba(14, 107, 96, 0.18);
+}
+
+.package-level-label.luxe {
+  background: rgba(22, 18, 14, 0.07);
+  color: var(--ink);
+  border-color: rgba(22, 18, 14, 0.14);
+}
+
+/* ─── Package level card highlighted variant ─── */
+.package-level-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(20px, 2.4vw, 30px);
+}
+
+.package-level-card h3 {
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+  line-height: 1.1;
+}
+
+.package-level-card .price-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.package-level-card .price-line strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  color: var(--teal);
+  font-weight: 500;
+}
+
+.package-level-card .price-line span {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+/* ─── Package hub card ─── */
+.package-hub-card {
+  background: rgba(253, 249, 244, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.package-hub-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease-expo);
+}
+
+.package-hub-card:hover img {
+  transform: scale(1.04);
+}
+
+.package-hub-card-body {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+/* ─── Sidebar link ─── */
+.sidebar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--teal);
+  padding: 12px 18px;
+  border-radius: var(--r-full);
+  background: var(--teal-light);
+  border: 1px solid rgba(14, 107, 96, 0.14);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.sidebar-link:hover {
+  background: rgba(14, 107, 96, 0.16);
+  transform: translateY(-1px);
+}
+
+/* ─── Timeline list (contact / about) ─── */
+.timeline-list {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.timeline-list li {
+  display: flex;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.92rem;
+  color: var(--ink-mid);
+  line-height: 1.6;
+}
+
+.timeline-list li:last-child {
+  border-bottom: none;
+}
+
+.timeline-list li::before {
+  content: attr(data-step);
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--teal-light);
+  border: 1px solid rgba(14, 107, 96, 0.18);
+  color: var(--teal);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+/* ─── Enquiry next card ─── */
+.enquiry-next-card {
+  background: linear-gradient(145deg, rgba(14, 107, 96, 0.08), rgba(253, 249, 244, 0.96));
+  border: 1px solid rgba(14, 107, 96, 0.16);
+  border-radius: var(--r-lg);
+  padding: clamp(22px, 3vw, 34px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.enquiry-next-card h3 {
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+}
+
+/* ─── Trust sidebar card ─── */
+.trust-sidebar-card {
+  background: rgba(253, 249, 244, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: clamp(18px, 2.5vw, 26px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--sh-sm);
+}
+
+/* ─── Booking summary box ─── */
+.booking-summary-box {
+  padding: clamp(18px, 2.5vw, 26px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.booking-summary-box h3 {
+  font-size: 1.1rem;
+}
+
+/* ─── Compact insight band ─── */
+.compact-insight-band {
+  display: grid;
+  gap: 8px;
+}
+
+.compact-insight-band > div {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: rgba(253, 249, 244, 0.6);
+  font-size: 0.88rem;
+}
+
+.compact-insight-band > div strong {
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  color: var(--teal);
+}
+
+/* ─── Booking occasion grid ─── */
+.booking-occasion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* ─── Destination lens section ─── */
+.destination-lens-section,
+.booking-lens-section,
+.editorial-section,
+.package-editorial-lens,
+.package-occasion-section,
+.package-advice-section,
+.response-rhythm-section,
+.contact-route-section,
+.brand-principles-section,
+.signature-journeys-section {
+  /* These section wrappers are just containers — layout is handled by child classes */
+}
+
+/* ─── Destination mood grid ─── */
+.destination-mood-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Travel fit grid ─── */
+.travel-fit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* ─── Package advice grid ─── */
+.package-advice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Contact route grid ─── */
+.contact-route-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Brand principles grid ─── */
+.brand-principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Destination switch extra states ─── */
+.destination-switch-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+  display: block;
+}
+
+.destination-switch-copy {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  display: block;
+  line-height: 1.4;
+}
+
+/* ─── Small cards variant ─── */
+.small-cards .deal-card img,
+.small-cards .destination-card img {
+  height: 180px;
+}
+
+/* ─── Split grid reverse ─── */
+.split-grid-reverse {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 3vw, 36px);
+  align-items: center;
+}
+
+.split-grid-reverse > *:first-child {
+  order: 2;
+}
+
+.split-grid-reverse > *:last-child {
+  order: 1;
+}
+
+/* ─── Hero stats grid for booking page ─── */
+.hero-stats-grid-booking {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: clamp(18px, 3vw, 28px);
+  width: 100%;
+}
+
+/* ─── Left align tags ─── */
+.left-align-tags {
+  justify-content: flex-start;
+}
+
+/* ─── Lookbook grid ─── */
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+/* ─── Destination card image-detail list ─── */
+.image-detail-list {
+  display: grid;
+  gap: 10px;
+}
+
+/* ─── Card actions row ─── */
+.card-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+/* ─── Trip tag label ─── */
+.trip-tag-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  display: block;
+}
+
+/* ─── Step label (used on booking / how-it-works) ─── */
+.step-label {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--teal-light);
+  color: var(--teal);
+  border: 1px solid rgba(14, 107, 96, 0.14);
+}
+
+/* ─── Estimate price (booking calculator) ─── */
+.estimate-price {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  color: var(--teal);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+/* ─── Main column / side column layout (booking page) ─── */
+.main-column {
+  min-width: 0;
+}
+
+/* ─── Night mode overrides for new components ─── */
+html[data-holidae-style="night"] .package-hub-card,
+html[data-holidae-style="night"] .enquiry-next-card,
+html[data-holidae-style="night"] .trust-sidebar-card,
+html[data-holidae-style="night"] .booking-summary-box,
+html[data-holidae-style="night"] .compact-insight-band > div {
+  background: rgba(20, 18, 16, 0.92);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-holidae-style="night"] .sidebar-link {
+  background: rgba(62, 207, 191, 0.1);
+  border-color: rgba(62, 207, 191, 0.18);
+  color: #3ecfbf;
+}
+
+html[data-holidae-style="night"] .timeline-list li::before {
+  background: rgba(62, 207, 191, 0.12);
+  border-color: rgba(62, 207, 191, 0.2);
+  color: #3ecfbf;
+}
+
+/* ─── Mobile tweaks for style-options content ─── */
+
+
+
+
+/*
+  redesign.css
+  Layout redesign classes — refined grid systems, spacing overrides,
+  and section-level composition adjustments for the Holidae site.
+*/
+
+/* ─── Page-level layout wrapper ─── */
+.holidae-redesign main > section:not(:first-child) {
+  position: relative;
+}
+
+/* ─── Reveal animation setup (JS adds .reveal-animate after DOMContentLoaded) ─── */
+.reveal {
+  /* The element itself is visible by default — JS enhances with animation */
+}
+
+/* ─── Featured deals refined grid ─── */
+.featured-deals .card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+
+
+
+
+/* ─── Collection spotlight refined ─── */
+.collection-spotlight .spotlight-grid {
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: clamp(24px, 4vw, 52px);
+}
+
+
+
+/* ─── Signature journeys refined grid ─── */
+.signature-journeys-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+
+
+/* ─── Journey card featured lift (desktop only) ─── */
+
+
+/* ─── Holidae path grid (3-step section) ─── */
+.holidae-path-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+
+
+/* ─── Stats grid ─── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+
+
+/* ─── Review / planning notes grid ─── */
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+
+
+/* ─── About grid ─── */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+
+
+/* ─── Package hub grid ─── */
+.package-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+
+
+/* ─── Booking grid ─── */
+.booking-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+
+
+
+/* ─── Contact grid ─── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+
+
+
+/* ─── Two column layout ─── */
+.two-column-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+
+
+
+/* ─── Split grid ─── */
+.split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(22px, 4vw, 50px);
+}
+
+
+
+/* ─── Feature points grid ─── */
+.feature-points {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.feature-points-wide {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+
+
+/* ─── Package builder card mobile ─── */
+
+
+/* ─── CTA banner mobile ─── */
+
+
+/* ─── Footer mobile ─── */
+
+
+
+
+/* ─── Shortlist grid ─── */
+.shortlist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+
+
+
+
+/* ─── Package route grid ─── */
+.package-route-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+
+
+/* ─── Trust grid ─── */
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.trust-grid-compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+
+
+/* ─── Card grid responsive ─── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+
+
+/* ─── Occasion grid ─── */
+.occasion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+
+
+
+
+/* ─── Page progress bar ─── */
+.page-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  z-index: 9999;
+  border-radius: 0 99px 99px 0;
+  transition: width 0.05s linear;
+  box-shadow: 0 0 12px rgba(14, 107, 96, 0.4);
+}
+
+/* ─── Night mode section backgrounds ─── */
+html[data-holidae-style="night"] .cta-banner {
+  background: linear-gradient(135deg, #0a4f47 0%, #073d37 100%);
+}
+
+html[data-holidae-style="night"] .alt-bg {
+  background: #0b0908;
+}
+
+/* ─── Booking side sticky column ─── */
+.booking-side {
+  position: sticky;
+  top: 100px;
+}
+
+
+
+/*
+  experience.css
+  Interactive experience enhancements — animations, transitions,
+  hover states, scroll effects, and motion polish for the Holidae site.
+*/
+
+/* ─── Smooth page load fade-in ─── */
+@keyframes holidae-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes holidae-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes holidae-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes holidae-counter-tick {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Hero content entrance ─── */
+.video-hero-content > * {
+  animation: holidae-fade-in 0.85s var(--ease-expo) both;
+}
+
+.video-hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+.video-hero-content > *:nth-child(2) { animation-delay: 0.22s; }
+.video-hero-content > *:nth-child(3) { animation-delay: 0.32s; }
+.video-hero-content > *:nth-child(4) { animation-delay: 0.42s; }
+
+/* ─── Reduced motion: disable animations ─── */
+
+
+/* ─── Card hover shimmer effect ─── */
+.deal-card,
+.destination-card,
+.journey-card,
+.info-card,
+.route-card,
+.review-card,
+.occasion-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.deal-card::after,
+.destination-card::after,
+.journey-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+
+.deal-card:hover::after,
+.destination-card:hover::after,
+.journey-card:hover::after {
+  transform: translateX(120%);
+}
+
+/* ─── Interactive card focus ring ─── */
+.interactive-card:focus-within {
+  outline: 3px solid rgba(201, 169, 110, 0.7);
+  outline-offset: 3px;
+}
+
+/* ─── Image hover zoom (non-mobile) ─── */
+
+
+/* ─── Text link animated underline ─── */
+.text-link {
+  position: relative;
+}
+
+.text-link::before {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--teal);
+  transition: width 0.3s var(--ease-expo);
+}
+
+.text-link:hover::before {
+  width: 100%;
+}
+
+/* ─── Counter animation class ─── */
+.counter {
+  display: block;
+  animation: holidae-counter-tick 0.5s var(--ease-expo) both;
+}
+
+/* ─── Review card border left accent ─── */
+.review-card {
+  border-left: 3px solid transparent;
+  transition: border-color 0.3s ease, transform 0.35s var(--ease-expo), box-shadow 0.35s ease;
+}
+
+.review-card:hover {
+  border-left-color: var(--gold);
+}
+
+/* ─── Route card featured highlight pulse ─── */
+@keyframes holidae-border-pulse {
+  0%, 100% { border-color: rgba(14, 107, 96, 0.18); }
+  50% { border-color: rgba(14, 107, 96, 0.36); }
+}
+
+.route-card-featured {
+  animation: holidae-border-pulse 3.5s ease-in-out infinite;
+}
+
+/* ─── Booking form step transition ─── */
+.booking-form .form-stage-heading {
+  animation: holidae-fade-in 0.4s var(--ease-expo) both;
+}
+
+/* ─── FAQ item animation ─── */
+.faq-answer {
+  animation: none;
+}
+
+.faq-item.active .faq-answer {
+  animation: holidae-fade-in 0.3s var(--ease-expo) both;
+}
+
+/* ─── Scroll snap for stats row on mobile ─── */
+
+
+/* ─── Page transition polish ─── */
+.page-transition-overlay {
+  background: var(--cream);
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 1, 1);
+}
+
+body.is-transitioning .page-transition-overlay {
+  opacity: 1;
+}
+
+/* ─── Image detail modal entrance ─── */
+.image-detail-panel {
+  animation: holidae-scale-in 0.35s var(--ease-expo) both;
+}
+
+.image-detail-modal.open .image-detail-panel {
+  animation-play-state: running;
+}
+
+/* ─── Footer link hover effect ─── */
+.footer-links a {
+  transition: color 0.22s ease, letter-spacing 0.22s ease;
+}
+
+.footer-links a:hover {
+  letter-spacing: 0.01em;
+}
+
+/* ─── Eyebrow dot pulse ─── */
+@keyframes eyebrow-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.18); }
+  50% { box-shadow: 0 0 0 6px rgba(201, 169, 110, 0.08); }
+}
+
+.eyebrow::before {
+  animation: eyebrow-pulse 2.4s ease-in-out infinite;
+}
+
+/* ─── Style switcher smooth theme change ─── */
+body,
+.deal-card,
+.destination-card,
+.info-card,
+.route-card,
+.review-card,
+.journey-card,
+.editorial-panel,
+.booking-form-panel,
+.content-box,
+.header-wrap {
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease;
+}
+
+/* ─── Nav item stagger on mobile open ─── */
+.site-nav.open .nav-list li {
+  animation: holidae-slide-up 0.36s var(--ease-expo) both;
+}
+
+.site-nav.open .nav-list li:nth-child(1) { animation-delay: 0.04s; }
+.site-nav.open .nav-list li:nth-child(2) { animation-delay: 0.09s; }
+.site-nav.open .nav-list li:nth-child(3) { animation-delay: 0.14s; }
+.site-nav.open .nav-list li:nth-child(4) { animation-delay: 0.19s; }
+.site-nav.open .nav-list li:nth-child(5) { animation-delay: 0.24s; }
+.site-nav.open .nav-list li:nth-child(6) { animation-delay: 0.29s; }
+
+/* ─── Night mode card glow on hover ─── */
+html[data-holidae-style="night"] .interactive-card:hover,
+html[data-holidae-style="night"] .deal-card:hover,
+html[data-holidae-style="night"] .destination-card:hover,
+html[data-holidae-style="night"] .journey-card:hover {
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(62, 207, 191, 0.12);
+}
+
+/* ─── Destination card image overlay ─── */
+.destination-card {
+  position: relative;
+}
+
+.destination-card img {
+  position: relative;
+}
+
+/* ─── Package filter pressed state ─── */
+.package-filter {
+  position: relative;
+  overflow: hidden;
+}
+
+.package-filter::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--teal);
+  opacity: 0;
+  transform: scale(0.6);
+  border-radius: inherit;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.package-filter.active::after,
+.package-filter:active::after {
+  opacity: 0.12;
+  transform: scale(1);
+}
+
+/* ─── Section reveal base (enhanced by JS) ─── */
+.reveal {
+  transition: opacity 0.75s var(--ease-expo), transform 0.75s var(--ease-expo);
+}
+
+/*
+  refinement.css
+  Final refinements — spacing micro-adjustments, typographic polish,
+  accessibility improvements, and cross-browser fixes for Holidae.
+*/
+
+/* ─── Typography refinements ─── */
+h1 {
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+  line-height: 0.93;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+h3 {
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+h4 {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.2;
+}
+
+/* ─── Paragraph max-width for readability ─── */
+.section-heading p,
+.editorial-panel p,
+.booking-form-panel p,
+.content-box p {
+  max-width: 60ch;
+}
+
+/* ─── Remove orphan words on headings ─── */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+/* ─── Refined eyebrow label ─── */
+.eyebrow {
+  font-family: var(--font-body);
+}
+
+/* ─── Link accessibility: visible focus ─── */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid rgba(201, 169, 110, 0.85);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ─── Skip to main content link (accessibility) ─── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  padding: 10px 18px;
+  background: var(--teal);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 0 0 var(--r-sm) var(--r-sm);
+  z-index: 10000;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ─── Image aspect ratio helpers ─── */
+.aspect-video {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  width: 100%;
+}
+
+.aspect-square {
+  aspect-ratio: 1;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* ─── Scrollbar refinement ─── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sand-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(14, 107, 96, 0.28);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(14, 107, 96, 0.42);
+}
+
+/* ─── Selection colour ─── */
+::selection {
+  background: rgba(14, 107, 96, 0.18);
+  color: var(--ink);
+}
+
+/* ─── Print: hide non-essential elements ─── */
+
+
+/* ─── Form refinements ─── */
+select option {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 0.5;
+}
+
+/* ─── Placeholder text ─── */
+::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+
+/* ─── Disabled state ─── */
+input:disabled,
+select:disabled,
+textarea:disabled,
+button:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+/* ─── Package filter refinement ─── */
+.package-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+/* ─── Divider helper ─── */
+.section-divider {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  border-radius: 99px;
+  margin: 6px 0;
+}
+
+.section-heading .section-divider {
+  margin: 0 auto;
+}
+
+.section-heading-left .section-divider {
+  margin-left: 0;
+}
+
+/* ─── Sticky sidebar refinement ─── */
+.side-column {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+}
+
+
+
+/* ─── Mobile typography refinements ─── */
+
+
+/* ─── Tablet typography refinements ─── */
+
+
+/* ─── Focus management: modal ─── */
+.image-detail-modal:not(.open) {
+  pointer-events: none;
+}
+
+.image-detail-modal.open {
+  pointer-events: all;
+}
+
+/* ─── Smooth scroll with offset for sticky header ─── */
+[id] {
+  scroll-margin-top: 90px;
+}
+
+/* ─── Night mode final polish ─── */
+html[data-holidae-style="night"] ::selection {
+  background: rgba(62, 207, 191, 0.2);
+  color: #f8f2e8;
+}
+
+html[data-holidae-style="night"] ::-webkit-scrollbar-track {
+  background: #0e0c0a;
+}
+
+html[data-holidae-style="night"] ::-webkit-scrollbar-thumb {
+  background: rgba(62, 207, 191, 0.25);
+}
+
+html[data-holidae-style="night"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(62, 207, 191, 0.38);
+}
+
+html[data-holidae-style="night"] .page-progress {
+  background: linear-gradient(90deg, #3ecfbf, #d4b07a);
+  box-shadow: 0 0 12px rgba(62, 207, 191, 0.4);
+}
+
+html[data-holidae-style="night"] .site-footer {
+  background: #080706;
+}
+
+html[data-holidae-style="night"] .footer-logo {
+  color: var(--gold);
+}
+
+/* ─── Deal card: ensure text is never clipped on mobile ─── */
+
+
+/* ─── Journey card: ensure text is visible on mobile ─── */
+
+
+/* ─── Destination card: fix clipping on mobile ─── */
+
+
+/* ─── Ensure stats section heading is visible on mobile ─── */
+
+
+/* ─── Improved mobile touch targets ─── */
+
+
+/* ─── Fix overflow on very small screens ─── */
+
+
+/* ─── Booking form mobile refinements ─── */
+
+
+/* ─── Tablet form grid stays 2-col ─── */
+
+
+/* ─── Improve package level card on tablet ─── */
+
+
+
+/* ═══════════════════════════════════════════
+   TABLET & DESKTOP RESPONSIVE
+═══════════════════════════════════════════ */
+
+@media (((max-width: 1100px))) {
+
+
+  .lookbook-card,
+  .image-detail-panel,
+  .footer-shell,
+  .footer-grid,
+  .package-builder-card {
+    grid-template-columns: 1fr;
+  }
+
+  .journey-card-featured,
+  .journey-card-featured:hover {
+    transform: none;
+  }
+
+  .shortlist-grid,
+  .response-rhythm-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .trust-grid-compact {
+    grid-template-columns: 1fr;
+  }
+
+
+}
+
+@media (((max-width: 1020px) and (min-width: 701px))) {
+
+
+  h1 { font-size: clamp(2.8rem, 6vw, 4.8rem); }
+  h2 { font-size: clamp(2rem, 5vw, 3.4rem); }
+
+
+}
+
+@media (((max-width: 1020px))) {
+
+
+  .featured-deals .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+
+  .shortlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+}
+
+@media ((max-width: 1020px)) {
+
+  .featured-deals .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+
+  .shortlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media ((max-width: 1020px) and (min-width: 701px)) {
+
+  h1 { font-size: clamp(2.8rem, 6vw, 4.8rem); }
+  h2 { font-size: clamp(2rem, 5vw, 3.4rem); }
+
+}
+
+@media (((max-width: 980px))) {
+
+
+  .split-grid,
+  .booking-grid,
+  .two-column-layout,
+  .contact-grid,
+  .trip-brief-card,
+  .image-band-layout,
+  .image-band-layout.reverse-band,
+  .package-hub-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .occasion-grid,
+  .signature-journeys-grid,
+  .review-grid,
+  .feature-points-wide,
+  .holidae-path-grid,
+  .contact-route-grid,
+  .destination-mood-grid,
+  .booking-occasion-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-row,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .side-column {
+    position: static !important;
+  }
+
+
+}
+
+@media (((max-width: 900px))) {
+
+
+  .hero-stats-grid,
+  .package-route-grid,
+  .trust-grid,
+  .builder-result-list {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-stat-card {
+    min-height: auto;
+    text-align: center;
+  }
+
+
+}
+
+@media (((max-width: 860px) and (min-width: 701px))) {
+
+
+  .booking-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .package-level-card {
+    padding: 20px;
+  }
+
+
+}
+
+@media (((max-width: 860px))) {
+
+
+  .collection-spotlight .spotlight-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .signature-journeys-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .holidae-path-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .booking-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .two-column-layout {
+    grid-template-columns: 1fr;
+  }
+
+
+  .package-builder-card {
+    grid-template-columns: 1fr;
+  }
+
+
+  .occasion-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+
+  .booking-side {
+    position: static;
+  }
+
+
+  .side-column {
+    position: static;
+  }
+
+
+}
+
+@media ((max-width: 860px)) {
+
+  .collection-spotlight .spotlight-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .signature-journeys-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .holidae-path-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .booking-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .two-column-layout {
+    grid-template-columns: 1fr;
+  }
+
+
+  .package-builder-card {
+    grid-template-columns: 1fr;
+  }
+
+
+  .occasion-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+
+  .booking-side {
+    position: static;
+  }
+
+
+  .side-column {
+    position: static;
+  }
+
+}
+
+@media ((max-width: 860px) and (min-width: 701px)) {
+
+  .booking-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .package-level-card {
+    padding: 20px;
+  }
+
+}
+
+@media (((max-width: 760px))) {
+
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .package-hub-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+
+  .split-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .feature-points,
+  .feature-points-wide {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+
+}
+
+@media ((max-width: 760px)) {
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .package-hub-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+
+  .split-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .feature-points,
+  .feature-points-wide {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+}
+
+@media (((min-width: 701px))) {
+
+
+  .journey-card-featured {
+    transform: translateY(-16px);
+  }
+
+  .journey-card-featured:hover {
+    transform: translateY(-22px) !important;
+  }
+
+
+}
+
+@media ((min-width: 701px)) {
+
+  .journey-card-featured {
+    transform: translateY(-16px);
+  }
+
+  .journey-card-featured:hover {
+    transform: translateY(-22px) !important;
+  }
+
+}
+
+@media (((min-width: 1100px))) {
+
+
+  body[data-page="package"] .side-column,
+  body[data-page="booking"] .side-column,
+  body[data-page="contact"] .side-column {
+    position: sticky;
+    top: 110px;
+  }
+
+
+}
+
+@media ((print)) {
+
+
+  .site-header,
+  .style-switcher,
+  .immersive-sound-toggle,
+  .page-progress,
+  .page-transition-overlay,
+  .cursor-glow,
+  .audio-toast,
+  .nav-toggle,
+  .hero-buttons {
+    display: none !important;
+  }
+
+  .site-footer {
+    margin-top: 40px;
+  }
+
+  .video-hero {
+    min-height: auto;
+  }
+
+  .hero-video {
+    display: none;
+  }
+
+
+}
+
+@media (print) {
+
+  .site-header,
+  .style-switcher,
+  .immersive-sound-toggle,
+  .page-progress,
+  .page-transition-overlay,
+  .cursor-glow,
+  .audio-toast,
+  .nav-toggle,
+  .hero-buttons {
+    display: none !important;
+  }
+
+  .site-footer {
+    margin-top: 40px;
+  }
+
+  .video-hero {
+    min-height: auto;
+  }
+
+  .hero-video {
+    display: none;
+  }
+
+}
+
+@media (((prefers-reduced-motion: reduce))) {
+
+
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation: none !important;
+  }
+
+  .hero-video,
+  .video-hero:hover .hero-video,
+  .deal-card:hover img,
+  .destination-card:hover img,
+  .journey-card:hover img,
+  .stack-large:hover,
+  .stack-small:hover {
+    transform: none !important;
+  }
+
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-video {
+    transform: none !important;
+    transition: none !important;
+  }
+
+
+}
+
+@media ((prefers-reduced-motion: reduce)) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-video {
+    transform: none !important;
+    transition: none !important;
+  }
+
+}
+
+@media (((hover: hover))) {
+
+
+  .lookbook-hero,
+  .stack-large,
+  .stack-small,
+  .image-band-large,
+  .image-band-small {
+    transition: transform 0.7s var(--ease-expo), filter 0.5s ease;
+    cursor: pointer;
+  }
+
+  .lookbook-hero:hover,
+  .stack-large:hover,
+  .stack-small:hover {
+    transform: scale(1.04);
+    filter: saturate(1.08);
+  }
+
+  .image-band-large:hover,
+  .image-band-small:hover {
+    transform: scale(1.03);
+    filter: saturate(1.06);
+  }
+
+
+}
+
+@media ((hover: hover)) {
+
+  .lookbook-hero,
+  .stack-large,
+  .stack-small,
+  .image-band-large,
+  .image-band-small {
+    transition: transform 0.7s var(--ease-expo), filter 0.5s ease;
+    cursor: pointer;
+  }
+
+  .lookbook-hero:hover,
+  .stack-large:hover,
+  .stack-small:hover {
+    transform: scale(1.04);
+    filter: saturate(1.08);
+  }
+
+  .image-band-large:hover,
+  .image-band-small:hover {
+    transform: scale(1.03);
+    filter: saturate(1.06);
+  }
+
+}

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Holidae | Destinations</title>
+
+<link rel="stylesheet" href="../css/style.css"/>
+<link rel="stylesheet" href="../css/mobile.css"/>
+</head>
+
+<!-- data-page marks this as the destinations page for page-specific styling. -->
+<body class="holidae-redesign" data-page="destinations">
+<header class="site-header site-header-overlay">
+<div class="container header-wrap">
+<a class="logo logo-light" href="../index.html">Holidae</a>
+
+<!-- Mobile menu button handled by the shared JavaScript. -->
+<button aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation" class="nav-toggle nav-toggle-light" type="button">
+<span></span>
+<span></span>
+<span></span>
+</button>
+
+<nav class="site-nav" id="site-nav">
+<ul class="nav-list nav-list-light">
+<li><a href="../index.html">Home</a></li>
+<li><a href="package.html">Package</a></li>
+<li><a href="booking.html">Booking</a></li>
+<li><a href="about.html">About</a></li>
+<li><a class="active" href="destinations.html">Destinations</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+</div>
+</header>
+
+<main>
+
+<!-- Hero introduces the destination page as a comparison step, not just a gallery. -->
+<section class="video-hero video-hero-small reveal">
+<video autoplay="" class="hero-video" loop="" muted="" playsinline="">
+<source src="../videos/Video 1.mp4" type="video/mp4"/>
+</video>
+<div class="hero-overlay"></div>
+<div class="container video-hero-content">
+<p class="eyebrow eyebrow-light">Browse the collection</p>
+<h1>Compare destinations before you choose the package</h1>
+<p>
+          Read the destination through pace, atmosphere, and stay style first. The point of this page is not just to show pretty places, but to help narrow which trip actually fits.
+        </p>
+<div class="hero-buttons">
+<a class="btn" href="package.html#package-collection">Compare Packages</a>
+<a class="btn btn-ghost" href="booking.html#booking-form-section">Start Booking</a>
+</div>
+</div>
+</section>
+
+<!-- Main destination cards. Each card gives a quick route to packages or booking. -->
+<section class="section-padding reveal">
+<div class="container">
+<div class="section-heading section-heading-center">
+<p class="eyebrow">Featured destinations</p>
+<h2>Six destinations with six different rhythms</h2>
+</div>
+<div class="card-grid">
+<article class="destination-card interactive-card">
+<img alt="Santorini destination" src="../images/santorini.jpg"/>
+<div class="card-content">
+<h3>Santorini, Greece</h3>
+<p>
+                Whitewashed buildings, sea views, and relaxing all-inclusive
+                stays make Santorini ideal for a scenic island holiday.
+              </p>
+<a class="text-link" href="package.html#santorini-package">View package</a>
+</div>
+</article>
+<article class="destination-card interactive-card">
+<img alt="Dubai destination" src="../images/dubai.jpg"/>
+<div class="card-content">
+<h3>Dubai, UAE</h3>
+<p>
+                Enjoy modern city luxury, rooftop dining, desert excursions,
+                and premium hotels in one of the world’s most exciting cities.
+              </p>
+<a class="text-link" href="booking.html?destination=Dubai&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</article>
+<article class="destination-card interactive-card">
+<img alt="Maldives destination" src="../images/maldives.jpg"/>
+<div class="card-content">
+<h3>Maldives</h3>
+<p>
+                Escape to crystal-clear water, island resorts, and peaceful
+                beach villas for a luxury tropical experience.
+              </p>
+<a class="text-link" href="booking.html?destination=Maldives&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</article>
+<article class="destination-card interactive-card">
+<img alt="Bali destination" src="../images/bali.jpg"/>
+<div class="card-content">
+<h3>Bali, Indonesia</h3>
+<p>
+                Tropical beaches, resort calm, and warm island scenery make Bali
+                a strong choice for a laid-back escape.
+              </p>
+<a class="text-link" href="booking.html?destination=Bali&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</article>
+<article class="destination-card interactive-card">
+<img alt="Amalfi Coast destination" src="../images/amalfi.jpg"/>
+<div class="card-content">
+<h3>Amalfi Coast, Italy</h3>
+<p>
+                Bright coastal towns, elegant sea views, and Italian summer
+                style create a more refined holiday atmosphere.
+              </p>
+<a class="text-link" href="booking.html?destination=Amalfi%20Coast&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</article>
+<article class="destination-card interactive-card">
+<img alt="Marrakech destination" src="../images/marrakech.jpg"/>
+<div class="card-content">
+<h3>Marrakech, Morocco</h3>
+<p>
+                Colourful streets, warm evenings, boutique stays, and a more
+                vibrant city energy make Marrakech feel distinct.
+              </p>
+<a class="text-link" href="booking.html?destination=Marrakech&amp;package=Signature#booking-form-section">Enquire now</a>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<!-- Lookbooks give each destination more visual context before the user books. -->
+<section class="section-padding alt-bg reveal" id="destination-lookbooks">
+<div class="container">
+<div class="section-heading section-heading-center">
+<p class="eyebrow">Destination lookbooks</p>
+<h2>See more of each destination before you compare packages</h2>
+<p>These galleries give a fuller sense of atmosphere, scenery, and travel style so each destination feels properly represented before you move into booking.</p>
+</div>
+<div class="lookbook-grid">
+<article class="lookbook-card interactive-card">
+<div class="lookbook-media">
+<img alt="Santorini sunset over blue-domed architecture" class="lookbook-hero" src="../images/santorini-sunset-dome.jpg"/>
+<div class="lookbook-thumb-row">
+<img alt="Santorini sea-view terrace dining area" class="lookbook-thumb" src="../images/santorini-terrace-view.jpg"/>
+<img alt="Santorini village at twilight" class="lookbook-thumb" src="../images/santorini-oia-twilight.jpg"/>
+</div>
+</div>
+<div class="lookbook-content">
+<p class="eyebrow">Santorini</p>
+<h3>Sea views, terraces, and slower evenings</h3>
+<p>Best for couples or scenic travellers who want a polished island stay built around views, calm pacing, and sunset dining.</p>
+<a class="btn btn-secondary" href="booking.html?destination=Santorini&amp;package=Signature#booking-form-section">Start Santorini enquiry</a>
+</div>
+</article>
+<article class="lookbook-card interactive-card">
+<div class="lookbook-media">
+<img alt="Maldives overwater villa with private pool" class="lookbook-hero" src="../images/maldives-water-villa-pool.jpg"/>
+<div class="lookbook-thumb-row">
+<img alt="Maldives aerial view of lagoon villas" class="lookbook-thumb" src="../images/maldives-aerial-lagoon.jpg"/>
+<img alt="Maldives water villa at sunset" class="lookbook-thumb" src="../images/maldives-villa-sunset.jpg"/>
+</div>
+</div>
+<div class="lookbook-content">
+<p class="eyebrow">Maldives</p>
+<h3>Quiet resort luxury and a full reset</h3>
+<p>Best for slower luxury holidays built around water villas, privacy, and resort-first days with almost no rushing.</p>
+<a class="btn btn-secondary" href="booking.html?destination=Maldives&amp;package=Signature#booking-form-section">Start Maldives enquiry</a>
+</div>
+</article>
+<article class="lookbook-card interactive-card">
+<div class="lookbook-media">
+<img alt="Dubai Marina skyline and yachts" class="lookbook-hero" src="../images/dubai-marina-towers.jpg"/>
+<div class="lookbook-thumb-row">
+<img alt="Dubai desert adventure with skyline" class="lookbook-thumb" src="../images/dubai-desert-adventure.jpg"/>
+<img alt="Dubai skyline view from a luxury terrace" class="lookbook-thumb" src="../images/dubai-skyline-terrace.jpg"/>
+</div>
+</div>
+<div class="lookbook-content">
+<p class="eyebrow">Dubai</p>
+<h3>City energy with luxury at every step</h3>
+<p>Best for travellers who want premium hotels, skyline views, shopping, restaurants, and the option of a desert experience.</p>
+<a class="btn btn-secondary" href="booking.html?destination=Dubai&amp;package=Luxe#booking-form-section">Start Dubai enquiry</a>
+</div>
+</article>
+<article class="lookbook-card interactive-card">
+<div class="lookbook-media">
+<img alt="Bali jungle resort with valley view" class="lookbook-hero" src="../images/bali-resort-valley.jpg"/>
+<div class="lookbook-thumb-row">
+<img alt="Bali infinity pool with mountain view" class="lookbook-thumb" src="../images/bali-infinity-mountain.jpg"/>
+<img alt="Bali temple at sunset" class="lookbook-thumb" src="../images/bali-temple-sunset.jpg"/>
+</div>
+</div>
+<div class="lookbook-content">
+<p class="eyebrow">Bali</p>
+<h3>Tropical calm with scenery and wellness appeal</h3>
+<p>Best for resort-led stays, warm landscapes, spa-style downtime, and a softer island pace than a busy city break.</p>
+<a class="btn btn-secondary" href="booking.html?destination=Bali&amp;package=Signature#booking-form-section">Start Bali enquiry</a>
+</div>
+</article>
+<article class="lookbook-card interactive-card">
+<div class="lookbook-media">
+<img alt="Amalfi Coast dining with sea view" class="lookbook-hero" src="../images/amalfi-seaside-dining.jpg"/>
+<div class="lookbook-thumb-row">
+<img alt="Amalfi town square and cathedral" class="lookbook-thumb" src="../images/amalfi-town-square.jpg"/>
+<img alt="Amalfi Coast evening street scene" class="lookbook-thumb" src="../images/amalfi-coast-night.jpg"/>
+</div>
+</div>
+<div class="lookbook-content">
+<p class="eyebrow">Amalfi Coast</p>
+<h3>Mediterranean views, local food, and coastal style</h3>
+<p>Best for refined summer trips shaped by sea views, bright towns, local dining, and more polished coastal scenery.</p>
+<a class="btn btn-secondary" href="booking.html?destination=Amalfi%20Coast&amp;package=Signature#booking-form-section">Start Amalfi enquiry</a>
+</div>
+</article>
+<article class="lookbook-card interactive-card">
+<div class="lookbook-media">
+<img alt="Marrakech palace interior with lanterns" class="lookbook-hero" src="../images/marrakech-palace-arches.jpg"/>
+<div class="lookbook-thumb-row">
+<img alt="Marrakech desert camels at sunset" class="lookbook-thumb" src="../images/marrakech-desert-camels.jpg"/>
+<img alt="Marrakech market at sunset" class="lookbook-thumb" src="../images/marrakech-market-sunset.jpg"/>
+</div>
+</div>
+<div class="lookbook-content">
+<p class="eyebrow">Marrakech</p>
+<h3>Warm evenings, culture, and a boutique city mood</h3>
+<p>Best for travellers who want riad-style atmosphere, markets, architectural detail, and a more textured city break.</p>
+<a class="btn btn-secondary" href="booking.html?destination=Marrakech&amp;package=Signature#booking-form-section">Start Marrakech enquiry</a>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<!-- Groups destinations by mood so users can choose based on travel style. -->
+<section class="section-padding reveal destination-lens-section">
+  <div class="container">
+    <div class="section-heading section-heading-left">
+      <p class="eyebrow">Choose by travel mood</p>
+      <h2>Use pace, atmosphere, and trip length together</h2>
+      <p>Most travellers decide faster once the destination is grouped by how the trip actually feels rather than by country alone.</p>
+    </div>
+    <div class="occasion-grid destination-mood-grid">
+      <article class="occasion-card interactive-card">
+        <span>Slow and scenic</span>
+        <h3>Santorini or Maldives</h3>
+        <p>Best when the holiday should feel restorative, polished, and naturally photogenic without needing a packed plan.</p>
+      </article>
+      <article class="occasion-card interactive-card">
+        <span>Social and high-energy</span>
+        <h3>Dubai or Marrakech</h3>
+        <p>Best when the traveller wants movement, city atmosphere, restaurants, and a destination with stronger day-to-night contrast.</p>
+      </article>
+      <article class="occasion-card interactive-card">
+        <span>Balanced and longer-stay</span>
+        <h3>Bali or Amalfi Coast</h3>
+        <p>Best when the traveller wants scenery and atmosphere, but still enough variety to fill almost a full week well.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison table gives the most practical decision details in one place. -->
+<section class="section-padding alt-bg reveal" id="comparison">
+<div class="container">
+<div class="section-heading section-heading-left">
+<p class="eyebrow">Destination comparison</p>
+<h2>Choose the place that fits your holiday style</h2>
+<p>
+            Use this comparison to review mood, pace, budget feel, ideal duration, and the type of traveller each destination usually suits before moving into booking.
+          </p>
+</div>
+<div class="decision-table-wrap interactive-card">
+<table class="decision-table">
+<thead>
+<tr>
+<th>Destination</th>
+<th>Best for</th>
+<th>Trip pace</th>
+<th>Budget feel</th>
+<th>Ideal stay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Santorini</strong><span>Greece</span></td>
+<td>Couples, scenery, sunset dining</td>
+<td>Slow and romantic</td>
+<td>Premium mid-range</td>
+<td>7 nights</td>
+</tr>
+<tr>
+<td><strong>Dubai</strong><span>UAE</span></td>
+<td>Luxury hotels, shopping, city energy</td>
+<td>Busy and polished</td>
+<td>Premium city break</td>
+<td>5 nights</td>
+</tr>
+<tr>
+<td><strong>Maldives</strong><span>Indian Ocean</span></td>
+<td>Quiet luxury, beaches, honeymoon-style escapes</td>
+<td>Very slow and restful</td>
+<td>Highest luxury tier</td>
+<td>7 nights</td>
+</tr>
+<tr>
+<td><strong>Bali</strong><span>Indonesia</span></td>
+<td>Tropical calm, spa stays, softer island travel</td>
+<td>Gentle and balanced</td>
+<td>Premium accessible</td>
+<td>7 nights</td>
+</tr>
+<tr>
+<td><strong>Amalfi Coast</strong><span>Italy</span></td>
+<td>Coastal elegance, refined scenery, summer style</td>
+<td>Relaxed but polished</td>
+<td>Refined coastal premium</td>
+<td>6 nights</td>
+</tr>
+<tr>
+<td><strong>Marrakech</strong><span>Morocco</span></td>
+<td>Colour, culture, boutique city breaks</td>
+<td>Vibrant and varied</td>
+<td>Good-value premium</td>
+<td>5 nights</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- Shortlist cards turn the research into direct booking options. -->
+<section class="section-padding reveal" id="shortlist-builder">
+<div class="container">
+<div class="section-heading section-heading-left">
+<p class="eyebrow">Shortlist builder</p>
+<h2>Turn destination research into a more confident shortlist</h2>
+<p>
+            Each recommendation below links directly to the package page or opens booking with the destination already selected.
+          </p>
+</div>
+<div class="shortlist-grid">
+<article class="shortlist-card interactive-card">
+<span>Most romantic</span>
+<h3>Santorini Signature</h3>
+<p>Best for travellers who want scenery, slower evenings, and a polished island package.</p>
+<a class="text-link" href="booking.html?destination=Santorini&amp;package=Signature#booking-form-section">Start Santorini enquiry</a>
+</article>
+<article class="shortlist-card interactive-card">
+<span>Most premium city break</span>
+<h3>Dubai Luxe</h3>
+<p>Best for travellers who want a higher-energy trip with skyline hotels and elevated service.</p>
+<a class="text-link" href="booking.html?destination=Dubai&amp;package=Luxe#booking-form-section">Start Dubai enquiry</a>
+</article>
+<article class="shortlist-card interactive-card">
+<span>Best beach reset</span>
+<h3>Maldives Signature</h3>
+<p>Best for travellers who want privacy, slow resort days, and a clearer luxury escape mood.</p>
+<a class="text-link" href="booking.html?destination=Maldives&amp;package=Signature#booking-form-section">Start Maldives enquiry</a>
+</article>
+<article class="shortlist-card interactive-card">
+<span>Best value premium feel</span>
+<h3>Marrakech Essential</h3>
+<p>Best for travellers who want colour, boutique atmosphere, and a lower starting price.</p>
+<a class="text-link" href="booking.html?destination=Marrakech&amp;package=Essential#booking-form-section">Start Marrakech enquiry</a>
+</article>
+</div>
+</div>
+</section>
+
+<!-- Final CTA sends users to the booking form after they compare destinations. -->
+<section class="cta-banner section-padding reveal">
+<div class="container cta-wrap">
+<div>
+<p class="eyebrow">Ready to choose?</p>
+<h2>Pick your destination and continue to booking</h2>
+</div>
+<a class="btn" href="booking.html#booking-form-section">Go to Booking</a>
+</div>
+</section>
+</main>
+
+<!-- Shared footer with navigation and contact details. -->
+<footer class="site-footer">
+<div class="container footer-shell">
+  <div class="footer-brand">
+    <a class="footer-logo" href="../index.html">Holidae</a>
+    <p>Curated holiday planning for travellers who want destination clarity, polished package options, and a calmer enquiry experience.</p>
+    <div class="footer-micro">
+      <span>Dubai-based planning desk</span>
+      <span>AED pricing</span>
+      <span>Enquiry-first booking flow</span>
+    </div>
+  </div>
+  <div class="footer-grid">
+    <div class="footer-links">
+      <h3>Explore</h3>
+      <a href="package.html">Packages</a>
+      <a href="destinations.html">Destinations</a>
+      <a href="booking.html">Booking</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-links">
+      <h3>Collection</h3>
+      <a href="booking.html?destination=Santorini&amp;package=Signature#booking-form-section">Santorini</a>
+      <a href="booking.html?destination=Dubai&amp;package=Luxe#booking-form-section">Dubai</a>
+      <a href="booking.html?destination=Maldives&amp;package=Luxe#booking-form-section">Maldives</a>
+      <a href="booking.html?destination=Amalfi%20Coast&amp;package=Signature#booking-form-section">Amalfi Coast</a>
+    </div>
+    <div class="footer-links">
+      <h3>Planning help</h3>
+      <span>hello@holidae.ae</span>
+      <span>+971 4 555 0189</span>
+      <span>Mon–Sat · 9am–7pm GST</span>
+      <span>Dubai, United Arab Emirates</span>
+    </div>
+  </div>
+</div>
+<div class="container footer-base">
+  <p>© 2026 Holidae. All rights reserved.</p>
+  <p>Premium destination enquiries and curated holiday packages.</p>
+</div>
+</footer>
+
+<!-- Mobile styles and shared JavaScript load last. --><script src="../js/script.js"></script>
+</body>
+</html>

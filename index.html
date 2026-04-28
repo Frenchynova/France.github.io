@@ -1,11 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Holidae — Curated Holiday Planning</title>
+
+<link rel="stylesheet" href="css/style.css"/>
+<link rel="stylesheet" href="css/mobile.css"/>
 </head>
-<body>
-    <h1> Welcome to Web Dev 1 </h1>
+
+<!-- The body classes and data-page value help the CSS and JavaScript apply page-specific styling and behaviour. -->
+<body class="holidae-redesign" data-page="index">
+
+<!-- Header stays above the video hero, so the navigation is visible without taking attention away from the landing section. -->
+<header class="site-header site-header-overlay">
+  <div class="container header-wrap">
+    <a class="logo logo-light" href="index.html">Holidae</a>
+
+    <!-- Mobile menu button. The aria attributes make it clearer for screen readers when the navigation opens or closes. -->
+    <button class="nav-toggle nav-toggle-light" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav">
+      <ul class="nav-list nav-list-light">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="pages/package.html">Packages</a></li>
+        <li><a href="pages/booking.html">Booking</a></li>
+        <li><a href="pages/about.html">About</a></li>
+        <li><a href="pages/destinations.html">Destinations</a></li>
+        <li><a href="pages/contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero section: this is the first impression, so it uses video, overlay text, and two clear actions instead of a plain banner. -->
+  <section class="video-hero reveal">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="videos/Video 6.mp4" type="video/mp4"/>
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="container video-hero-content">
+      <p class="eyebrow eyebrow-light">Six destinations. Three tiers. One clear planning route.</p>
+      <h1>Find the holiday that actually fits</h1>
+      <p>Holidae makes the planning part easier — richer destination context, honest package comparison, and a booking flow that moves at your pace, not ours.</p>
+      <div class="hero-buttons">
+        <a class="btn" href="pages/package.html#package-levels">Compare Packages</a>
+        <a class="btn btn-ghost" href="pages/destinations.html">Browse Destinations</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats section: the data-target values are used by JavaScript to animate the counters from 0 to their final numbers. -->
+  <section class="stats-section section-padding reveal">
+    <div class="container">
+      <div class="section-heading section-heading-center">
+        <p class="eyebrow">At a glance</p>
+        <h2>What Holidae brings to your next trip</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="mini-card stat-card interactive-card">
+          <strong class="counter" data-target="6">0</strong>
+          <span>Hand-picked destinations</span>
+        </div>
+        <div class="mini-card stat-card interactive-card">
+          <strong class="counter" data-target="3">0</strong>
+          <span>Package tiers to compare</span>
+        </div>
+        <div class="mini-card stat-card interactive-card">
+          <strong class="counter" data-target="18">0</strong>
+          <span>Destination and package combinations</span>
+        </div>
+        <div class="mini-card stat-card interactive-card">
+          <strong class="counter" data-target="24">0</strong>
+          <span>Hour transparent AED pricing</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works: this gives the user a simple route through the site instead of making them guess where to go next. -->
+  <section class="section-padding reveal" id="holidae-route">
+    <div class="container">
+      <div class="section-heading section-heading-center">
+        <p class="eyebrow">How it works</p>
+        <h2>Three steps from the first idea to the enquiry</h2>
+        <p>No pressure, no buried pricing. Just a clear route from inspiration through to a properly structured enquiry.</p>
+      </div>
+      <div class="holidae-path-grid">
+        <article class="route-card interactive-card">
+          <span class="route-step">01</span>
+          <h3>Find your destination mood</h3>
+          <p>Start with pace, atmosphere, and what the trip should actually feel like. Six destinations, clearly described.</p>
+          <a class="text-link" href="pages/destinations.html">Browse destinations</a>
+        </article>
+        <article class="route-card interactive-card route-card-featured">
+          <span class="route-step">02</span>
+          <h3>Pick the right package level</h3>
+          <p>Essential, Signature, or Luxe — each tier is explained so you can choose the level that matches the trip, not the budget you haven't set yet.</p>
+          <a class="text-link" href="pages/package.html#package-levels">See all packages</a>
+        </article>
+        <article class="route-card interactive-card">
+          <span class="route-step">03</span>
+          <h3>Send a focused enquiry</h3>
+          <p>The booking form keeps your destination and package choice visible while you fill it in. Nothing disappears, nothing resets.</p>
+          <a class="text-link" href="pages/booking.html#booking-form-section">Go to booking</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- This section explains the service value before showing more destinations, so the homepage feels less like a random list of trips. -->
+  <section class="section-padding reveal">
+    <div class="container">
+      <div class="section-heading section-heading-center">
+        <p class="eyebrow">What you get with every enquiry</p>
+        <h2>Planning support before anything is confirmed</h2>
+        <p>Holidae is an enquiry-first service — you get full destination guidance, package comparison, and trip structuring before anything resembling a commitment.</p>
+      </div>
+      <div class="card-grid">
+        <article class="info-card interactive-card">
+          <h3>Destination context</h3>
+          <p>Every destination page explains the pace, who it suits best, what the stay actually feels like, and how it differs from the others in the collection.</p>
+        </article>
+        <article class="info-card interactive-card">
+          <h3>Live price estimates</h3>
+          <p>The booking form recalculates as you adjust travellers, room type, and board basis. The price in AED stays visible throughout — no hidden steps.</p>
+        </article>
+        <article class="info-card interactive-card">
+          <h3>A properly structured enquiry</h3>
+          <p>Travel dates, room preferences, departure airport, board type, and personal notes — all of it feeds into a single, coherent enquiry rather than a vague request.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured destinations: each card follows the same pattern, which keeps the page consistent and makes the destinations easy to compare. -->
+  <section class="featured-deals section-padding reveal">
+    <div class="container">
+      <div class="section-heading section-heading-center">
+        <p class="eyebrow">The collection</p>
+        <h2>Six destinations worth taking seriously</h2>
+      </div>
+      <div class="card-grid">
+        <article class="deal-card interactive-card">
+          <img src="images/santorini.jpg" alt="Santorini caldera view at sunset"/>
+          <div class="card-content">
+            <h3>Santorini</h3>
+            <p>Seven nights on the caldera. Sea views, slow evenings, and a pace that actually lets you exhale.</p>
+            <p class="price">From AED 4,950</p>
+            <a class="text-link" href="pages/booking.html?destination=Santorini&package=Signature#booking-form-section">Enquire</a>
+          </div>
+        </article>
+        <article class="deal-card interactive-card">
+          <img src="images/dubai.jpg" alt="Dubai skyline and waterfront"/>
+          <div class="card-content">
+            <h3>Dubai</h3>
+            <p>Five nights in a proper skyline hotel. Rooftop dinners, shopping, beach clubs if you want them.</p>
+            <p class="price">From AED 4,200</p>
+            <a class="text-link" href="pages/booking.html?destination=Dubai&package=Signature#booking-form-section">Enquire</a>
+          </div>
+        </article>
+        <article class="deal-card interactive-card">
+          <img src="images/maldives.jpg" alt="Maldives overwater villa"/>
+          <div class="card-content">
+            <h3>Maldives</h3>
+            <p>Private water villa, clear lagoon, resort calm. One of the few destinations that delivers on the photograph.</p>
+            <p class="price">From AED 6,450</p>
+            <a class="text-link" href="pages/booking.html?destination=Maldives&package=Luxe#booking-form-section">Enquire</a>
+          </div>
+        </article>
+        <article class="deal-card interactive-card">
+          <img src="images/bali.jpg" alt="Bali rice terraces and resort"/>
+          <div class="card-content">
+            <h3>Bali</h3>
+            <p>Warm, green, and genuinely relaxed. Seven nights that feel like a proper exhale rather than a hectic itinerary.</p>
+            <p class="price">From AED 5,450</p>
+            <a class="text-link" href="pages/booking.html?destination=Bali&package=Signature#booking-form-section">Enquire</a>
+          </div>
+        </article>
+        <article class="deal-card interactive-card">
+          <img src="images/amalfi.jpg" alt="Amalfi Coast cliffside town"/>
+          <div class="card-content">
+            <h3>Amalfi Coast</h3>
+            <p>Six nights along one of the world's most distinctive coastlines. The drive, the light, the terrace lunches.</p>
+            <p class="price">From AED 5,700</p>
+            <a class="text-link" href="pages/booking.html?destination=Amalfi%20Coast&package=Signature#booking-form-section">Enquire</a>
+          </div>
+        </article>
+        <article class="deal-card interactive-card">
+          <img src="images/marrakech.jpg" alt="Marrakech medina and riad"/>
+          <div class="card-content">
+            <h3>Marrakech</h3>
+            <p>Five nights in a riad. The medina, the evening rooftops, the spice market at noon. More alive than most city breaks.</p>
+            <p class="price">From AED 4,450</p>
+            <a class="text-link" href="pages/booking.html?destination=Marrakech&package=Essential#booking-form-section">Enquire</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- The booking links pass destination and package values through the URL, so the booking page can pre-fill the enquiry details. -->
+
+  <!-- Collection spotlight: this breaks up the card-heavy layout with a more editorial section and stronger imagery. -->
+  <section class="section-padding reveal collection-spotlight">
+    <div class="container split-grid spotlight-grid">
+      <div class="image-band-card interactive-card">
+        <div class="image-band-layout">
+          <img src="images/amalfi-seaside-dining.jpg" alt="Amalfi terrace dining with sea view" class="image-band-large"/>
+          <div class="image-band-stack">
+            <img src="images/dubai-skyline-terrace.jpg" alt="Dubai skyline terrace at dusk" class="image-band-small"/>
+            <img src="images/maldives-water-villa-pool.jpg" alt="Maldives villa with private pool" class="image-band-small"/>
+          </div>
+        </div>
+      </div>
+      <div class="editorial-panel collection-copy">
+        <p class="eyebrow">The Holidae difference</p>
+        <h2>Luxury isn't about the highest price. It's about the right trip.</h2>
+        <p>Some trips need to slow everything down. Others are better when the days feel social, bright, and full of movement. Knowing which is which before you book saves more than money — it saves a disappointing holiday.</p>
+        <div class="insight-band">
+          <div><strong>For slowing down</strong><span>Santorini and the Maldives — privacy, views, and a pace that actually rests you.</span></div>
+          <div><strong>For sharper energy</strong><span>Dubai — polished hotels, great dining, and a shorter break that punches well above its length.</span></div>
+          <div><strong>For something more textured</strong><span>Amalfi, Bali, and Marrakech — atmosphere, character, and a sense of real place.</span></div>
+        </div>
+        <div class="hero-buttons">
+          <a class="btn" href="pages/destinations.html">Compare all destinations</a>
+          <a class="btn btn-secondary" href="pages/package.html#package-collection">See the full collection</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Signature journeys groups the offers by travel mood, which is more useful than only listing destinations by name. -->
+  <section class="section-padding reveal signature-journeys-section">
+    <div class="container">
+      <div class="section-heading section-heading-left">
+        <p class="eyebrow">Three ways to travel</p>
+        <h2>Match the trip to the traveller, not the other way around</h2>
+        <p>The same destination can feel completely different depending on pace, expectations, and what you're actually trying to get out of the week. These three moods cover most of what the collection offers.</p>
+      </div>
+      <div class="signature-journeys-grid">
+        <article class="journey-card interactive-card">
+          <img src="images/santorini-terrace-view.jpg" alt="Santorini terrace overlooking the caldera at golden hour"/>
+          <div class="journey-card-body">
+            <span class="journey-card-kicker">Slow travel</span>
+            <h3>Mornings without an agenda and evenings that earn their memory</h3>
+            <p>Best for travellers who want scenic beauty, a genuinely unhurried pace, and a setting that rewards doing very little with great elegance.</p>
+            <a class="text-link" href="pages/booking.html?destination=Santorini&package=Signature#booking-form-section">Santorini enquiry</a>
+          </div>
+        </article>
+        <article class="journey-card interactive-card journey-card-featured">
+          <img src="images/dubai-marina-towers.jpg" alt="Dubai Marina at twilight with reflected towers"/>
+          <div class="journey-card-body">
+            <span class="journey-card-kicker">Sharp luxury</span>
+            <h3>City hotels, rooftop dinners, and a destination that stays exciting throughout</h3>
+            <p>Best for travellers who want energy alongside the polish — excellent service, a skyline worth photographing, and a social pace that doesn't flag.</p>
+            <a class="text-link" href="pages/booking.html?destination=Dubai&package=Luxe#booking-form-section">Dubai enquiry</a>
+          </div>
+        </article>
+        <article class="journey-card interactive-card">
+          <img src="images/marrakech-palace-arches.jpg" alt="Marrakech riad courtyard with ornamental arches"/>
+          <div class="journey-card-body">
+            <span class="journey-card-kicker">Richer atmosphere</span>
+            <h3>Places that feel genuinely different from home and stay with you longer</h3>
+            <p>Best for travellers who find beach-only trips a little flat — the medina, the riad courtyards, the evening rooftops give the days more texture.</p>
+            <a class="text-link" href="pages/booking.html?destination=Marrakech&package=Essential#booking-form-section">Marrakech enquiry</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Travel styles help users start from the kind of holiday they want, even if they have not chosen a destination yet. -->
+  <section class="section-padding reveal alt-bg">
+    <div class="container">
+      <div class="section-heading section-heading-left">
+        <p class="eyebrow">Holiday styles</p>
+        <h2>Start with how the trip should feel</h2>
+        <p>The right destination comes from understanding the mood first. These four categories cover most of what travellers are actually looking for when they start planning.</p>
+      </div>
+      <div class="card-grid travel-style-grid">
+        <article class="info-card interactive-card">
+          <h3>Romantic escapes</h3>
+          <p>Scenic settings, slower evenings, and destinations where the atmosphere does the work. Santorini and the Maldives both belong here.</p>
+        </article>
+        <article class="info-card interactive-card">
+          <h3>Premium city breaks</h3>
+          <p>Better hotels, better restaurants, and a destination that genuinely rewards the shorter trip. Dubai is the clearest example in the collection.</p>
+        </article>
+        <article class="info-card interactive-card">
+          <h3>Beach and resort stays</h3>
+          <p>The trip where the sunlounger is part of the point. The Maldives and Bali both deliver on this without asking you to work for it.</p>
+        </article>
+        <article class="info-card interactive-card">
+          <h3>Coastal culture</h3>
+          <p>Mediterranean and North African destinations where the town, the food, and the setting matter as much as the view. Amalfi and Marrakech.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Planning notes answer common questions early, which makes the booking enquiry feel less uncertain for the user. -->
+  <section class="testimonials section-padding reveal">
+    <div class="container">
+      <div class="section-heading section-heading-center">
+        <p class="eyebrow">Useful before you enquire</p>
+        <h2>Things worth knowing before you pick the destination</h2>
+      </div>
+      <div class="review-grid">
+        <article class="review-card interactive-card">
+          <p>Slower destinations like Santorini and the Maldives tend to reward longer stays. Five nights often isn't quite long enough to settle in properly.</p>
+          <div class="review-meta">
+            <strong>On trip length</strong>
+            <span>Planning note</span>
+          </div>
+        </article>
+        <article class="review-card interactive-card">
+          <p>The Signature package is the most popular starting point. It includes transfers and a stronger room tier without reaching the full Luxe price.</p>
+          <div class="review-meta">
+            <strong>On package choice</strong>
+            <span>Package note</span>
+          </div>
+        </article>
+        <article class="review-card interactive-card">
+          <p>The booking form asks for departure airport, travel dates, room preference, and board basis. Having those four details ready makes the enquiry much more useful.</p>
+          <div class="review-meta">
+            <strong>On sending an enquiry</strong>
+            <span>Booking note</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final call-to-action: after the user has seen the options, this gives them one obvious next step. -->
+  <section class="cta-banner section-padding reveal">
+    <div class="container cta-wrap">
+      <div>
+        <p class="eyebrow">Ready when you are</p>
+        <h2>Start with the destination. Build the details from there.</h2>
+      </div>
+      <a class="btn" href="pages/booking.html#booking-form-section">Start Your Enquiry</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer keeps the main links, destination shortcuts, and contact details available after the user reaches the end of the page. -->
+<footer class="site-footer">
+  <div class="container footer-shell">
+    <div class="footer-brand">
+      <a class="footer-logo" href="index.html">Holidae</a>
+      <p>Curated holiday planning for travellers who want destination clarity, honest package comparison, and a calmer route to enquiry.</p>
+      <div class="footer-micro">
+        <span>Dubai-based planning</span>
+        <span>AED pricing</span>
+        <span>Enquiry-first</span>
+      </div>
+    </div>
+    <div class="footer-grid">
+      <div class="footer-links">
+        <h3>Explore</h3>
+        <a href="pages/package.html">Packages</a>
+        <a href="pages/destinations.html">Destinations</a>
+        <a href="pages/booking.html">Booking</a>
+        <a href="pages/contact.html">Contact</a>
+      </div>
+      <div class="footer-links">
+        <h3>Destinations</h3>
+        <a href="pages/booking.html?destination=Santorini&package=Signature#booking-form-section">Santorini</a>
+        <a href="pages/booking.html?destination=Dubai&package=Luxe#booking-form-section">Dubai</a>
+        <a href="pages/booking.html?destination=Maldives&package=Luxe#booking-form-section">Maldives</a>
+        <a href="pages/booking.html?destination=Amalfi%20Coast&package=Signature#booking-form-section">Amalfi Coast</a>
+        <a href="pages/booking.html?destination=Bali&package=Signature#booking-form-section">Bali</a>
+        <a href="pages/booking.html?destination=Marrakech&package=Essential#booking-form-section">Marrakech</a>
+      </div>
+      <div class="footer-links">
+        <h3>Get in touch</h3>
+        <span>hello@holidae.ae</span>
+        <span>+971 4 555 0189</span>
+        <span>Mon–Sat · 9am–7pm GST</span>
+        <span>Dubai, UAE</span>
+      </div>
+    </div>
+  </div>
+  <div class="container footer-base">
+    <p>© 2026 Holidae. All rights reserved.</p>
+    <p>Curated holiday packages and destination enquiries.</p>
+  </div>
+</footer>
+
+<!-- JavaScript loads after the HTML so the page content renders first, then the interactive behaviour kicks in. -->
+<script src="js/script.js"></script>
 </body>
 </html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Holidae | Booking</title>
+
+<link rel="stylesheet" href="../css/style.css"/>
+<link rel="stylesheet" href="../css/mobile.css"/>
+</head>
+
+<!-- data-page lets the CSS and JavaScript know this is the booking page. -->
+<body class="holidae-redesign" data-page="booking">
+<header class="site-header site-header-overlay">
+<div class="container header-wrap">
+<a class="logo logo-light" href="../index.html">Holidae</a>
+
+<!-- Mobile navigation button. JavaScript updates the open and closed state. -->
+<button aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation" class="nav-toggle nav-toggle-light" type="button">
+<span></span>
+<span></span>
+<span></span>
+</button>
+
+<nav class="site-nav" id="site-nav">
+<ul class="nav-list nav-list-light">
+<li><a href="../index.html">Home</a></li>
+<li><a href="package.html">Package</a></li>
+<li><a class="active" href="booking.html">Booking</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="destinations.html">Destinations</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+</div>
+</header>
+
+<main>
+
+<!-- Booking hero: introduces the enquiry flow before showing the actual form. -->
+<section class="video-hero video-hero-small reveal">
+<video autoplay="" class="hero-video" loop="" muted="" playsinline="">
+<source src="../videos/Video 3.mp4" type="video/mp4"/>
+</video>
+<div class="hero-overlay"></div>
+<div class="container video-hero-content">
+<p class="eyebrow eyebrow-light">Curated booking journey</p>
+<h1>Send a more detailed enquiry without losing the feel of the trip</h1>
+<p>
+          Compare destination moods, estimate a realistic total, and send an enquiry that is rooted in the package and stay experience you actually want.
+        </p>
+<div class="hero-buttons">
+<a class="btn" href="package.html#package-levels">Review Package Levels</a>
+<a class="btn btn-ghost" href="#booking-form-section">Go to Form</a>
+</div>
+<div class="hero-stats-grid hero-stats-grid-booking">
+<article class="hero-stat-card">
+<strong>Live trip guidance</strong>
+<p>Destination, room, and board choices adjust the estimate instantly as you build the enquiry.</p>
+</article>
+<article class="hero-stat-card">
+<strong>Destination-led booking</strong>
+<p>The enquiry starts with the destination mood before moving into traveller details.</p>
+</article>
+<article class="hero-stat-card">
+<strong>Trusted enquiry flow</strong>
+<p>No payment is taken from the form; support and availability are checked first.</p>
+</article>
+</div>
+</div>
+</section>
+
+<!-- These buttons change the selected destination without making the user scroll to the form first. -->
+<section class="section-padding alt-bg reveal">
+<div class="container">
+<div class="section-heading section-heading-center">
+<p class="eyebrow">Choose your trip mood</p>
+<h2>Start with the destination, then refine the stay</h2>
+</div>
+<div class="destination-switch-grid">
+<button class="destination-switch active" data-destination-trigger="Santorini" type="button">
+<span class="destination-switch-title">Santorini</span>
+<span class="destination-switch-copy">Scenic romance</span>
+</button>
+<button class="destination-switch" data-destination-trigger="Dubai" type="button">
+<span class="destination-switch-title">Dubai</span>
+<span class="destination-switch-copy">Luxury city energy</span>
+</button>
+<button class="destination-switch" data-destination-trigger="Maldives" type="button">
+<span class="destination-switch-title">Maldives</span>
+<span class="destination-switch-copy">Quiet island escape</span>
+</button>
+<button class="destination-switch" data-destination-trigger="Bali" type="button">
+<span class="destination-switch-title">Bali</span>
+<span class="destination-switch-copy">Tropical calm</span>
+</button>
+<button class="destination-switch" data-destination-trigger="Amalfi Coast" type="button">
+<span class="destination-switch-title">Amalfi Coast</span>
+<span class="destination-switch-copy">Coastal elegance</span>
+</button>
+<button class="destination-switch" data-destination-trigger="Marrakech" type="button">
+<span class="destination-switch-title">Marrakech</span>
+<span class="destination-switch-copy">Colour and culture</span>
+</button>
+</div>
+</div>
+</section>
+
+<!-- JavaScript updates this summary when the selected destination changes. -->
+<section class="section-padding reveal">
+<div class="container">
+<div class="trip-brief-card interactive-card">
+<div class="trip-brief-copy">
+<p class="eyebrow">Selected destination</p>
+<h2 id="booking-destination-heading">Santorini is currently selected</h2>
+<p id="booking-destination-copy">
+              A slower, scenic island stay designed around sea views, sunset evenings, and a more romantic pace.
+            </p>
+</div>
+<div class="trip-brief-tags">
+<div class="trip-tag">
+<span class="trip-tag-label">Best for</span>
+<strong id="booking-best-for">Couples and scenic travellers</strong>
+</div>
+<div class="trip-tag">
+<span class="trip-tag-label">Trip pace</span>
+<strong id="booking-trip-pace">Slow and scenic</strong>
+</div>
+<div class="trip-tag">
+<span class="trip-tag-label">Ideal duration</span>
+<strong id="booking-duration">7 nights</strong>
+</div>
+<div class="trip-tag">
+<span class="trip-tag-label">Budget feel</span>
+<strong id="booking-budget-feel">Premium mid-range</strong>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Short guide section before the form, so the user thinks about the trip properly first. -->
+<section class="section-padding reveal booking-lens-section">
+  <div class="container">
+    <div class="section-heading section-heading-left">
+      <p class="eyebrow">Before you fill the form</p>
+      <h2>Three checks that usually make the enquiry better</h2>
+      <p>A stronger enquiry usually comes down to three things: choosing the right pace, choosing the right room style, and being clear about what kind of trip this actually is.</p>
+    </div>
+    <div class="occasion-grid booking-occasion-grid">
+      <article class="occasion-card interactive-card">
+        <span>Trip pace</span>
+        <h3>Do you want movement or stillness?</h3>
+        <p>Dubai and Marrakech suit busier itineraries. Santorini, Maldives, and Bali work better when the traveller wants the day to feel lighter.</p>
+      </article>
+      <article class="occasion-card interactive-card">
+        <span>Room priority</span>
+        <h3>Is the room part of the experience?</h3>
+        <p>If sea views, pool villas, or upgraded suites really matter, it is worth using the package tier and room type together before sending the form.</p>
+      </article>
+      <article class="occasion-card interactive-card">
+        <span>Reason for travel</span>
+        <h3>Celebration, rest, or a sharper city break?</h3>
+        <p>The more clearly the trip reason is stated in the notes, the easier it is to shape the enquiry around the right stay style.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Main booking form. The IDs here are important because script.js uses them for validation and live pricing. -->
+<section class="section-padding reveal" id="booking-form-section">
+<div class="container booking-grid">
+<div class="main-column">
+<article class="content-box interactive-card booking-form-panel">
+<p class="eyebrow">Booking form</p>
+<h2>Build the enquiry around the trip you actually want</h2>
+<p>
+              The enquiry starts with the destination, so the package summary, estimate, and trip guidance stay connected from the start.
+            </p>
+<div class="form-note-band">
+<span>Package-led planning</span>
+<span>Clearer destination fit</span>
+<span>Support before booking</span>
+</div>
+
+<!-- novalidate keeps validation handled by our JavaScript instead of the browser's default popups. -->
+<form action="#" class="booking-form" id="booking-form" method="post" novalidate="">
+<div class="form-stage-heading">
+<span>Step 1</span>
+<h3>Choose the trip and main traveller</h3>
+<p>Start with the destination and the lead traveller details so the enquiry is clearly attached to a real package.</p>
+</div>
+<div class="form-row">
+<div>
+<label for="destination">Destination</label>
+<select id="destination" name="destination">
+<option value="Santorini">Santorini</option>
+<option value="Dubai">Dubai</option>
+<option value="Maldives">Maldives</option>
+<option value="Bali">Bali</option>
+<option value="Amalfi Coast">Amalfi Coast</option>
+<option value="Marrakech">Marrakech</option>
+</select>
+</div>
+<div>
+<label for="full-name">Full name</label>
+<input id="full-name" name="full-name" placeholder="Enter your full name" type="text"/>
+</div>
+</div>
+<div class="form-row">
+<div>
+<label for="email">Email address</label>
+<input id="email" name="email" placeholder="Enter your email address" type="email"/>
+</div>
+<div>
+<label for="phone">Phone number</label>
+<input id="phone" name="phone" placeholder="Enter your phone number" type="tel"/>
+</div>
+</div>
+
+<!-- These fields affect availability and the live estimate. -->
+<div class="form-stage-heading">
+<span>Step 2</span>
+<h3>Add travel dates and party size</h3>
+<p>These details help shape availability, room planning, and a more useful package response.</p>
+</div>
+<div class="form-row">
+<div>
+<label for="departure-date">Departure date</label>
+<input id="departure-date" name="departure-date" type="date"/>
+</div>
+<div>
+<label for="travellers">Number of travellers</label>
+<input id="travellers" min="1" name="travellers" type="number" value="2"/>
+</div>
+</div>
+
+<!-- Room, board, and package level are used by the price calculation. -->
+<div class="form-stage-heading">
+<span>Step 3</span>
+<h3>Choose stay preferences</h3>
+<p>Room, airport, board, and trip focus make the enquiry feel more tailored before it is sent.</p>
+</div>
+<div class="form-row">
+<div>
+<label for="room-type">Room type</label>
+<select id="room-type" name="room-type">
+<option value="Standard Room">Standard Room</option>
+<option value="Deluxe Room">Deluxe Room</option>
+<option value="Sea View Suite">Sea View Suite</option>
+</select>
+</div>
+<div>
+<label for="airport">Departure airport</label>
+<select id="airport" name="airport">
+<option value="Dubai International (DXB)">Dubai International (DXB)</option>
+<option value="Abu Dhabi (AUH)">Abu Dhabi (AUH)</option>
+<option value="Sharjah (SHJ)">Sharjah (SHJ)</option>
+<option value="Doha (DOH)">Doha (DOH)</option>
+<option value="Flexible">Flexible departure airport</option>
+</select>
+</div>
+</div>
+<div class="form-row">
+<div>
+<label for="board-type">Board type</label>
+<select id="board-type" name="board-type">
+<option value="All-inclusive">All-inclusive</option>
+<option value="Half board">Half board</option>
+<option value="Bed and breakfast">Bed and breakfast</option>
+</select>
+</div>
+<div>
+<label for="package-tier">Package level</label>
+<select id="package-tier" name="package-tier">
+<option value="Essential">Essential</option>
+<option selected="" value="Signature">Signature</option>
+<option value="Luxe">Luxe</option>
+</select>
+</div>
+</div>
+<div class="form-row">
+<div>
+<label for="trip-focus">Trip focus</label>
+<select id="trip-focus" name="trip-focus">
+<option value="Relax and scenery">Relax and scenery</option>
+<option value="Luxury and style">Luxury and style</option>
+<option value="Culture and exploring">Culture and exploring</option>
+<option value="Celebration or special trip">Celebration or special trip</option>
+</select>
+</div>
+<div>
+<label for="contact-preference">Preferred reply</label>
+<select id="contact-preference" name="contact-preference">
+<option value="Email">Email</option>
+<option value="Phone call">Phone call</option>
+<option value="WhatsApp message">WhatsApp message</option>
+</select>
+</div>
+</div>
+
+<!-- Final free-text field for anything the dropdowns cannot cover. -->
+<div class="form-stage-heading">
+<span>Step 4</span>
+<h3>Add final notes and send enquiry</h3>
+<p>Use this space for celebrations, accessibility needs, room views, or anything that would help shape the quote.</p>
+</div>
+<div>
+<label for="notes">Extra requests</label>
+<textarea id="notes" name="notes" placeholder="Add any room, travel, or celebration notes here" rows="6"></textarea>
+</div>
+<button class="btn form-btn" type="submit">Submit Enquiry</button>
+<p class="form-message" id="form-message"></p>
+</form>
+</article>
+
+<!-- Explains the form result without making the form feel like a payment page. -->
+<article class="content-box interactive-card">
+<p class="eyebrow">Before you send</p>
+<h2>What happens after your enquiry</h2>
+<div class="feature-points">
+<div class="feature-point interactive-card">
+<h3>Step 1</h3>
+<p>We review the destination, dates, room style, and traveller details you selected.</p>
+</div>
+<div class="feature-point interactive-card">
+<h3>Step 2</h3>
+<p>We shape the best-fitting package version and check live availability for your trip.</p>
+</div>
+<div class="feature-point interactive-card">
+<h3>Step 3</h3>
+<p>You receive clearer pricing guidance, next steps, and support before confirming anything.</p>
+</div>
+<div class="feature-point interactive-card">
+<h3>Step 4</h3>
+<p>You move forward with a trip that feels more tailored to your travel mood and priorities.</p>
+</div>
+</div>
+</article>
+
+<!-- Quick comparison for users who are still unsure which destination fits them. -->
+<article class="content-box interactive-card">
+<p class="eyebrow">Decision support</p>
+<h2>How the six trip styles differ</h2>
+<div class="card-grid small-cards travel-fit-grid">
+<article class="info-card interactive-card">
+<h3>Santorini</h3>
+<p>Best for scenic couples, relaxed evenings, and iconic sea-view stays.</p>
+</article>
+<article class="info-card interactive-card">
+<h3>Dubai</h3>
+<p>Best for luxury hotels, skyline dining, shopping, and a busier trip pace.</p>
+</article>
+<article class="info-card interactive-card">
+<h3>Maldives</h3>
+<p>Best for quiet water-villa escapes, honeymoon energy, and full reset travel.</p>
+</article>
+<article class="info-card interactive-card">
+<h3>Bali</h3>
+<p>Best for softer tropical pacing, resort downtime, and warm island scenery.</p>
+</article>
+<article class="info-card interactive-card">
+<h3>Amalfi Coast</h3>
+<p>Best for elegant coastal towns, stylish views, and bright summer atmosphere.</p>
+</article>
+<article class="info-card interactive-card">
+<h3>Marrakech</h3>
+<p>Best for culture, colour, boutique stays, and a stronger city-break mood.</p>
+</article>
+</div>
+</article>
+</div>
+
+<!-- Sidebar shows the same trip choice in a shorter summary while the form is being filled out. -->
+<aside class="side-column booking-side">
+<div class="content-box booking-summary-box interactive-card">
+<p class="eyebrow">Live estimate</p>
+<h2>Your package total</h2>
+<p class="estimate-price" id="estimate-price">From AED 11,700 total</p>
+<p id="estimate-context">
+              Based on traveller count, room type, board option, and Signature package level.
+            </p>
+<div class="summary-tag-row">
+<span class="summary-tag" id="summary-destination-tag">Santorini</span>
+<span class="summary-tag" id="summary-package-tag">Signature</span>
+<span class="summary-tag" id="summary-pace-tag">Slow pace</span>
+<span class="summary-tag" id="summary-duration-tag">7 nights</span>
+</div>
+<a class="btn full-width" href="package.html#package-levels">Back to Package Levels</a>
+</div>
+<div class="content-box interactive-card">
+<h2>Selected trip snapshot</h2>
+<ul class="feature-list compact-list">
+<li><strong>Destination:</strong> <span id="sidebar-destination">Santorini</span></li>
+<li><strong>Package level:</strong> <span id="sidebar-package-tier">Signature</span></li>
+<li><strong>Best for:</strong> <span id="sidebar-best-for">Couples and scenic travellers</span></li>
+<li><strong>Trip mood:</strong> <span id="sidebar-mood">Romantic, visual, and relaxed</span></li>
+<li><strong>Typical stay:</strong> <span id="sidebar-duration">7 nights</span></li>
+</ul>
+</div>
+<div class="content-box interactive-card enquiry-next-card">
+<p class="eyebrow">After submitting</p>
+<h2>Your enquiry route</h2>
+<ol class="timeline-list">
+<li><strong>Review:</strong> destination, tier, dates, room, and traveller count are checked together.</li>
+<li><strong>Match:</strong> Holidae would match the request to availability and package fit.</li>
+<li><strong>Reply:</strong> the traveller receives next steps before any payment is requested.</li>
+</ol>
+</div>
+<div class="content-box trust-sidebar-card interactive-card">
+<p class="eyebrow">Trust note</p>
+<h2>Secure enquiry promise</h2>
+<ul class="feature-list compact-list">
+<li>No payment is taken from this form</li>
+<li>Your options are reviewed before confirmation</li>
+<li>Availability and pricing are checked before next steps</li>
+<li>Support is available if your plans change</li>
+</ul>
+</div>
+<div class="content-box interactive-card">
+<h2>Why this booking flow is stronger</h2>
+<ul class="feature-list compact-list">
+<li>Destination-led package selection</li>
+<li>Live estimate tied to the chosen trip</li>
+<li>Clearer next steps before commitment</li>
+<li>Support available before final booking</li>
+</ul>
+</div>
+<div class="content-box interactive-card">
+<h2>Need help first?</h2>
+<p>
+              If you want advice before submitting the form, visit the contact page and ask about
+              destination fit, room options, or the right trip pace for your plans.
+            </p>
+<a class="btn full-width" href="contact.html">Contact Support</a>
+</div>
+</aside>
+</div>
+</section>
+
+<!-- Follow-up section explaining what happens after submission. -->
+<section class="section-padding alt-bg reveal response-rhythm-section">
+  <div class="container">
+    <div class="section-heading section-heading-left">
+      <p class="eyebrow">What happens next</p>
+      <h2>The best booking experience feels guided, not rushed</h2>
+      <p>Once the enquiry is sent, Holidae should feel more like a planning desk than a checkout page. The aim is to narrow the destination, check the stay style, then move toward a more accurate quote.</p>
+    </div>
+    <div class="response-rhythm-grid">
+      <article class="response-step interactive-card"><span>01</span><h3>Review the brief</h3><p>Dates, destination, traveller count, and room preference are checked first so the reply is grounded in the trip you actually want.</p></article>
+      <article class="response-step interactive-card"><span>02</span><h3>Refine the stay</h3><p>If something feels mismatched, the destination, package tier, or room type can be adjusted before anything moves further.</p></article>
+      <article class="response-step interactive-card"><span>03</span><h3>Confirm the next step</h3><p>The follow-up should make the quote, inclusions, and route to confirmation feel clear rather than rushed.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ answers common concerns before the user leaves the page. -->
+<section class="section-padding reveal">
+<div class="container">
+<div class="section-heading section-heading-center">
+<p class="eyebrow">Booking reassurance</p>
+<h2>Frequently asked questions</h2>
+</div>
+<div class="content-box interactive-card">
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Can I change the destination before confirming?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>Yes. Use the destination selector to compare different trip moods before submitting your enquiry.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Does the estimate update automatically?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>Yes. The estimate changes when the destination, traveller count, room type, or board option changes.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Can I ask for special requests?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>Yes. Add celebration notes, room preferences, or travel requests in the extra requests field.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Is this page only for Santorini?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>No. The booking page supports all six destinations and adjusts the trip summary to match.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Do I pay when I submit this enquiry?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>No. This is an enquiry step. Payment or deposit details would only be discussed after availability and package details are confirmed.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" type="button">
+<span>Can I compare destinations before deciding?</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer">
+<p>Yes. Use the package hub and destination selector to compare trip mood, duration, pace, and budget feel before sending your enquiry.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Final CTA gives the user another route if they are not ready to submit the form. -->
+<section class="cta-banner section-padding reveal">
+<div class="container cta-wrap">
+<div>
+<p class="eyebrow">Ready to continue?</p>
+<h2>Move to contact if you want help before you send the form</h2>
+</div>
+<a class="btn" href="package.html#package-levels">Compare Package Options</a>
+</div>
+</section>
+</main>
+
+<!-- Footer keeps useful links and contact details available at the bottom of the booking page. -->
+<footer class="site-footer">
+<div class="container footer-shell">
+  <div class="footer-brand">
+    <a class="footer-logo" href="../index.html">Holidae</a>
+    <p>Curated holiday planning for travellers who want destination clarity, polished package options, and a calmer enquiry experience.</p>
+    <div class="footer-micro">
+      <span>Dubai-based planning desk</span>
+      <span>AED pricing</span>
+      <span>Enquiry-first booking flow</span>
+    </div>
+  </div>
+  <div class="footer-grid">
+    <div class="footer-links">
+      <h3>Explore</h3>
+      <a href="package.html">Packages</a>
+      <a href="destinations.html">Destinations</a>
+      <a href="booking.html">Booking</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-links">
+      <h3>Collection</h3>
+      <a href="booking.html?destination=Santorini&amp;package=Signature#booking-form-section">Santorini</a>
+      <a href="booking.html?destination=Dubai&amp;package=Luxe#booking-form-section">Dubai</a>
+      <a href="booking.html?destination=Maldives&amp;package=Luxe#booking-form-section">Maldives</a>
+      <a href="booking.html?destination=Amalfi%20Coast&amp;package=Signature#booking-form-section">Amalfi Coast</a>
+    </div>
+    <div class="footer-links">
+      <h3>Planning help</h3>
+      <span>hello@holidae.ae</span>
+      <span>+971 4 555 0189</span>
+      <span>Mon–Sat · 9am–7pm GST</span>
+      <span>Dubai, United Arab Emirates</span>
+    </div>
+  </div>
+</div>
+<div class="container footer-base">
+  <p>© 2026 Holidae. All rights reserved.</p>
+  <p>Premium destination enquiries and curated holiday packages.</p>
+</div>
+</footer>
+
+<!-- Mobile stylesheet and JavaScript are loaded last. --><script src="../js/script.js"></script>
+</body>
+</html>
