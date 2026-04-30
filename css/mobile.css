@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
-
 /* ═══════════════════════════════════════════
    MOBILE & RESPONSIVE OVERRIDES
    Breakpoint-specific layout, spacing, and interaction fixes.
+   The font is imported once in style.css — no need to re-fetch it here.
 ═══════════════════════════════════════════ */
 
 @media ((max-width: 700px)) {
@@ -22,6 +21,8 @@
     gap: 12px;
   }
 
+  /* On mobile, the reversed split layout reverts to a single column and the order resets
+     so content reads top-to-bottom naturally instead of image-first every time. */
   .split-grid-reverse {
     grid-template-columns: 1fr;
   }
@@ -31,6 +32,7 @@
     order: unset;
   }
 
+  /* Booking hero stat cards stay 2-column on small phones — they're short enough to fit side by side. */
   .hero-stats-grid-booking {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
@@ -278,19 +280,50 @@
     min-height: 58px;
     padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(253, 249, 244, 0.88);
+    background: rgba(253, 249, 244, 0.92);
     border: 1px solid rgba(255,255,255,0.7);
     backdrop-filter: blur(24px) saturate(1.8);
     box-shadow: 0 8px 32px rgba(22,18,14,0.12), 0 1px 0 rgba(255,255,255,0.9) inset;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  }
+
+  /* Start transparent over the dark video hero on mobile too */
+  .site-header-overlay .header-wrap {
+    background: transparent;
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  /* Snap to opaque pill once scrolled */
+  .site-header-overlay.scrolled .header-wrap {
+    background: rgba(253, 249, 244, 0.95);
+    border-color: rgba(255,255,255,0.7);
+    box-shadow: 0 8px 32px rgba(22,18,14,0.14), 0 1px 0 rgba(255,255,255,0.9) inset;
+    backdrop-filter: blur(24px) saturate(1.8);
   }
 
   html[data-holidae-style="night"] .header-wrap {
     background: rgba(14, 12, 10, 0.9);
     border-color: rgba(255,255,255,0.08);
     box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.05) inset;
+  }
+
+  html[data-holidae-style="night"] .site-header-overlay .header-wrap {
+    background: transparent;
+    border-color: rgba(255,255,255,0.10);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  html[data-holidae-style="night"] .site-header-overlay.scrolled .header-wrap {
+    background: rgba(14, 12, 10, 0.95);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.05) inset;
+    backdrop-filter: blur(24px) saturate(1.4);
   }
 
   .logo {
@@ -403,6 +436,13 @@
     letter-spacing: 0.01em;
     border: 1px solid transparent;
     transition: all 0.22s ease;
+    position: relative;
+    text-decoration: none;
+  }
+
+  /* Kill the text-link underline pseudo from style.css bleeding into drawer links */
+  .nav-list a::before {
+    display: none !important;
   }
 
   .nav-list a::after {
@@ -411,6 +451,11 @@
     opacity: 0;
     transform: translateX(-6px);
     transition: opacity 0.22s ease, transform 0.22s ease;
+    /* Override text-link::after transition */
+    width: auto;
+    height: auto;
+    background: none;
+    position: static;
   }
 
   .nav-list a:hover::after,
@@ -433,7 +478,20 @@
   }
 
   .nav-list-light a {
+    /* Inside the mobile drawer (which is always light), ignore the light variant */
     color: var(--ink-mid);
+  }
+
+  html[data-holidae-style="night"] .nav-list a,
+  html[data-holidae-style="night"] .nav-list-light a {
+    color: rgba(240,236,228,0.8);
+  }
+
+  html[data-holidae-style="night"] .nav-list a:hover,
+  html[data-holidae-style="night"] .nav-list a.active {
+    color: var(--teal);
+    background: rgba(62,207,191,0.10);
+    border-color: rgba(62,207,191,0.14);
   }
 
   /* Mobile hero sizing, overlay treatment, content alignment, and stacked buttons. */
@@ -1028,51 +1086,32 @@
     font-size: 0.78rem;
   }
 
-  /* Reposition style and sound controls above mobile safe areas. */
+  /* Compact floating controls stay small and out of the way on mobile */
   .style-switcher {
-    right: 12px;
-    left: auto;
-    bottom: calc(16px + var(--mobile-safe-bottom));
-    max-width: 220px;
-    min-width: 180px;
-    border-radius: var(--mob-radius);
-    box-shadow: 0 12px 40px rgba(22,18,14,0.18);
+    right: 10px;
+    bottom: calc(10px + var(--mobile-safe-bottom));
+    padding: 5px 8px;
+    gap: 4px;
+    max-width: calc(100vw - 20px);
   }
 
-  .style-switcher-header {
-    padding: 12px 14px;
-  }
-
-  .style-switcher-title {
-    font-size: 0.78rem;
-  }
-
-  .style-switcher-subtitle {
-    font-size: 0.7rem;
-  }
-
-  .style-switcher-options {
-    padding: 6px 10px 10px;
-    gap: 6px;
-  }
+  .style-switcher-label { display: none; }
 
   .style-option-btn {
-    padding: 6px 12px;
-    font-size: 0.78rem;
+    padding: 4px 9px;
+    font-size: 0.68rem;
+    min-height: 28px;
   }
 
   .immersive-sound-toggle {
-    left: 12px;
-    right: auto;
-    bottom: calc(16px + var(--mobile-safe-bottom));
-    padding: 10px 14px;
-    font-size: 0.83rem;
-    min-height: 42px;
+    left: 10px;
+    bottom: calc(10px + var(--mobile-safe-bottom));
+    padding: 5px 10px;
+    min-height: 30px;
+    gap: 4px;
   }
 
-  .sound-status {
-    display: none;
-  }
+  .sound-status-label { display: none; }
 
   /* Booking, two-column, and contact pages collapse to one column. */
   .booking-grid,

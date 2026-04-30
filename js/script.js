@@ -1,4 +1,6 @@
-// Load the saved theme early so the page doesn't flash the wrong style.
+// This runs immediately before the page renders — if we waited for DOMContentLoaded
+// the user would briefly see the wrong theme before it gets corrected (flash of unstyled content).
+// If localStorage is blocked (private mode, etc.) we just fall back to Cinematic.
 (function () {
   try {
     const savedStyle = localStorage.getItem("holidae-style") || "cinematic";
@@ -7,30 +9,32 @@
     document.documentElement.setAttribute("data-holidae-style", "cinematic");
   }
 
+  // CSS uses .js-enabled to enable animations that would break without JavaScript
   document.documentElement.classList.add("js-enabled");
 })();
 
-// Main site interactions start after the HTML is ready.
 document.addEventListener("DOMContentLoaded", function () {
+
+  // Check these once upfront so we don't repeatedly query matchMedia throughout the file.
+  // prefersReducedMotion disables animations for accessibility; isFinePointer skips hover effects on touch devices.
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isFinePointer = window.matchMedia("(pointer: fine)").matches;
 
+  // Ensure <main> has an ID so the skip link actually works.
   const main = document.querySelector("main");
-  if (main && !main.id) {
-    main.id = "main-content";
-  }
+  if (main && !main.id) main.id = "main-content";
 
-  /* ---------------------------------------------------------
-     NAVIGATION
-  --------------------------------------------------------- */
+
+  /* ─── NAVIGATION ─────────────────────────────────────────── */
+
   const navToggle = document.querySelector(".nav-toggle");
-  const siteNav = document.querySelector(".site-nav");
-  const navLinks = document.querySelectorAll(".site-nav a");
+  const siteNav   = document.querySelector(".site-nav");
+  const navLinks  = document.querySelectorAll(".site-nav a");
 
-  // Reused because the menu closes from links and the Escape key.
+  // Pulled out as its own function because both the hamburger button
+  // and the Escape key need to trigger it — avoids duplicating the same cleanup logic.
   function closeNavigation() {
     if (!navToggle || !siteNav) return;
-
     siteNav.classList.remove("open");
     navToggle.classList.remove("active");
     document.body.classList.remove("nav-open");
@@ -48,78 +52,75 @@ document.addEventListener("DOMContentLoaded", function () {
       navToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
     });
 
-    navLinks.forEach(function (link) {
-      link.addEventListener("click", closeNavigation);
-    });
-
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") closeNavigation();
-    });
+    navLinks.forEach(function (link) { link.addEventListener("click", closeNavigation); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeNavigation(); });
   }
 
   const siteHeader = document.querySelector(".site-header");
 
-  // Adds a class once the header is no longer sitting at the very top.
   if (siteHeader) {
+    const navList = siteHeader.querySelector(".nav-list");
+    const logo    = siteHeader.querySelector(".logo");
+    const toggle  = siteHeader.querySelector(".nav-toggle");
+
+    // The header starts transparent and white-text over the video hero.
+    // After 20px of scrolling it switches to an opaque pill with dark text
+    // so it stays readable against the cream background behind it.
     const updateHeaderScroll = function () {
-      siteHeader.classList.toggle("scrolled", window.scrollY > 20);
+      const isScrolled = window.scrollY > 20;
+      siteHeader.classList.toggle("scrolled", isScrolled);
+
+      if (siteHeader.classList.contains("site-header-overlay")) {
+        if (isScrolled) {
+          if (navList) navList.classList.remove("nav-list-light");
+          if (logo)    { logo.classList.remove("logo-light"); logo.style.color = ""; }
+          if (toggle)  toggle.classList.remove("nav-toggle-light");
+        } else {
+          if (navList) navList.classList.add("nav-list-light");
+          if (logo)    logo.classList.add("logo-light");
+          if (toggle)  toggle.classList.add("nav-toggle-light");
+        }
+      }
     };
 
     updateHeaderScroll();
     window.addEventListener("scroll", updateHeaderScroll, { passive: true });
   }
 
-  /* ---------------------------------------------------------
-     VISUAL STYLE SWITCHER
-  --------------------------------------------------------- */
-  // Theme buttons are generated from this list instead of writing each one manually.
+
+  /* ─── VISUAL STYLE SWITCHER ──────────────────────────────── */
+
+  // Adding a new theme is just a new entry here — the switcher builds its buttons from this array automatically.
   const visualStyles = [
-    { id: "cinematic", label: "Cinematic", helper: "Current premium look" },
-    { id: "editorial", label: "Editorial", helper: "Warm magazine tone" },
-    { id: "resort", label: "Resort", helper: "Fresh coastal tone" },
-    { id: "night", label: "Night Luxe", helper: "Darker luxury tone" }
+    { id: "cinematic", label: "Cinematic", helper: "Default premium look" },
+    { id: "editorial", label: "Editorial", helper: "Warm magazine tone"   },
+    { id: "resort",    label: "Resort",    helper: "Fresh coastal tone"   },
+    { id: "night",     label: "Night Luxe",helper: "Dark luxury tone"     }
   ];
 
   function setupStyleSwitcher() {
     if (document.querySelector(".style-switcher")) return;
 
-    const switcher = document.createElement("aside");
-    switcher.className = "style-switcher";
-    switcher.setAttribute("aria-label", "Holidae visual style options");
-
-    const savedCollapsed = localStorage.getItem("holidae-style-switcher-collapsed") === "true";
-    if (savedCollapsed) switcher.classList.add("collapsed");
-
     const currentStyle = document.documentElement.getAttribute("data-holidae-style") || "cinematic";
 
+    const switcher = document.createElement("aside");
+    switcher.className = "style-switcher";
+    switcher.setAttribute("aria-label", "Visual style options");
+
     switcher.innerHTML = `
-      <div class="style-switcher-header">
-        <span class="style-switcher-copy">
-          <span class="style-switcher-title">Visual style</span>
-          <span class="style-switcher-subtitle">Choose your Holidae mood</span>
-        </span>
-        <button class="style-switcher-toggle" type="button" aria-label="Collapse visual style options" aria-expanded="${savedCollapsed ? "false" : "true"}">✦</button>
-      </div>
+      <div class="style-switcher-label" aria-hidden="true">Style</div>
       <div class="style-switcher-options">
-        ${visualStyles.map(function (style) {
-          return `<button class="style-option-btn${style.id === currentStyle ? " active" : ""}" type="button" data-style-option="${style.id}" title="${style.helper}" aria-pressed="${style.id === currentStyle ? "true" : "false"}">${style.label}</button>`;
+        ${visualStyles.map(function (s) {
+          return `<button class="style-option-btn${s.id === currentStyle ? " active" : ""}" type="button"
+            data-style-option="${s.id}" title="${s.helper}"
+            aria-pressed="${s.id === currentStyle ? "true" : "false"}">${s.label}</button>`;
         }).join("")}
       </div>
     `;
 
     document.body.appendChild(switcher);
 
-    const toggle = switcher.querySelector(".style-switcher-toggle");
     const optionButtons = switcher.querySelectorAll("[data-style-option]");
-
-    if (toggle) {
-      toggle.addEventListener("click", function () {
-        const isCollapsed = !switcher.classList.contains("collapsed");
-        switcher.classList.toggle("collapsed", isCollapsed);
-        toggle.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
-        localStorage.setItem("holidae-style-switcher-collapsed", isCollapsed ? "true" : "false");
-      });
-    }
 
     optionButtons.forEach(function (button) {
       button.addEventListener("click", function () {
@@ -128,9 +129,9 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("holidae-style", style);
 
         optionButtons.forEach(function (item) {
-          const isActive = item === button;
-          item.classList.toggle("active", isActive);
-          item.setAttribute("aria-pressed", isActive ? "true" : "false");
+          const active = item === button;
+          item.classList.toggle("active", active);
+          item.setAttribute("aria-pressed", active ? "true" : "false");
         });
       });
     });
@@ -138,12 +139,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   setupStyleSwitcher();
 
-  /* ---------------------------------------------------------
-     FAQ ACCORDIONS
-  --------------------------------------------------------- */
+
+  /* ─── FAQ ACCORDIONS ─────────────────────────────────────── */
+
   document.querySelectorAll(".faq-item").forEach(function (item) {
     const question = item.querySelector(".faq-question");
-    const icon = item.querySelector(".faq-icon");
+    const icon     = item.querySelector(".faq-icon");
 
     if (!question) return;
 
@@ -152,24 +153,21 @@ document.addEventListener("DOMContentLoaded", function () {
     question.addEventListener("click", function () {
       const isActive = item.classList.toggle("active");
       question.setAttribute("aria-expanded", isActive ? "true" : "false");
-
-      if (icon) {
-        icon.textContent = isActive ? "−" : "+";
-      }
+      if (icon) icon.textContent = isActive ? "−" : "+";
     });
   });
 
-  /* ---------------------------------------------------------
-     PACKAGE FILTERS
-  --------------------------------------------------------- */
+
+  /* ─── PACKAGE FILTERS ────────────────────────────────────── */
+
   const packageFilters = document.querySelectorAll("[data-package-filter]");
-  const packageCards = document.querySelectorAll("[data-package-category]");
+  const packageCards   = document.querySelectorAll("[data-package-category]");
 
   if (packageFilters.length > 0 && packageCards.length > 0) {
     const filterBar = document.querySelector(".package-filter-bar");
     let filterStatus = document.querySelector(".package-filter-status");
 
-    // Small status line for the package results.
+    // Create the live status line if the HTML doesn't already have one.
     if (filterBar && !filterStatus) {
       filterStatus = document.createElement("p");
       filterStatus.className = "package-filter-status";
@@ -183,17 +181,17 @@ document.addEventListener("DOMContentLoaded", function () {
       let visibleCount = 0;
 
       packageCards.forEach(function (card) {
-        const categories = (card.getAttribute("data-package-category") || "").split(" ").filter(Boolean);
-        const shouldShow = filterValue === "all" || categories.includes(filterValue);
-        card.classList.toggle("is-hidden", !shouldShow);
-        card.setAttribute("aria-hidden", shouldShow ? "false" : "true");
-        if (shouldShow) visibleCount += 1;
+        const cats = (card.getAttribute("data-package-category") || "").split(" ").filter(Boolean);
+        const show = filterValue === "all" || cats.includes(filterValue);
+        card.classList.toggle("is-hidden", !show);
+        card.setAttribute("aria-hidden", show ? "false" : "true");
+        if (show) visibleCount++;
       });
 
-      packageFilters.forEach(function (button) {
-        const isActive = button.getAttribute("data-package-filter") === filterValue;
-        button.classList.toggle("active", isActive);
-        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      packageFilters.forEach(function (btn) {
+        const active = btn.getAttribute("data-package-filter") === filterValue;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
       });
 
       if (filterStatus) {
@@ -202,20 +200,22 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    packageFilters.forEach(function (button) {
-      button.setAttribute("aria-pressed", button.classList.contains("active") ? "true" : "false");
-      button.addEventListener("click", function () {
-        applyPackageFilter(button.getAttribute("data-package-filter") || "all");
+    packageFilters.forEach(function (btn) {
+      btn.setAttribute("aria-pressed", btn.classList.contains("active") ? "true" : "false");
+      btn.addEventListener("click", function () {
+        applyPackageFilter(btn.getAttribute("data-package-filter") || "all");
       });
     });
 
     applyPackageFilter("all");
   }
 
-  /* ---------------------------------------------------------
-     SHARED TRIP DATA
-  --------------------------------------------------------- */
-  // Main trip data used by the booking page and package builder.
+
+  /* ─── DESTINATION + PACKAGE DATA ────────────────────────── */
+
+  // Single source of truth for all six destinations.
+  // The booking page, package builder, and sidebar all read from here —
+  // so updating a price or description only needs to happen once.
   const destinationData = {
     "Santorini": {
       basePrice: 4950,
@@ -279,6 +279,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
+  // Each tier is just an extra on top of whatever the destination base price is.
+  // Keeping it separate means changing Essential vs Luxe pricing doesn't touch the destination data at all.
   const packageTierData = {
     "Essential": {
       extra: 0,
@@ -290,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
       extra: 900,
       label: "Signature",
       builderCopy: "A balanced Holidae enquiry with stronger room preference, transfers, board guidance, and a more complete trip feel.",
-      bookingCopy: "Signature is the recommended Holidae level for most travellers because it balances comfort, clarity, and value."
+      bookingCopy: "Signature is the recommended level for most travellers — it balances comfort, clarity, and value."
     },
     "Luxe": {
       extra: 1950,
@@ -300,42 +302,41 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  // One formatter for every AED price.
+  // Centralised so every price on the page looks identical — no one-off formatting scattered around.
   function formatAED(value) {
     return new Intl.NumberFormat("en-AE", {
-      style: "currency",
-      currency: "AED",
-      maximumFractionDigits: 0
+      style: "currency", currency: "AED", maximumFractionDigits: 0
     }).format(value);
   }
 
-  /* ---------------------------------------------------------
-     BOOKING PAGE LOGIC
-  --------------------------------------------------------- */
-  const destinationSelect = document.getElementById("destination");
-  const destinationButtons = document.querySelectorAll("[data-destination-trigger]");
-  const travellersInput = document.getElementById("travellers");
-  const roomTypeSelect = document.getElementById("room-type");
-  const boardTypeSelect = document.getElementById("board-type");
-  const packageTierSelect = document.getElementById("package-tier");
-  const estimatePrice = document.getElementById("estimate-price");
 
+  /* ─── BOOKING PAGE ───────────────────────────────────────── */
+
+  const destinationSelect  = document.getElementById("destination");
+  const destinationButtons = document.querySelectorAll("[data-destination-trigger]");
+  const travellersInput    = document.getElementById("travellers");
+  const roomTypeSelect     = document.getElementById("room-type");
+  const boardTypeSelect    = document.getElementById("board-type");
+  const packageTierSelect  = document.getElementById("package-tier");
+  const estimatePrice      = document.getElementById("estimate-price");
+
+  // All the text elements the booking page updates when destination or tier changes.
   const bookingDestinationHeading = document.getElementById("booking-destination-heading");
-  const bookingDestinationCopy = document.getElementById("booking-destination-copy");
-  const bookingBestFor = document.getElementById("booking-best-for");
-  const bookingTripPace = document.getElementById("booking-trip-pace");
-  const bookingDuration = document.getElementById("booking-duration");
-  const bookingBudgetFeel = document.getElementById("booking-budget-feel");
-  const summaryDestinationTag = document.getElementById("summary-destination-tag");
-  const summaryPackageTag = document.getElementById("summary-package-tag");
-  const summaryPaceTag = document.getElementById("summary-pace-tag");
-  const summaryDurationTag = document.getElementById("summary-duration-tag");
-  const sidebarDestination = document.getElementById("sidebar-destination");
-  const sidebarPackageTier = document.getElementById("sidebar-package-tier");
-  const sidebarBestFor = document.getElementById("sidebar-best-for");
-  const sidebarMood = document.getElementById("sidebar-mood");
-  const sidebarDuration = document.getElementById("sidebar-duration");
-  const estimateContext = document.getElementById("estimate-context");
+  const bookingDestinationCopy    = document.getElementById("booking-destination-copy");
+  const bookingBestFor            = document.getElementById("booking-best-for");
+  const bookingTripPace           = document.getElementById("booking-trip-pace");
+  const bookingDuration           = document.getElementById("booking-duration");
+  const bookingBudgetFeel         = document.getElementById("booking-budget-feel");
+  const summaryDestinationTag     = document.getElementById("summary-destination-tag");
+  const summaryPackageTag         = document.getElementById("summary-package-tag");
+  const summaryPaceTag            = document.getElementById("summary-pace-tag");
+  const summaryDurationTag        = document.getElementById("summary-duration-tag");
+  const sidebarDestination        = document.getElementById("sidebar-destination");
+  const sidebarPackageTier        = document.getElementById("sidebar-package-tier");
+  const sidebarBestFor            = document.getElementById("sidebar-best-for");
+  const sidebarMood               = document.getElementById("sidebar-mood");
+  const sidebarDuration           = document.getElementById("sidebar-duration");
+  const estimateContext           = document.getElementById("estimate-context");
 
   function getCurrentDestination() {
     if (!destinationSelect) return destinationData["Santorini"];
@@ -347,33 +348,34 @@ document.addEventListener("DOMContentLoaded", function () {
     return packageTierData[tier] || packageTierData["Signature"];
   }
 
-  // Price changes with destination, package, room, board, and travellers.
+  // Recalculates the live price shown in the sidebar whenever any input changes.
+  // Room upgrades add a fixed premium; board type reductions apply a discount on top.
   function updateEstimate() {
     if (!estimatePrice) return;
 
-    const selectedDestination = getCurrentDestination();
+    const dest       = getCurrentDestination();
     const travellers = Math.max(1, parseInt(travellersInput ? travellersInput.value : "1", 10) || 1);
-    const roomType = roomTypeSelect ? roomTypeSelect.value : "Standard Room";
-    const boardType = boardTypeSelect ? boardTypeSelect.value : "All-inclusive";
-    const packageTier = getCurrentPackageTier();
+    const roomType   = roomTypeSelect  ? roomTypeSelect.value  : "Standard Room";
+    const boardType  = boardTypeSelect ? boardTypeSelect.value : "All-inclusive";
+    const tier       = getCurrentPackageTier();
 
     let roomExtra = 0;
-    if (roomType === "Deluxe Room") roomExtra = 750;
-    if (roomType === "Sea View Suite") roomExtra = 1500;
+    if (roomType === "Deluxe Room")     roomExtra = 750;
+    if (roomType === "Sea View Suite")  roomExtra = 1500;
 
     let boardAdjustment = 0;
-    if (boardType === "Half board") boardAdjustment = -300;
+    if (boardType === "Half board")        boardAdjustment = -300;
     if (boardType === "Bed and breakfast") boardAdjustment = -550;
 
-    const total = (selectedDestination.basePrice + packageTier.extra + roomExtra + boardAdjustment) * travellers;
+    const total = (dest.basePrice + tier.extra + roomExtra + boardAdjustment) * travellers;
     estimatePrice.textContent = `From ${formatAED(total)} total`;
   }
 
   function applyPackageTier(tierName) {
     if (!packageTierData[tierName]) return;
 
-    if (packageTierSelect) packageTierSelect.value = tierName;
-    if (summaryPackageTag) summaryPackageTag.textContent = tierName;
+    if (packageTierSelect)  packageTierSelect.value       = tierName;
+    if (summaryPackageTag)  summaryPackageTag.textContent = tierName;
     if (sidebarPackageTier) sidebarPackageTier.textContent = tierName;
 
     if (estimateContext && destinationSelect) {
@@ -383,36 +385,37 @@ document.addEventListener("DOMContentLoaded", function () {
     updateEstimate();
   }
 
-  // Keeps all destination text and tags matched to the selected place.
+  // Updates every destination-specific element on the page in one go —
+  // headings, sidebar tags, summary chips, and the live price estimate all refresh together.
   function applyDestination(destinationName) {
     if (!destinationData[destinationName]) return;
 
     if (destinationSelect) destinationSelect.value = destinationName;
-    const selected = destinationData[destinationName];
+    const d = destinationData[destinationName];
 
-    if (bookingDestinationHeading) bookingDestinationHeading.textContent = selected.heading;
-    if (bookingDestinationCopy) bookingDestinationCopy.textContent = selected.copy;
-    if (bookingBestFor) bookingBestFor.textContent = selected.bestFor;
-    if (bookingTripPace) bookingTripPace.textContent = selected.pace;
-    if (bookingDuration) bookingDuration.textContent = selected.duration;
-    if (bookingBudgetFeel) bookingBudgetFeel.textContent = selected.budgetFeel;
-    if (summaryDestinationTag) summaryDestinationTag.textContent = destinationName;
-    if (summaryPaceTag) summaryPaceTag.textContent = selected.pace;
-    if (summaryDurationTag) summaryDurationTag.textContent = selected.duration;
-    if (sidebarDestination) sidebarDestination.textContent = destinationName;
-    if (sidebarBestFor) sidebarBestFor.textContent = selected.bestFor;
-    if (sidebarMood) sidebarMood.textContent = selected.mood;
-    if (sidebarDuration) sidebarDuration.textContent = selected.duration;
+    if (bookingDestinationHeading) bookingDestinationHeading.textContent = d.heading;
+    if (bookingDestinationCopy)    bookingDestinationCopy.textContent    = d.copy;
+    if (bookingBestFor)            bookingBestFor.textContent            = d.bestFor;
+    if (bookingTripPace)           bookingTripPace.textContent           = d.pace;
+    if (bookingDuration)           bookingDuration.textContent           = d.duration;
+    if (bookingBudgetFeel)         bookingBudgetFeel.textContent         = d.budgetFeel;
+    if (summaryDestinationTag)     summaryDestinationTag.textContent     = destinationName;
+    if (summaryPaceTag)            summaryPaceTag.textContent            = d.pace;
+    if (summaryDurationTag)        summaryDurationTag.textContent        = d.duration;
+    if (sidebarDestination)        sidebarDestination.textContent        = destinationName;
+    if (sidebarBestFor)            sidebarBestFor.textContent            = d.bestFor;
+    if (sidebarMood)               sidebarMood.textContent               = d.mood;
+    if (sidebarDuration)           sidebarDuration.textContent           = d.duration;
 
     if (estimateContext) {
       const tierName = packageTierSelect ? packageTierSelect.value : "Signature";
       estimateContext.textContent = `Based on traveller count, room type, board option, and ${tierName} package level for ${destinationName}.`;
     }
 
-    destinationButtons.forEach(function (button) {
-      const isActive = button.getAttribute("data-destination-trigger") === destinationName;
-      button.classList.toggle("active", isActive);
-      button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    destinationButtons.forEach(function (btn) {
+      const active = btn.getAttribute("data-destination-trigger") === destinationName;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
     });
 
     updateEstimate();
@@ -424,31 +427,29 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  destinationButtons.forEach(function (button) {
-    button.setAttribute("aria-pressed", button.classList.contains("active") ? "true" : "false");
-    button.addEventListener("click", function () {
-      applyDestination(button.getAttribute("data-destination-trigger"));
+  destinationButtons.forEach(function (btn) {
+    btn.setAttribute("aria-pressed", btn.classList.contains("active") ? "true" : "false");
+    btn.addEventListener("click", function () {
+      applyDestination(btn.getAttribute("data-destination-trigger"));
     });
   });
 
-  if (travellersInput) travellersInput.addEventListener("input", updateEstimate);
-  if (roomTypeSelect) roomTypeSelect.addEventListener("change", updateEstimate);
-  if (boardTypeSelect) boardTypeSelect.addEventListener("change", updateEstimate);
+  if (travellersInput)   travellersInput.addEventListener("input",  updateEstimate);
+  if (roomTypeSelect)    roomTypeSelect.addEventListener("change",   updateEstimate);
+  if (boardTypeSelect)   boardTypeSelect.addEventListener("change",  updateEstimate);
   if (packageTierSelect) {
     packageTierSelect.addEventListener("change", function () {
       applyPackageTier(packageTierSelect.value);
     });
   }
 
-  // Pre-fills booking choices from links like booking.html?destination=Dubai&package=Luxe.
+  // Destination pages pass ?destination=Dubai&package=Luxe in the URL
+  // so clicking "Enquire" on a card pre-fills the booking form automatically.
   const params = new URLSearchParams(window.location.search);
   const requestedDestination = params.get("destination");
-  const requestedPackage = params.get("package") || params.get("tier");
+  const requestedPackage     = params.get("package") || params.get("tier");
 
-  if (requestedPackage && packageTierData[requestedPackage]) {
-    applyPackageTier(requestedPackage);
-  }
-
+  if (requestedPackage    && packageTierData[requestedPackage])    applyPackageTier(requestedPackage);
   if (requestedDestination && destinationData[requestedDestination]) {
     applyDestination(requestedDestination);
   } else if (destinationSelect) {
@@ -456,44 +457,42 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     updateEstimate();
   }
+  if (!requestedPackage && packageTierSelect) applyPackageTier(packageTierSelect.value);
 
-  if (!requestedPackage && packageTierSelect) {
-    applyPackageTier(packageTierSelect.value);
-  }
 
-  /* ---------------------------------------------------------
-     BOOKING FORM VALIDATION + PROGRESS
-  --------------------------------------------------------- */
-  const bookingForm = document.getElementById("booking-form");
-  const fullName = document.getElementById("full-name");
-  const email = document.getElementById("email");
-  const phone = document.getElementById("phone");
+  /* ─── BOOKING FORM VALIDATION + PROGRESS BAR ─────────────── */
+
+  const bookingForm   = document.getElementById("booking-form");
+  const fullName      = document.getElementById("full-name");
+  const email         = document.getElementById("email");
+  const phone         = document.getElementById("phone");
   const departureDate = document.getElementById("departure-date");
-  const formMessage = document.getElementById("form-message");
+  const formMessage   = document.getElementById("form-message");
 
-  // Date picker starts from tomorrow.
+  // Prevent the date picker from allowing past dates — departure has to be at least tomorrow.
   if (departureDate) {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     departureDate.min = tomorrow.toISOString().split("T")[0];
   }
 
-  function setFormMessage(element, message, type) {
-    if (!element) return;
-    element.textContent = message;
-    element.classList.toggle("error", type === "error");
-    element.style.color = type === "error" ? "#b91c1c" : "#0f766e";
+  function setFormMessage(el, msg, type) {
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.toggle("error", type === "error");
+    el.style.color = type === "error" ? "#b91c1c" : "#0f766e";
   }
 
+  // The progress bar gets injected once — if it already exists on the page we don't duplicate it.
   function setupBookingProgress() {
     if (!bookingForm || document.querySelector(".booking-progress-card")) return;
 
-    const requiredFields = [fullName, email, phone, departureDate, travellersInput, destinationSelect, packageTierSelect].filter(Boolean);
-    if (requiredFields.length === 0) return;
+    const fields = [fullName, email, phone, departureDate, travellersInput, destinationSelect, packageTierSelect].filter(Boolean);
+    if (fields.length === 0) return;
 
-    const progressCard = document.createElement("div");
-    progressCard.className = "booking-progress-card";
-    progressCard.innerHTML = `
+    const card = document.createElement("div");
+    card.className = "booking-progress-card";
+    card.innerHTML = `
       <div class="booking-progress-topline">
         <strong>Enquiry readiness</strong>
         <span class="booking-progress-percent">0%</span>
@@ -504,36 +503,31 @@ document.addEventListener("DOMContentLoaded", function () {
       <p class="booking-progress-hint">Complete the key details to make the enquiry more useful.</p>
     `;
 
-    bookingForm.insertAdjacentElement("afterbegin", progressCard);
+    bookingForm.insertAdjacentElement("afterbegin", card);
 
-    const percentLabel = progressCard.querySelector(".booking-progress-percent");
-    const progressBar = progressCard.querySelector(".booking-progress-bar");
-    const hint = progressCard.querySelector(".booking-progress-hint");
+    const percentLabel = card.querySelector(".booking-progress-percent");
+    const bar          = card.querySelector(".booking-progress-bar");
+    const hint         = card.querySelector(".booking-progress-hint");
 
-    // Counts only the fields that matter most for the enquiry.
     function updateBookingProgress() {
-      const completed = requiredFields.filter(function (field) {
-        return String(field.value || "").trim() !== "";
+      const completed = fields.filter(function (f) {
+        return String(f.value || "").trim() !== "";
       }).length;
-      const percent = Math.round((completed / requiredFields.length) * 100);
+      const pct = Math.round((completed / fields.length) * 100);
 
-      if (percentLabel) percentLabel.textContent = `${percent}%`;
-      if (progressBar) progressBar.style.width = `${percent}%`;
+      if (percentLabel) percentLabel.textContent = `${pct}%`;
+      if (bar)          bar.style.width = `${pct}%`;
 
       if (hint) {
-        if (percent < 50) {
-          hint.textContent = "Add your contact details and travel date to make this enquiry useful.";
-        } else if (percent < 100) {
-          hint.textContent = "Almost ready — check traveller count, date, and contact details before submitting.";
-        } else {
-          hint.textContent = "Ready to send. The enquiry now has the key information Holidae needs.";
-        }
+        if (pct < 50)       hint.textContent = "Add your contact details and travel date to make this enquiry useful.";
+        else if (pct < 100) hint.textContent = "Almost ready — check traveller count, date, and contact details.";
+        else                hint.textContent = "Ready to send. The enquiry has the key information Holidae needs.";
       }
     }
 
-    requiredFields.forEach(function (field) {
-      field.addEventListener("input", updateBookingProgress);
-      field.addEventListener("change", updateBookingProgress);
+    fields.forEach(function (f) {
+      f.addEventListener("input",  updateBookingProgress);
+      f.addEventListener("change", updateBookingProgress);
     });
 
     updateBookingProgress();
@@ -545,18 +539,18 @@ document.addEventListener("DOMContentLoaded", function () {
     bookingForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      const nameValue = fullName.value.trim();
-      const emailValue = email.value.trim();
-      const phoneValue = phone.value.trim();
-      const dateValue = departureDate.value.trim();
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const nameVal  = fullName.value.trim();
+      const emailVal = email.value.trim();
+      const phoneVal = phone.value.trim();
+      const dateVal  = departureDate.value.trim();
+      const emailOk  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
 
-      if (!nameValue || !emailValue || !phoneValue || !dateValue) {
+      if (!nameVal || !emailVal || !phoneVal || !dateVal) {
         setFormMessage(formMessage, "Please complete all required fields.", "error");
         return;
       }
 
-      if (!emailPattern.test(emailValue)) {
+      if (!emailOk) {
         setFormMessage(formMessage, "Please enter a valid email address.", "error");
         return;
       }
@@ -566,127 +560,127 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const selectedDestination = destinationSelect ? destinationSelect.value : "your selected destination";
-      const selectedPackage = packageTierSelect ? packageTierSelect.value : "Signature";
+      const selectedDest = destinationSelect  ? destinationSelect.value  : "your selected destination";
+      const selectedPkg  = packageTierSelect  ? packageTierSelect.value  : "Signature";
 
       setFormMessage(
         formMessage,
-        `${selectedPackage} enquiry for ${selectedDestination} submitted successfully. Holidae would now review availability, package fit, and next steps before any payment.`,
+        `${selectedPkg} enquiry for ${selectedDest} submitted. Holidae will review availability and next steps before any payment.`,
         "success"
       );
 
       formMessage.classList.add("focus-ring-pulse");
       bookingForm.reset();
 
-      // Restore these after reset so the page does not jump back to unrelated defaults.
+      // Restore destination and tier after form.reset() so the sidebar doesn't
+      // snap back to Santorini/Signature and confuse someone who just submitted.
       if (travellersInput) travellersInput.value = "2";
-      if (roomTypeSelect) roomTypeSelect.value = "Standard Room";
+      if (roomTypeSelect)  roomTypeSelect.value  = "Standard Room";
       if (boardTypeSelect) boardTypeSelect.value = "All-inclusive";
-      if (packageTierSelect) packageTierSelect.value = selectedPackage;
-      if (destinationSelect) applyDestination(selectedDestination);
-      applyPackageTier(selectedPackage);
+      if (packageTierSelect) packageTierSelect.value = selectedPkg;
+      if (destinationSelect) applyDestination(selectedDest);
+      applyPackageTier(selectedPkg);
       updateEstimate();
 
-      bookingForm.querySelectorAll("input, select, textarea").forEach(function (field) {
-        field.dispatchEvent(new Event("input", { bubbles: true }));
-        field.dispatchEvent(new Event("change", { bubbles: true }));
+      bookingForm.querySelectorAll("input, select, textarea").forEach(function (f) {
+        f.dispatchEvent(new Event("input",  { bubbles: true }));
+        f.dispatchEvent(new Event("change", { bubbles: true }));
       });
 
-      setTimeout(function () {
-        formMessage.classList.remove("focus-ring-pulse");
-      }, 950);
+      setTimeout(function () { formMessage.classList.remove("focus-ring-pulse"); }, 950);
     });
   }
 
-  /* ---------------------------------------------------------
-     PACKAGE BUILDER
-  --------------------------------------------------------- */
-  const packageBuilderDestination = document.getElementById("package-builder-destination");
-  const packageBuilderTier = document.getElementById("package-builder-tier");
-  const packageBuilderTitle = document.getElementById("package-builder-title");
-  const packageBuilderCopy = document.getElementById("package-builder-copy");
-  const packageBuilderLink = document.getElementById("package-builder-link");
-  const builderPrice = document.getElementById("builder-price");
-  const builderDuration = document.getElementById("builder-duration");
-  const builderFit = document.getElementById("builder-fit");
 
-  // Same data, different page section.
+  /* ─── PACKAGE BUILDER ────────────────────────────────────── */
+
+  const packageBuilderDestination = document.getElementById("package-builder-destination");
+  const packageBuilderTier        = document.getElementById("package-builder-tier");
+  const packageBuilderTitle       = document.getElementById("package-builder-title");
+  const packageBuilderCopy        = document.getElementById("package-builder-copy");
+  const packageBuilderLink        = document.getElementById("package-builder-link");
+  const builderPrice              = document.getElementById("builder-price");
+  const builderDuration           = document.getElementById("builder-duration");
+  const builderFit                = document.getElementById("builder-fit");
+
+  // The package builder on packages.html uses the same destination and tier data as the booking page.
+  // Selecting a combination here generates a summary and pre-fills the booking form link.
   function updatePackageBuilder() {
     if (!packageBuilderDestination || !packageBuilderTier) return;
 
-    const destinationName = packageBuilderDestination.value;
+    const destName = packageBuilderDestination.value;
     const tierName = packageBuilderTier.value;
-    const destination = destinationData[destinationName] || destinationData["Santorini"];
-    const tier = packageTierData[tierName] || packageTierData["Signature"];
-    const price = destination.basePrice + tier.extra;
+    const dest     = destinationData[destName] || destinationData["Santorini"];
+    const tier     = packageTierData[tierName] || packageTierData["Signature"];
+    const price    = dest.basePrice + tier.extra;
 
-    if (packageBuilderTitle) packageBuilderTitle.textContent = `${destinationName} ${tierName} enquiry`;
-    if (packageBuilderCopy) packageBuilderCopy.textContent = `${tier.builderCopy} ${destination.copy}`;
-    if (builderPrice) builderPrice.textContent = `From ${formatAED(price)}`;
-    if (builderDuration) builderDuration.textContent = destination.duration;
-    if (builderFit) builderFit.textContent = destination.bestFor;
+    if (packageBuilderTitle) packageBuilderTitle.textContent = `${destName} ${tierName} enquiry`;
+    if (packageBuilderCopy)  packageBuilderCopy.textContent  = `${tier.builderCopy} ${dest.copy}`;
+    if (builderPrice)        builderPrice.textContent        = `From ${formatAED(price)}`;
+    if (builderDuration)     builderDuration.textContent     = dest.duration;
+    if (builderFit)          builderFit.textContent          = dest.bestFor;
     if (packageBuilderLink) {
-      packageBuilderLink.href = `booking.html?destination=${encodeURIComponent(destinationName)}&package=${encodeURIComponent(tierName)}#booking-form-section`;
-      packageBuilderLink.textContent = `Continue with ${destinationName} ${tierName}`;
+      packageBuilderLink.href        = `booking.html?destination=${encodeURIComponent(destName)}&package=${encodeURIComponent(tierName)}#booking-form-section`;
+      packageBuilderLink.textContent = `Continue with ${destName} ${tierName}`;
     }
   }
 
   if (packageBuilderDestination && packageBuilderTier) {
     packageBuilderDestination.addEventListener("change", updatePackageBuilder);
-    packageBuilderTier.addEventListener("change", updatePackageBuilder);
+    packageBuilderTier.addEventListener("change",        updatePackageBuilder);
     updatePackageBuilder();
   }
 
-  /* ---------------------------------------------------------
-     CONTACT FORM
-  --------------------------------------------------------- */
-  const contactForm = document.querySelector('form.booking-form:not(#booking-form)');
-  const contactName = document.getElementById("contact-name");
-  const contactEmail = document.getElementById("contact-email");
-  const contactPhone = document.getElementById("contact-phone");
+
+  /* ─── CONTACT FORM ───────────────────────────────────────── */
+
+  // Both forms share the .booking-form class, but only the booking form has id="booking-form".
+  // This selector grabs the contact form specifically without conflicting with the booking one.
+  const contactForm    = document.querySelector("form.booking-form:not(#booking-form)");
+  const contactName    = document.getElementById("contact-name");
+  const contactEmail   = document.getElementById("contact-email");
+  const contactPhone   = document.getElementById("contact-phone");
   const contactMessage = document.getElementById("contact-message");
 
   if (contactForm && contactName && contactEmail && contactPhone && contactMessage) {
-    const existingMessage = contactForm.querySelector(".form-message");
-    const contactFormMessage = existingMessage || document.createElement("p");
+    const existingMsg      = contactForm.querySelector(".form-message");
+    const contactFormMsg   = existingMsg || document.createElement("p");
 
-    if (!existingMessage) {
-      contactFormMessage.className = "form-message";
-      contactFormMessage.setAttribute("role", "status");
-      contactFormMessage.setAttribute("aria-live", "polite");
-      contactForm.appendChild(contactFormMessage);
+    if (!existingMsg) {
+      contactFormMsg.className = "form-message";
+      contactFormMsg.setAttribute("role", "status");
+      contactFormMsg.setAttribute("aria-live", "polite");
+      contactForm.appendChild(contactFormMsg);
     }
 
     contactForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      const nameValue = contactName.value.trim();
-      const emailValue = contactEmail.value.trim();
-      const phoneValue = contactPhone.value.trim();
-      const messageValue = contactMessage.value.trim();
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const n = contactName.value.trim();
+      const e = contactEmail.value.trim();
+      const p = contactPhone.value.trim();
+      const m = contactMessage.value.trim();
 
-      if (!nameValue || !emailValue || !phoneValue || !messageValue) {
-        setFormMessage(contactFormMessage, "Please complete all required contact fields.", "error");
+      if (!n || !e || !p || !m) {
+        setFormMessage(contactFormMsg, "Please complete all required contact fields.", "error");
         return;
       }
 
-      if (!emailPattern.test(emailValue)) {
-        setFormMessage(contactFormMessage, "Please enter a valid email address.", "error");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) {
+        setFormMessage(contactFormMsg, "Please enter a valid email address.", "error");
         return;
       }
 
-      setFormMessage(contactFormMessage, "Message sent successfully.", "success");
+      setFormMessage(contactFormMsg, "Message sent successfully.", "success");
       contactForm.reset();
     });
   }
 
-  /* ---------------------------------------------------------
-     REVEALS
-  --------------------------------------------------------- */
+
+  /* ─── SCROLL REVEAL ──────────────────────────────────────── */
+
   const revealItems = document.querySelectorAll(".reveal");
 
-  // Reveals sections as they come into view.
   if (revealItems.length > 0 && "IntersectionObserver" in window && !prefersReducedMotion) {
     const revealObserver = new IntersectionObserver(
       function (entries, observer) {
@@ -697,32 +691,31 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
       },
+      // rootMargin extends the trigger zone below the viewport so sections
+      // start fading in slightly before they're fully in view — feels more natural.
       { threshold: 0.01, rootMargin: "0px 0px 160px 0px" }
     );
 
     revealItems.forEach(function (item) {
       item.classList.add("reveal-animate");
-      if (item.classList.contains("video-hero")) {
-        item.classList.add("active");
-      }
+      // The hero is already visible on load, so don't animate it in.
+      if (item.classList.contains("video-hero")) item.classList.add("active");
       revealObserver.observe(item);
     });
 
-    // Fallback so nothing stays hidden if the observer is slow.
+    // Safety net — if the IntersectionObserver fires slowly on a heavy page,
+    // this makes sure nothing stays invisible after 1.2 seconds regardless.
     setTimeout(function () {
-      revealItems.forEach(function (item) {
-        item.classList.add("active");
-      });
+      revealItems.forEach(function (item) { item.classList.add("active"); });
     }, 1200);
+
   } else {
-    revealItems.forEach(function (item) {
-      item.classList.add("active");
-    });
+    revealItems.forEach(function (item) { item.classList.add("active"); });
   }
 
-  /* ---------------------------------------------------------
-     COUNTERS
-  --------------------------------------------------------- */
+
+  /* ─── ANIMATED STAT COUNTERS ─────────────────────────────── */
+
   const counters = document.querySelectorAll(".counter");
 
   function setCounterComplete(counter) {
@@ -736,48 +729,41 @@ document.addEventListener("DOMContentLoaded", function () {
         entries.forEach(function (entry) {
           if (!entry.isIntersecting) return;
 
-          const counter = entry.target;
-          const target = parseInt(counter.getAttribute("data-target"), 10) || 0;
-          let current = 0;
+          const counter   = entry.target;
+          const target    = parseInt(counter.getAttribute("data-target"), 10) || 0;
+          let current     = 0;
           const increment = Math.max(1, Math.ceil(target / 60));
 
-          function animateCounter() {
+          function tick() {
             current += increment;
-            if (current >= target) {
-              counter.textContent = `${target}+`;
-              return;
-            }
+            if (current >= target) { counter.textContent = `${target}+`; return; }
             counter.textContent = `${current}+`;
-            requestAnimationFrame(animateCounter);
+            requestAnimationFrame(tick);
           }
 
-          animateCounter();
+          tick();
           observer.unobserve(counter);
         });
       },
       { threshold: 0.5 }
     );
 
-    counters.forEach(function (counter) {
-      counterObserver.observe(counter);
-    });
+    counters.forEach(function (c) { counterObserver.observe(c); });
   } else {
     counters.forEach(setCounterComplete);
   }
 
-  /* ---------------------------------------------------------
-     PAGE PROGRESS
-  --------------------------------------------------------- */
+
+  /* ─── PAGE SCROLL PROGRESS BAR ───────────────────────────── */
+
   if (!document.querySelector(".page-progress")) {
     const progress = document.createElement("div");
     progress.className = "page-progress";
     document.body.appendChild(progress);
 
     const updateProgress = function () {
-      const doc = document.documentElement;
-      const total = doc.scrollHeight - window.innerHeight;
-      const current = window.scrollY;
-      const pct = total > 0 ? Math.min(100, Math.max(0, (current / total) * 100)) : 0;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const pct   = total > 0 ? Math.min(100, Math.max(0, (window.scrollY / total) * 100)) : 0;
       progress.style.width = `${pct}%`;
     };
 
@@ -786,94 +772,90 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("resize", updateProgress);
   }
 
-  /* ---------------------------------------------------------
-     CURSOR GLOW
-  --------------------------------------------------------- */
-  // Desktop-only glow effect.
+
+  /* ─── CURSOR GLOW ────────────────────────────────────────── */
+
+  // Subtle radial gradient that follows the cursor on desktop.
+  // Skipped entirely on touch screens and for users who prefer reduced motion — no point animating something they won't see.
   if (!prefersReducedMotion && isFinePointer && !document.querySelector(".cursor-glow")) {
     const glow = document.createElement("div");
     glow.className = "cursor-glow";
     document.body.appendChild(glow);
 
     let raf = null;
-    let x = 0;
-    let y = 0;
+    let x   = 0;
+    let y   = 0;
 
-    const renderGlow = function () {
-      glow.style.transform = `translate(${x}px, ${y}px)`;
-      glow.style.opacity = "1";
-      raf = null;
-    };
-
-    window.addEventListener("mousemove", function (event) {
-      x = event.clientX;
-      y = event.clientY;
-      if (!raf) raf = requestAnimationFrame(renderGlow);
+    window.addEventListener("mousemove", function (e) {
+      x = e.clientX;
+      y = e.clientY;
+      if (!raf) raf = requestAnimationFrame(function () {
+        glow.style.transform = `translate(${x}px, ${y}px)`;
+        glow.style.opacity   = "1";
+        raf = null;
+      });
     }, { passive: true });
 
-    window.addEventListener("mouseleave", function () {
-      glow.style.opacity = "0";
-    });
+    window.addEventListener("mouseleave", function () { glow.style.opacity = "0"; });
   }
 
-  /* ---------------------------------------------------------
-     CARD TILT + MAGNETIC BUTTONS
-  --------------------------------------------------------- */
+
+  /* ─── CARD TILT + MAGNETIC BUTTONS ──────────────────────── */
+
+  // 3D tilt on hover gives cards a sense of depth without being distracting.
+  // Capped to 8° of rotation and turned off below 900px where it feels wrong on smaller screens.
   if (!prefersReducedMotion && isFinePointer) {
-    const tiltCards = document.querySelectorAll(".interactive-card, .deal-card, .review-card, .info-card, .mini-card, .route-card, .home-fit-card, .destination-switch, .package-level-card, .package-detail-card");
+    const tiltCards = document.querySelectorAll(
+      ".interactive-card, .deal-card, .review-card, .info-card, .mini-card, .route-card, .destination-switch, .package-level-card"
+    );
 
     tiltCards.forEach(function (card) {
-      card.addEventListener("mousemove", function (event) {
+      card.addEventListener("mousemove", function (e) {
         if (window.innerWidth < 900) return;
-        const rect = card.getBoundingClientRect();
-        const px = (event.clientX - rect.left) / rect.width;
-        const py = (event.clientY - rect.top) / rect.height;
-        const rotateY = (px - 0.5) * 8;
-        const rotateX = (0.5 - py) * 8;
-        card.style.transform = `translateY(-7px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+        const r  = card.getBoundingClientRect();
+        const rx = ((e.clientY - r.top)  / r.height - 0.5) * -8;
+        const ry = ((e.clientX - r.left) / r.width  - 0.5) *  8;
+        card.style.transform = `translateY(-7px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
       });
-
-      card.addEventListener("mouseleave", function () {
-        card.style.transform = "";
-      });
+      card.addEventListener("mouseleave", function () { card.style.transform = ""; });
     });
 
-    document.querySelectorAll(".btn").forEach(function (button) {
-      button.addEventListener("mousemove", function (event) {
+    // Buttons drift slightly toward the cursor — a subtle magnetic pull.
+    // The math keeps movement small (8% of cursor offset) so it doesn't feel jittery.
+    document.querySelectorAll(".btn").forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
         if (window.innerWidth < 900) return;
-        const rect = button.getBoundingClientRect();
-        const x = event.clientX - rect.left - rect.width / 2;
-        const y = event.clientY - rect.top - rect.height / 2;
-        button.style.transform = `translate(${(x * 0.08).toFixed(2)}px, ${(y * 0.08).toFixed(2)}px) translateY(-3px)`;
+        const r = btn.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width  / 2) * 0.08;
+        const y = (e.clientY - r.top  - r.height / 2) * 0.08;
+        btn.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) translateY(-3px)`;
       });
-
-      button.addEventListener("mouseleave", function () {
-        button.style.transform = "";
-      });
+      btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
     });
   }
 
-  /* ---------------------------------------------------------
-     IMAGE DETAIL MODAL
-  --------------------------------------------------------- */
-  // Info shown when a destination image is opened.
+
+  /* ─── IMAGE DETAIL MODAL ─────────────────────────────────── */
+
+  // Modal content keyed by a substring of the image filename, so we don't need
+  // data attributes on every image element — just match the src string at click time.
   const imageDetails = {
     santorini: {
       label: "Destination detail",
       title: "Santorini, Greece",
-      copy: "Santorini usually suits travellers looking for sea views, slower evenings, and a scenic island setting built around terraces, dining, and short walks between villages.",
+      copy: "Santorini suits travellers looking for sea views, slower evenings, and a scenic island setting built around terraces and short walks between villages.",
       rows: { "Typical stay": "Around 7 nights", "Best for": "Couples and scenic stays", "Highlights": "Caldera views, whitewashed towns, sunset dining" }
     },
     dubai: {
       label: "Destination detail",
       title: "Dubai, UAE",
-      copy: "Dubai is stronger for travellers who want a polished city break with luxury hotels, restaurants, shopping, and the option to combine city time with beach clubs or desert experiences.",
-      rows: { "Typical stay": "Around 5 nights", "Best for": "Luxury city breaks", "Highlights": "Skyline hotels, shopping districts, dining" }
+      copy: "Dubai works well for travellers who want a polished city break with luxury hotels, dining, and the option to combine city time with beach clubs or desert experiences.",
+      rows: { "Typical stay": "Around 5 nights", "Best for": "Luxury city breaks", "Highlights": "Skyline hotels, shopping districts, fine dining" }
     },
     maldives: {
       label: "Destination detail",
       title: "Maldives",
-      copy: "The Maldives is built around resort privacy, clear water, beach time, and quieter days that suit honeymoon-style or reset-focused trips.",
+      copy: "The Maldives is built around resort privacy, clear water, and quieter days that suit honeymoon or reset-focused trips.",
       rows: { "Typical stay": "Around 7 nights", "Best for": "Resort-led luxury stays", "Highlights": "Water villas, lagoons, slower pace" }
     },
     bali: {
@@ -885,47 +867,43 @@ document.addEventListener("DOMContentLoaded", function () {
     amalfi: {
       label: "Destination detail",
       title: "Amalfi Coast, Italy",
-      copy: "The Amalfi Coast is a strong fit for travellers who want coastal hotels, summer dining, scenic drives, and Mediterranean viewpoints.",
+      copy: "The Amalfi Coast suits travellers who want coastal hotels, summer dining, scenic drives, and Mediterranean viewpoints.",
       rows: { "Typical stay": "Around 6 nights", "Best for": "Coastal holidays", "Highlights": "Sea views, cliffside towns, terraces" }
     },
     marrakech: {
       label: "Destination detail",
       title: "Marrakech, Morocco",
-      copy: "Marrakech tends to suit travellers who want boutique stays, local markets, warm evenings, and a city break with more colour and texture than a resort-first trip.",
-      rows: { "Typical stay": "Around 5 nights", "Best for": "Culture-led city breaks", "Highlights": "Riads, markets, rooftops" }
+      copy: "Marrakech suits travellers who want boutique stays, local markets, warm evenings, and a city break with more texture than a resort-first trip.",
+      rows: { "Typical stay": "Around 5 nights", "Best for": "Culture-led city breaks", "Highlights": "Riads, medina markets, rooftops" }
     },
     gallery1: {
-      label: "Travel detail",
-      title: "Travel gallery image",
-      copy: "This gallery image is used to give extra context to the destination atmosphere and the type of stay it suggests.",
-      rows: { "Use on site": "Editorial support image", "Best for": "Browsing mood and atmosphere", "Next step": "Open the package or booking page for the practical details" }
+      label: "Travel detail", title: "Travel gallery image",
+      copy: "An editorial image used to give extra context to the destination atmosphere.",
+      rows: { "Use": "Editorial support", "Next step": "Open the booking page for practical details" }
     },
     gallery2: {
-      label: "Travel detail",
-      title: "Travel gallery image",
-      copy: "This gallery image adds more visual context so the destination feels easier to imagine before an enquiry is sent.",
-      rows: { "Use on site": "Editorial support image", "Best for": "Understanding scenery", "Next step": "Compare package tiers for the trip style" }
+      label: "Travel detail", title: "Travel gallery image",
+      copy: "Supporting image helping the destination feel easier to imagine before sending an enquiry.",
+      rows: { "Use": "Editorial support", "Next step": "Compare package tiers for the trip style" }
     },
     gallery3: {
-      label: "Travel detail",
-      title: "Travel gallery image",
-      copy: "This gallery image supports the destination story with a closer look at atmosphere, setting, and travel mood.",
-      rows: { "Use on site": "Editorial support image", "Best for": "Visual comparison", "Next step": "Continue to booking for dates and room options" }
+      label: "Travel detail", title: "Travel gallery image",
+      copy: "A closer look at atmosphere, setting, and travel mood for this destination.",
+      rows: { "Use": "Editorial support", "Next step": "Continue to booking for dates and room options" }
     }
   };
 
   function findImageKey(src) {
-    const value = (src || "").toLowerCase();
+    const v    = (src || "").toLowerCase();
     const keys = Object.keys(imageDetails);
-
-    for (let i = 0; i < keys.length; i += 1) {
-      if (value.indexOf(keys[i]) !== -1) return keys[i];
+    for (let i = 0; i < keys.length; i++) {
+      if (v.indexOf(keys[i]) !== -1) return keys[i];
     }
-
-    if (value.indexOf("amafi") !== -1) return "amalfi";
+    if (v.indexOf("amafi") !== -1) return "amalfi";
     return "";
   }
 
+  // Only create the modal DOM once and reuse it — swapping content is cheaper than rebuilding the element on every click.
   function ensureModal() {
     let modal = document.querySelector(".image-detail-modal");
     if (modal) return modal;
@@ -948,15 +926,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.body.appendChild(modal);
 
-    modal.addEventListener("click", function (event) {
-      if (event.target.matches("[data-close-modal='true'], .image-detail-close")) {
+    modal.addEventListener("click", function (e) {
+      if (e.target.matches("[data-close-modal='true'], .image-detail-close")) {
         modal.classList.remove("open");
         document.body.classList.remove("modal-open");
       }
     });
 
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") {
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
         modal.classList.remove("open");
         document.body.classList.remove("modal-open");
       }
@@ -966,23 +944,23 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function openImageDetail(image) {
-    const modal = ensureModal();
-    const key = image.getAttribute("data-place-key") || findImageKey(image.getAttribute("src"));
+    const modal  = ensureModal();
+    const key    = image.getAttribute("data-place-key") || findImageKey(image.getAttribute("src"));
     const detail = imageDetails[key] || {
       label: "Destination detail",
       title: image.getAttribute("alt") || "Destination image",
-      copy: "This image is included to give a closer look at the destination and the kind of stay it suggests.",
-      rows: { "Use on site": "Editorial support image", "Best for": "Understanding the destination feel", "Next step": "Use the package or booking page for the practical details" }
+      copy:  "A closer look at the destination and the kind of stay it suggests.",
+      rows:  { "Use": "Editorial support", "Next step": "Use the booking page for dates and room options" }
     };
 
-    const modalImage = modal.querySelector(".image-detail-media img");
+    const img  = modal.querySelector(".image-detail-media img");
     const list = modal.querySelector(".image-detail-list");
 
-    modalImage.src = image.getAttribute("src") || "";
-    modalImage.alt = image.getAttribute("alt") || detail.title;
-    modal.querySelector(".image-detail-kicker").textContent = detail.label;
-    modal.querySelector("h3").textContent = detail.title;
-    modal.querySelector(".image-detail-copy").textContent = detail.copy;
+    img.src = image.getAttribute("src") || "";
+    img.alt = image.getAttribute("alt") || detail.title;
+    modal.querySelector(".image-detail-kicker").textContent   = detail.label;
+    modal.querySelector("h3").textContent                     = detail.title;
+    modal.querySelector(".image-detail-copy").textContent     = detail.copy;
     list.innerHTML = "";
 
     Object.keys(detail.rows).forEach(function (label) {
@@ -994,45 +972,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
     modal.classList.add("open");
     document.body.classList.add("modal-open");
-
-    if (window.holidaeSound) {
-      window.holidaeSound.play("detail");
-    }
+    if (window.holidaeSound) window.holidaeSound.play("detail");
   }
 
-  // Makes clickable images usable with keyboard too.
-  document.querySelectorAll(".deal-card img, .destination-card img, .stack-large, .stack-small, .story-card img, .image-band-card img, .lookbook-card img, .journey-card img").forEach(function (img) {
+  // Give images tabindex and role so keyboard users can open the detail modal too, not just mouse users.
+  document.querySelectorAll(".deal-card img, .destination-card img, .stack-large, .stack-small, .image-band-card img, .lookbook-card img, .journey-card img").forEach(function (img) {
     img.setAttribute("tabindex", "0");
     img.setAttribute("role", "button");
     img.setAttribute("aria-label", `${img.getAttribute("alt") || "Destination image"}. Open destination details`);
-    img.addEventListener("click", function () { openImageDetail(img); });
-    img.addEventListener("keydown", function (event) {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        openImageDetail(img);
-      }
+    img.addEventListener("click",   function ()  { openImageDetail(img); });
+    img.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openImageDetail(img); }
     });
   });
 
-  /* ---------------------------------------------------------
-     IMMERSIVE SOUND
-  --------------------------------------------------------- */
-  const soundBaseScript = Array.from(document.scripts).find(function (script) {
-    const src = script.getAttribute("src") || "";
-    return /(^|\/)script\.js($|\?|#)/.test(src);
+
+  /* ─── IMMERSIVE SOUND ────────────────────────────────────── */
+
+  // Resolve sound paths relative to this script's own location
+  // so the paths work correctly whether the page is at root or inside /pages/.
+  const soundBaseScript = Array.from(document.scripts).find(function (s) {
+    return /(^|\/)script\.js($|\?|#)/.test(s.getAttribute("src") || "");
   });
   const soundBaseUrl = soundBaseScript && soundBaseScript.src ? soundBaseScript.src : window.location.href;
 
   const soundFiles = {
-    ambient: new URL("../sounds/coastal-ambient.wav", soundBaseUrl).href,
-    click: new URL("../sounds/ui-click.wav", soundBaseUrl).href,
-    transition: new URL("../sounds/page-transition.wav", soundBaseUrl).href,
-    detail: new URL("../sounds/detail-open.wav", soundBaseUrl).href
+    ambient:    new URL("../sounds/coastal-ambient.wav",  soundBaseUrl).href,
+    click:      new URL("../sounds/ui-click.wav",         soundBaseUrl).href,
+    transition: new URL("../sounds/page-transition.wav",  soundBaseUrl).href,
+    detail:     new URL("../sounds/detail-open.wav",      soundBaseUrl).href
   };
 
   function showAudioToast(message) {
     let toast = document.querySelector(".audio-toast");
-
     if (!toast) {
       toast = document.createElement("div");
       toast.className = "audio-toast";
@@ -1040,139 +1012,108 @@ document.addEventListener("DOMContentLoaded", function () {
       toast.setAttribute("aria-live", "polite");
       document.body.appendChild(toast);
     }
-
     toast.textContent = message;
     toast.classList.add("show");
     window.clearTimeout(showAudioToast._timer);
-    showAudioToast._timer = window.setTimeout(function () {
-      toast.classList.remove("show");
-    }, 1500);
+    showAudioToast._timer = window.setTimeout(function () { toast.classList.remove("show"); }, 1500);
   }
 
-  // Handles all site sounds from one object.
   function HolidaeSound() {
-    this.enabled = false;
+    this.enabled       = false;
     this.pendingResume = false;
-    this.hoverContext = null;
-    this.lastHoverAt = 0;
-    this.audio = {};
+    this.hoverContext  = null;
+    this.lastHoverAt   = 0;
+    this.audio         = {};
 
-    try {
-      this.enabled = localStorage.getItem("holidae-sound-enabled") === "true";
-    } catch (error) {
-      this.enabled = false;
-    }
+    try { this.enabled = localStorage.getItem("holidae-sound-enabled") === "true"; } catch (e) {}
 
     try {
       this.audio = {
-        ambient: new Audio(soundFiles.ambient),
-        click: new Audio(soundFiles.click),
+        ambient:    new Audio(soundFiles.ambient),
+        click:      new Audio(soundFiles.click),
         transition: new Audio(soundFiles.transition),
-        detail: new Audio(soundFiles.detail)
+        detail:     new Audio(soundFiles.detail)
       };
-
-      this.audio.ambient.loop = true;
-      this.audio.ambient.volume = 0.24;
+      this.audio.ambient.loop    = true;
+      this.audio.ambient.volume  = 0.24;
       this.audio.ambient.preload = "metadata";
-      this.audio.click.volume = 0.1;
+      this.audio.click.volume      = 0.10;
       this.audio.transition.volume = 0.13;
-      this.audio.detail.volume = 0.12;
+      this.audio.detail.volume     = 0.12;
 
+      // Restore ambient playback position if the user navigated to a new page.
       const savedTime = parseFloat(sessionStorage.getItem("holidae-ambient-time") || "0");
       if (!Number.isNaN(savedTime) && savedTime > 0) {
         this.audio.ambient.currentTime = savedTime;
       }
-    } catch (error) {
-      this.audio = {};
+    } catch (e) {
+      this.audio   = {};
       this.enabled = false;
     }
   }
 
   HolidaeSound.prototype.play = function (name) {
     if (!this.enabled || !this.audio[name]) return;
-
     try {
-      if (name === "ambient") {
-        this.resumeAmbient();
-        return;
-      }
-
+      if (name === "ambient") { this.resumeAmbient(); return; }
+      // Clone the audio node so overlapping clicks don't cut each other off.
       const clip = this.audio[name].cloneNode();
       clip.volume = this.audio[name].volume;
       clip.play().catch(function () {});
-    } catch (error) {}
+    } catch (e) {}
   };
 
   HolidaeSound.prototype.resumeAmbient = function () {
     const self = this;
     if (!this.enabled || !this.audio.ambient) return;
-
     try {
-      this.audio.ambient.play().then(function () {
-        self.pendingResume = false;
-      }).catch(function () {
-        self.pendingResume = true;
-      });
-    } catch (error) {
-      self.pendingResume = true;
-    }
+      this.audio.ambient.play()
+        .then(function ()  { self.pendingResume = false; })
+        .catch(function () { self.pendingResume = true; });
+    } catch (e) { self.pendingResume = true; }
   };
 
   HolidaeSound.prototype.pauseAmbient = function () {
-    try {
-      if (this.audio.ambient) this.audio.ambient.pause();
-    } catch (error) {}
+    try { if (this.audio.ambient) this.audio.ambient.pause(); } catch (e) {}
   };
 
   HolidaeSound.prototype.ensureHoverContext = function () {
     if (this.hoverContext) return this.hoverContext;
-    const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextConstructor) return null;
-
-    try {
-      this.hoverContext = new AudioContextConstructor();
-    } catch (error) {
-      return null;
-    }
-
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    try { this.hoverContext = new Ctx(); } catch (e) { return null; }
     return this.hoverContext;
   };
 
+  // Synthesises a tiny tone on hover using the Web Audio API instead of loading
+  // a separate audio file for every interactive element — much cheaper on bandwidth.
   HolidaeSound.prototype.playHover = function () {
     if (!this.enabled || prefersReducedMotion) return;
-
     const now = Date.now();
-    if (now - this.lastHoverAt < 140) return;
+    if (now - this.lastHoverAt < 140) return; // throttle — no rapid-fire chirping
     this.lastHoverAt = now;
 
-    const context = this.ensureHoverContext();
-    if (!context) return;
+    const ctx = this.ensureHoverContext();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume().catch(function () {});
 
-    if (context.state === "suspended") {
-      context.resume().catch(function () {});
-    }
-
-    const osc = context.createOscillator();
-    const gain = context.createGain();
-
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
     osc.type = "triangle";
-    osc.frequency.setValueAtTime(840, context.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(1120, context.currentTime + 0.07);
-    gain.gain.setValueAtTime(0.0001, context.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.004, context.currentTime + 0.012);
-    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.11);
+    osc.frequency.setValueAtTime(840, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1120, ctx.currentTime + 0.07);
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.004,   ctx.currentTime + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001,  ctx.currentTime + 0.11);
     osc.connect(gain);
-    gain.connect(context.destination);
+    gain.connect(ctx.destination);
     osc.start();
-    osc.stop(context.currentTime + 0.12);
+    osc.stop(ctx.currentTime + 0.12);
   };
 
   HolidaeSound.prototype.toggle = function () {
     this.enabled = !this.enabled;
-
-    try {
-      localStorage.setItem("holidae-sound-enabled", this.enabled ? "true" : "false");
-    } catch (error) {}
+    try { localStorage.setItem("holidae-sound-enabled", this.enabled ? "true" : "false"); } catch (e) {}
 
     if (this.enabled) {
       this.resumeAmbient();
@@ -1180,10 +1121,9 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       this.pendingResume = false;
       this.pauseAmbient();
-      try { sessionStorage.removeItem("holidae-ambient-time"); } catch (error) {}
+      try { sessionStorage.removeItem("holidae-ambient-time"); } catch (e) {}
       showAudioToast("Immersive sound muted");
     }
-
     updateSoundButton();
   };
 
@@ -1192,43 +1132,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const button = document.createElement("button");
     button.className = "immersive-sound-toggle";
-    button.type = "button";
-    button.setAttribute("aria-label", "Toggle immersive sound");
-    button.innerHTML = '<span>Immersive sound</span><span class="sound-status">Off</span>';
+    button.type      = "button";
+    button.setAttribute("aria-label",  "Toggle immersive sound");
+    button.setAttribute("aria-pressed", "false");
+    button.innerHTML = '<span class="sound-icon" aria-hidden="true">♪</span><span class="sound-status-label">Sound</span>';
     button.addEventListener("click", function () {
       if (window.holidaeSound) window.holidaeSound.toggle();
     });
-
     document.body.appendChild(button);
   }
 
   function updateSoundButton() {
     const button = document.querySelector(".immersive-sound-toggle");
     if (!button || !window.holidaeSound) return;
-
-    const status = button.querySelector(".sound-status");
-    if (status) status.textContent = window.holidaeSound.enabled ? "On" : "Off";
-    button.setAttribute("aria-pressed", window.holidaeSound.enabled ? "true" : "false");
+    const on = window.holidaeSound.enabled;
+    button.setAttribute("aria-pressed", on ? "true" : "false");
+    button.classList.toggle("sound-on", on);
+    const icon = button.querySelector(".sound-icon");
+    if (icon) icon.textContent = on ? "♪" : "○";
   }
 
   function setupHoverAudio() {
     if (!isFinePointer) return;
 
     const selector = [
-      ".btn",
-      ".btn-secondary",
-      ".btn-ghost",
-      ".text-link",
-      ".package-filter",
-      ".destination-switch",
-      ".style-option-btn",
-      ".deal-card img",
-      ".destination-card img",
-      ".lookbook-card img",
-      ".journey-card img",
-      ".stack-large",
-      ".stack-small",
-      ".faq-question"
+      ".btn", ".btn-secondary", ".btn-ghost", ".text-link",
+      ".package-filter", ".destination-switch", ".style-option-btn",
+      ".deal-card img", ".destination-card img", ".lookbook-card img",
+      ".journey-card img", ".stack-large", ".stack-small", ".faq-question"
     ].join(", ");
 
     document.querySelectorAll(selector).forEach(function (node) {
@@ -1243,33 +1174,32 @@ document.addEventListener("DOMContentLoaded", function () {
   window.holidaeSound = new HolidaeSound();
   ensureSoundButton();
   updateSoundButton();
+  if (window.holidaeSound.enabled) window.holidaeSound.resumeAmbient();
 
-  if (window.holidaeSound.enabled) {
-    window.holidaeSound.resumeAmbient();
-  }
-
-  document.addEventListener("click", function (event) {
-    const clickable = event.target.closest("button, .btn, .text-link, .style-option-btn, .package-filter, .faq-question, .destination-switch, .nav-list a");
-    if (!clickable || !window.holidaeSound) return;
-    if (window.holidaeSound.enabled) window.holidaeSound.play("click");
+  // Play a click sound on any interactive element without attaching a listener to each one.
+  document.addEventListener("click", function (e) {
+    const el = e.target.closest("button, .btn, .text-link, .style-option-btn, .package-filter, .faq-question, .destination-switch, .nav-list a");
+    if (el && window.holidaeSound && window.holidaeSound.enabled) window.holidaeSound.play("click");
   }, true);
 
-  // Pause ambience when the tab is hidden.
+  // Save the ambient track position when the user navigates away, so it
+  // resumes from the same point on the next page rather than restarting from zero.
   document.addEventListener("visibilitychange", function () {
     if (!window.holidaeSound) return;
-
     if (document.hidden) {
       try {
         if (window.holidaeSound.audio.ambient) {
           sessionStorage.setItem("holidae-ambient-time", String(window.holidaeSound.audio.ambient.currentTime || 0));
         }
-      } catch (error) {}
+      } catch (e) {}
       window.holidaeSound.pauseAmbient();
     } else if (window.holidaeSound.enabled) {
       window.holidaeSound.resumeAmbient();
     }
   });
 
+  // Browsers block audio autoplay until the user does something — resume ambient
+  // sound on first pointer, keyboard, or touch event if we had a pending play request.
   ["pointerdown", "keydown", "touchstart"].forEach(function (eventName) {
     window.addEventListener(eventName, function () {
       if (window.holidaeSound && window.holidaeSound.enabled && window.holidaeSound.pendingResume) {
@@ -1280,22 +1210,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   window.addEventListener("pagehide", function () {
     if (!window.holidaeSound || !window.holidaeSound.audio.ambient) return;
-    try {
-      sessionStorage.setItem("holidae-ambient-time", String(window.holidaeSound.audio.ambient.currentTime || 0));
-    } catch (error) {}
+    try { sessionStorage.setItem("holidae-ambient-time", String(window.holidaeSound.audio.ambient.currentTime || 0)); } catch (e) {}
   });
 
   window.addEventListener("pageshow", function () {
-    if (window.holidaeSound && window.holidaeSound.enabled) {
-      window.holidaeSound.resumeAmbient();
-    }
+    if (window.holidaeSound && window.holidaeSound.enabled) window.holidaeSound.resumeAmbient();
   });
 
   setupHoverAudio();
 
-  /* ---------------------------------------------------------
-     PAGE TRANSITIONS
-  --------------------------------------------------------- */
+
+  /* ─── PAGE TRANSITIONS ───────────────────────────────────── */
+
   function setupTransitions() {
     if (prefersReducedMotion) return;
 
@@ -1306,24 +1232,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     document.querySelectorAll("a[href]").forEach(function (link) {
-      link.addEventListener("click", function (event) {
+      link.addEventListener("click", function (e) {
         const href = link.getAttribute("href") || "";
 
-        // Only internal page links get the transition effect.
-        if (!href || href.charAt(0) === "#" || href.indexOf("mailto:") === 0 || href.indexOf("tel:") === 0) return;
-        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === "_blank") return;
+        // Skip anchors, mailto/tel links, external tabs, and non-HTML hrefs —
+        // we only want to intercept internal page navigations.
+        if (!href || href[0] === "#" || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || link.target === "_blank") return;
         if (!/\.html($|\?|#)/.test(href) && href !== "index.html") return;
 
-        event.preventDefault();
-
-        if (window.holidaeSound) {
-          window.holidaeSound.play("transition");
-        }
-
+        e.preventDefault();
+        if (window.holidaeSound) window.holidaeSound.play("transition");
         document.body.classList.add("is-transitioning");
-        window.setTimeout(function () {
-          window.location.href = href;
-        }, 180);
+        window.setTimeout(function () { window.location.href = href; }, 180);
       });
     });
   }
